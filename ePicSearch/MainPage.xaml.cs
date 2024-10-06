@@ -2,23 +2,29 @@
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
-
         public MainPage()
         {
             InitializeComponent();
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
+        // Event handler for Start Preparation button
+        private void OnStartPrepClicked(object sender, EventArgs e)
         {
-            count++;
+            StartPrepBtn.Text = "Preparation Started!";
+            // Add your logic here
+        }
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
+        // Event handler for Start Game button
+        private void OnStartGameClicked(object sender, EventArgs e)
+        {
+            StartGameBtn.Text = "Game Started!";
+            // Add your logic here
+        }
 
-            SemanticScreenReader.Announce(CounterBtn.Text);
+        // Event handler for Exit App button
+        private void OnExitAppClicked(object sender, EventArgs e)
+        {
+            Application.Current.Quit();  // Exits the app
         }
     }
 
