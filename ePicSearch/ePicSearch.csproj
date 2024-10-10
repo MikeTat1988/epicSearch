@@ -63,4 +63,16 @@
 		<PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.91" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <MauiXaml Update="Views\MyAdventuresPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\NewAdventurePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\SettingsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 </Project>

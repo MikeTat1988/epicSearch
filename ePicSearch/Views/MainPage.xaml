@@ -1,0 +1,20 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ePicSearch.Views.MainPage">
+    <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="20">
+
+        <!-- Button for Settings -->
+        <Button x:Name="SettingsBtn" Text="Settings" Clicked="OnSettingsClicked" />
+
+        <!-- Button for My Adventures -->
+        <Button x:Name="MyAdventuresBtn" Text="My Adventures" Clicked="OnMyAdventuresClicked" />
+
+        <!-- Button for New Adventure -->
+        <Button x:Name="NewAdventureBtn" Text="New Adventure" Clicked="OnNewAdventureClicked" />
+
+        <!-- Button for Quit App -->
+        <Button x:Name="QuitBtn" Text="Quit" Clicked="OnQuitClicked" />
+
+    </StackLayout>
+</ContentPage>
+
