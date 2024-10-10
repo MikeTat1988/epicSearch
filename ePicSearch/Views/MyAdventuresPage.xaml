@@ -1,7 +1,18 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ePicSearch.Views.MyAdventuresPage">
-    <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-        <Label Text="My Adventures" />
+    <StackLayout Padding="10">
+        <Label Text="Your Adventures" FontSize="20" />
+        <ListView x:Name="AdventuresList" ItemSelected="OnAdventureSelected">
+            
+            <!-- Placeholder items, will be dynamic later -->
+            <ListView.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Adventure 1</x:String>
+                    <x:String>Adventure 2</x:String>
+                    <x:String>Adventure 3</x:String>
+                </x:Array>
+            </ListView.ItemsSource>
+        </ListView>
     </StackLayout>
 </ContentPage>
