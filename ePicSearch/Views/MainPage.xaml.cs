@@ -17,7 +17,7 @@
             await Navigation.PushAsync(new MyAdventuresPage());
         }
 
-        private async void OnNewAdventureClicked(object sender, EventArgs e)
+        private async void OnCreateNewAdventureClicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new NewAdventurePage());
         }

@@ -19,14 +19,18 @@ namespace ePicSearch.Views
 
             if (!string.IsNullOrEmpty(adventures))
             {
-                // Split the saved adventures into a list and update the ListView's ItemsSource
-                AdventuresList.ItemsSource = adventures.Split(';').Where(a => !string.IsNullOrEmpty(a)).ToList();
-            }
+                var adventureList = adventures.Split(';').Where(a => !string.IsNullOrEmpty(a)).ToList();
+                AdventuresList.ItemsSource = adventureList;
 
+                AdventuresList.IsVisible = true;
+                DeleteAllButton.IsVisible = true;
+                NoAdventuresGrid.IsVisible = false;
+            }
             else
             {
-                // If no adventures are found, display a placeholder message
-                AdventuresList.ItemsSource = new string[] { "No adventures found" };
+                AdventuresList.IsVisible = false;
+                DeleteAllButton.IsVisible = false;
+                NoAdventuresGrid.IsVisible = true;
             }
         }
 
@@ -37,14 +41,47 @@ namespace ePicSearch.Views
 
             if (e.SelectedItem is string adventureName)
             {
-                await DisplayAlert("Adventure Selected", $"You selected {adventureName}", "OK");
-                //will await untill user presses OK
+                await DisplayAlert($"Adventure {adventureName} Selected", null, "OK");
             }
 
             // Deselecting the item after handling is done
             ((ListView)sender).SelectedItem = null;
         }
 
+        private async void OnViewAdventureClicked(object sender, EventArgs e)
+        {
+            if (sender is Button button && button.CommandParameter is string adventureName)
+            {
+                await DisplayAlert("View Adventure", $"You are viewing adventure: {adventureName}", "OK");
+                //TODO: Implement the navigation or display logic here
+            }
+        }
+
+        private async void OnDeleteAdventureClicked(object sender, EventArgs e)
+        {
+            if (sender is Button button && button.CommandParameter is string adventureName)
+            {
+                bool confirm = await DisplayAlert($"Confirm delete {adventureName}", null, "Yes", "No");
+                if (confirm)
+                {
+                    string adventures = Preferences.Get("Adventures", string.Empty);
+                    var adventureList = adventures.Split(';').Where(a => !a.Equals(adventureName)).ToList();
+                    Preferences.Set("Adventures", string.Join(";", adventureList));
+
+                    LoadAdventures();
+                }
+            }
+        }
+
+        private async void OnDeleteAllAdventuresClicked(object sender, EventArgs e)
+        {
+            bool confirm = await DisplayAlert("Confirm Delete All", null, "Yes", "No");
+            if (confirm)
+            {
+                Preferences.Set("Adventures", string.Empty);
+                LoadAdventures();
+            }
+        }
 
     }
 }

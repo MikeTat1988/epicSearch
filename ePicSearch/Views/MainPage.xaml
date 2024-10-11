@@ -10,7 +10,7 @@
         <Button x:Name="MyAdventuresBtn" Text="My Adventures" Clicked="OnMyAdventuresClicked" />
 
         <!-- Button for New Adventure -->
-        <Button x:Name="NewAdventureBtn" Text="New Adventure" Clicked="OnNewAdventureClicked" />
+        <Button x:Name="CreateNewAdventureBtn" Text="Create New Adventure" Clicked="OnCreateNewAdventureClicked" />
 
         <!-- Button for Quit App -->
         <Button x:Name="QuitBtn" Text="Quit" Clicked="OnQuitClicked" />

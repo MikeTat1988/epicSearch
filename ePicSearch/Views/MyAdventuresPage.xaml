@@ -1,18 +1,48 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ePicSearch.Views.MyAdventuresPage">
-    <StackLayout Padding="10">
-        <Label Text="Your Adventures" FontSize="20" />
-        <ListView x:Name="AdventuresList" ItemSelected="OnAdventureSelected">
-            
-            <!-- Placeholder items, will be dynamic later -->
-            <ListView.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>Adventure 1</x:String>
-                    <x:String>Adventure 2</x:String>
-                    <x:String>Adventure 3</x:String>
-                </x:Array>
-            </ListView.ItemsSource>
+
+    <StackLayout Padding="10" VerticalOptions="FillAndExpand">
+
+        <Label Text="Your Adventures" FontSize="20" HorizontalOptions="Center" />
+
+        <!-- no adventures -->
+        <Grid x:Name="NoAdventuresGrid" IsVisible="False" VerticalOptions="CenterAndExpand">
+            <Label x:Name="NoAdventuresLabel"
+                   Text="No adventures found"
+                   FontSize="18"
+                   TextColor="Gray"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+        </Grid>
+
+        <!-- ListView for Adventures -->
+        <ListView x:Name="AdventuresList" 
+                  ItemSelected="OnAdventureSelected" 
+                  HasUnevenRows="True"
+                  IsVisible="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Frame BackgroundColor="White" Padding="10" Margin="10" HasShadow="True">
+                            <StackLayout Orientation="Vertical" Spacing="10" HorizontalOptions="CenterAndExpand">
+                                <!-- Adventure title  -->
+                                <Label Text="{Binding .}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="18" TextColor="Black"/>
+
+                                <!-- Buttons  -->
+                                <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="Center">
+                                    <Button Text="View" Clicked="OnViewAdventureClicked" CommandParameter="{Binding .}" />
+                                    <Button Text="Delete" Clicked="OnDeleteAdventureClicked" CommandParameter="{Binding .}" />
+                                </StackLayout>
+                            </StackLayout>
+                        </Frame>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
+
+        <!-- "Delete All" button, only shown when adventures exist -->
+        <Button x:Name="DeleteAllButton" Text="Delete All" Clicked="OnDeleteAllAdventuresClicked" HorizontalOptions="Center" IsVisible="True" />
+
     </StackLayout>
 </ContentPage>

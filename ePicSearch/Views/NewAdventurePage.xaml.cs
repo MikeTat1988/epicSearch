@@ -12,7 +12,7 @@ namespace ePicSearch.Views
             _photoManager = new PhotoManager(new PhotoStorageService(), new CodeGenerator());
         }
 
-        private async void OnStartAdventureClicked(object sender, EventArgs e)
+        private async void OnStartCreatingClicked(object sender, EventArgs e)
         {
             string adventureName = AdventureNameEntry.Text;
 
@@ -34,7 +34,7 @@ namespace ePicSearch.Views
 
                         if (photo == null)
                         {
-                            await DisplayAlert("No Photo", "No photo was captured.", "OK");
+                            await DisplayAlert("No Photo", null, "OK");
                             return;
                         }
 
@@ -42,14 +42,14 @@ namespace ePicSearch.Views
 
                         if (photoInfo.SerialNumber == 1)
                         {
-                            await DisplayAlert("Treasure Saved!", $"The Treasure photo is saved! Code: {photoInfo.Code}, go hide it!", "OK");
+                            await DisplayAlert("Treasure Photo Saved!", $"Code: {photoInfo.Code}, go hide it!", "OK");
                         }
                         else
                         {
-                            await DisplayAlert($"Clue photo Saved!", $"A clue has been saved! Code: {photoInfo.Code}!", "OK");
+                            await DisplayAlert($"Clue photo Saved!", $"Code: {photoInfo.Code}, go hide it!", "OK");
                         }
 
-                        keepTakingPhotos = await DisplayAlert("Another clue?", "Do you want to add another photo?", "Yes", "No");
+                        keepTakingPhotos = await DisplayAlert("Another clue?", null, "Yes", "No");
 
                     }
                     catch (Exception ex)
@@ -59,12 +59,29 @@ namespace ePicSearch.Views
                 }
                 else
                 {
-                    await DisplayAlert("Not Supported", "Camera is not supported on this device.", "OK");
+                    await DisplayAlert("Error", "Camera is not supported", "OK");
                     break;
                 }
             }
 
+            SaveAdventure(adventureName);
+
+            await DisplayAlert($"Adventure {adventureName} Saved", null, "OK");
             await Navigation.PopAsync();
+        }
+
+        private static void SaveAdventure(string adventureName)
+        {
+            string adventures = Preferences.Get("Adventures", string.Empty);
+
+            // Ensure adventures separation
+            if (!string.IsNullOrEmpty(adventures))
+            {
+                adventures += ";";
+            }
+
+            adventures += $"{adventureName};";
+            Preferences.Set("Adventures", adventures);
         }
     }
 }

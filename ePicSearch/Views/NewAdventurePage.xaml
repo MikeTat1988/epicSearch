@@ -6,7 +6,7 @@
 
         <Entry x:Name="AdventureNameEntry" Placeholder="Enter adventure name" />
 
-        <Button Text="Start New Adventure" Clicked="OnStartAdventureClicked" />
+        <Button Text="Start Creating" Clicked="OnStartCreatingClicked" />
 
         <Label x:Name="ErrorMessage" Text="" TextColor="Red" IsVisible="False" />
     </StackLayout>
