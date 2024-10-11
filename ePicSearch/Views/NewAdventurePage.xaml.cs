@@ -23,6 +23,16 @@ namespace ePicSearch.Views
                 return;
             }
 
+            string adventures = Preferences.Get("Adventures", string.Empty);
+            var adventureSet = new HashSet<string>(adventures.Split(';').Where(a => !string.IsNullOrEmpty(a)));
+
+            // Check if the adventure name already exists in the set
+            if (!adventureSet.Add(adventureName)) // Returns false if the name already exists
+            {
+                await DisplayAlert("Name Already Exists", "This adventure name already exists. Please choose a different name.", "OK");
+                return;
+            }
+
             bool keepTakingPhotos = true;
             while (keepTakingPhotos)
             {
@@ -64,24 +74,11 @@ namespace ePicSearch.Views
                 }
             }
 
-            SaveAdventure(adventureName);
+            adventureSet.Add(adventureName);
+            Preferences.Set("Adventures", string.Join(";", adventureSet));
 
             await DisplayAlert($"Adventure {adventureName} Saved", null, "OK");
             await Navigation.PopAsync();
-        }
-
-        private static void SaveAdventure(string adventureName)
-        {
-            string adventures = Preferences.Get("Adventures", string.Empty);
-
-            // Ensure adventures separation
-            if (!string.IsNullOrEmpty(adventures))
-            {
-                adventures += ";";
-            }
-
-            adventures += $"{adventureName};";
-            Preferences.Set("Adventures", adventures);
         }
     }
 }
