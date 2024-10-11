@@ -7,7 +7,6 @@ namespace ePicSearch.Services
         private readonly PhotoStorageService _photoStorageService = photoStorageService;
         private readonly CodeGenerator _codeGenerator = codeGenerator;
         private List<PhotoInfo> _photoList = new List<PhotoInfo>();
-        private int _photoNumber = 1;
 
         public async Task<PhotoInfo> CapturePhoto(FileResult photo, string adventureName)
         {
@@ -24,7 +23,7 @@ namespace ePicSearch.Services
             };
 
             // Save the photo to to the corresponding adventure folder
-            photoInfo.FilePath = await _photoStorageService.SavePhotoAsync(photoInfo);
+            photoInfo.FilePath = await _photoStorageService.SavePhotoAsync(photo, photoInfo);
 
             // Delete the original photo after it's been saved to the adventure folder
             if (File.Exists(photo.FullPath))

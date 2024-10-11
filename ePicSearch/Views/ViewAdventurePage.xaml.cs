@@ -23,11 +23,10 @@ namespace ePicSearch.Views
 
             if (photos != null && photos.Count > 0)
             {
-                // Reverse and prepare the photos
-                var preparedPhotos = PreparePhotos(photos);
+                // Reverse the order of photos so the latest comes first
+                var orderedPhotos = photos.OrderByDescending(p => p.SerialNumber).ToList();
 
-                // Bind the ordered list of photos to the ListView
-                PhotoListView.ItemsSource = preparedPhotos;
+                PhotoListView.ItemsSource = orderedPhotos;
             }
             else
             {
@@ -35,32 +34,15 @@ namespace ePicSearch.Views
             }
         }
 
-        private static List<PhotoInfo> PreparePhotos(List<PhotoInfo> photos)
+        // Method to control how the serial number and code are displayed in the UI
+        private string GetDisplaySerialNumber(PhotoInfo photo, int index, int totalPhotos)
         {
-            // Reverse the order
-            var orderedPhotos = photos.OrderByDescending(p => p.SerialNumber).ToList();
+            if (index == totalPhotos - 1)
+                return "Treasure!";
 
-            // Hide the code for the first photo (latest clue)
-            if (orderedPhotos.Count > 0)
-            {
-                orderedPhotos[0].ShowCode = false;
-                orderedPhotos[0].DisplaySerialNumber = "1"; 
-            }
-
-            for (int i = 1; i < orderedPhotos.Count; i++)
-            {
-                orderedPhotos[i].ShowCode = true;
-                if (i == orderedPhotos.Count - 1)  // If it's the last item (Treasure photo)
-                {
-                    orderedPhotos[i].DisplaySerialNumber = "Treasure!"; 
-                }
-                else
-                {
-                    orderedPhotos[i].DisplaySerialNumber = (i + 1).ToString(); 
-                }
-            }
-
-            return orderedPhotos;
+            return (index + 1).ToString();
         }
+
+        private bool ShouldShowCode(int index) => index != 0;
     }
 }

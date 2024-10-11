@@ -1,12 +1,13 @@
-﻿
+﻿using ePicSearch.Entities;
+
 namespace ePicSearch.Services
 {
     public class PhotoStorageService
     {
-        public async Task<string> SavePhotoAsync(FileResult photo, string adventureName)
+        public async Task<string> SavePhotoAsync(FileResult photo, PhotoInfo photoInfo)
         {
             // Create a folder for the current adventure if it doesn't exist
-            string adventureFolderPath = Path.Combine(FileSystem.AppDataDirectory, adventureName);
+            string adventureFolderPath = Path.Combine(FileSystem.AppDataDirectory, photoInfo.AdventureName);
 
             if (!Directory.Exists(adventureFolderPath))
             {
@@ -14,7 +15,7 @@ namespace ePicSearch.Services
             }
 
             // Save the photo in the adventure-specific folder
-            string localPath = Path.Combine(adventureFolderPath, photo.FileName);
+            string localPath = Path.Combine(adventureFolderPath, photoInfo.Name);
 
             using (Stream sourceStream = await photo.OpenReadAsync())
             using (FileStream localFileStream = File.OpenWrite(localPath))

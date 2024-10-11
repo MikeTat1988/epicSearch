@@ -1,5 +1,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ePicSearch.Views"
              x:Class="ePicSearch.Views.ViewAdventurePage">
     <StackLayout Padding="10">
 
@@ -15,11 +16,11 @@
                             <Image Source="{Binding FilePath}" HeightRequest="150" WidthRequest="150" Aspect="AspectFill" />
 
                             <!-- Conditionally display the photo code -->
-                            <Label Text="Photo Code:" FontSize="14" TextColor="Gray" IsVisible="{Binding ShowCode}" />
-                            <Label Text="{Binding Code}" FontSize="16" TextColor="Black" IsVisible="{Binding ShowCode}" />
+                            <Label Text="Photo Code:" FontSize="14" TextColor="Gray" IsVisible="{Binding Source={RelativeSource AncestorType={x:Type local:ViewAdventurePage}}, Path=ShouldShowCode}" />
+                            <Label Text="{Binding Code}" FontSize="16" TextColor="Black" IsVisible="{Binding Source={RelativeSource AncestorType={x:Type local:ViewAdventurePage}}, Path=ShouldShowCode}" />
 
-                            <!-- Serial number displayed normally -->
-                            <Label Text="{Binding DisplaySerialNumber}" FontSize="16" TextColor="Black" />
+                            <!-- Display serial number or "Treasure!" -->
+                            <Label Text="{Binding Source={RelativeSource AncestorType={x:Type local:ViewAdventurePage}}, Path=GetDisplaySerialNumber}" FontSize="16" TextColor="Black" />
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>
