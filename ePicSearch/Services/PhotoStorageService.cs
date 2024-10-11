@@ -1,7 +1,4 @@
-﻿using System.IO;
-using System.Threading.Tasks;
-using Microsoft.Maui.Storage;
-
+﻿
 namespace ePicSearch.Services
 {
     public class PhotoStorageService

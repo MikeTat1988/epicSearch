@@ -1,4 +1,5 @@
-﻿
+﻿using ePicSearch.Entities;
+
 namespace ePicSearch.Services
 {
     public class PhotoManager(PhotoStorageService photoStorageService, CodeGenerator codeGenerator)
@@ -10,31 +11,36 @@ namespace ePicSearch.Services
 
         public async Task<PhotoInfo> CapturePhoto(FileResult photo, string adventureName)
         {
-            string filePath = await _photoStorageService.SavePhotoAsync(photo, adventureName);
             string photoCode = _codeGenerator.GenerateCode();
-            string photoName = $"{photoCode}_{_photoNumber }";
+            int serialNumber = _photoList.Count + 1;
 
             var photoInfo = new PhotoInfo
             {
-                FilePath = filePath,
-                Name = photoName,
+                FilePath = photo.FullPath,  // FullPath for now to get the actual file path
+                Name = $"{photoCode}_{serialNumber}",
                 Code = photoCode,
-                SerialNumber = _photoNumber 
+                SerialNumber = serialNumber,
+                AdventureName = adventureName
             };
+
+            // Save the photo to to the corresponding adventure folder
+            photoInfo.FilePath = await _photoStorageService.SavePhotoAsync(photoInfo);
+
+            // Delete the original photo after it's been saved to the adventure folder
+            if (File.Exists(photo.FullPath))
+            {
+                File.Delete(photo.FullPath);
+            }
+
             _photoList.Add(photoInfo);
 
-            _photoNumber++;
             return photoInfo;
         }
 
-        public List<PhotoInfo> GetPhotos() => _photoList;
-    }
-
-    public class PhotoInfo
-    {
-        public string FilePath { get; set; } = "";
-        public string Name { get; set; } = "";
-        public string Code { get; set; } = "";
-        public int SerialNumber { get; set; }
+        public List<PhotoInfo> GetPhotosForAdventure(string adventureName)
+        {
+            //TODO: In a real implementation, this would retrieve previously saved photo data
+            return _photoList.Where(p => p.AdventureName == adventureName).ToList();
+        }
     }
 }

@@ -52,8 +52,7 @@ namespace ePicSearch.Views
         {
             if (sender is Button button && button.CommandParameter is string adventureName)
             {
-                await DisplayAlert("View Adventure", $"You are viewing adventure: {adventureName}", "OK");
-                //TODO: Implement the navigation or display logic here
+                await Navigation.PushAsync(new ViewAdventurePage(adventureName));
             }
         }
 

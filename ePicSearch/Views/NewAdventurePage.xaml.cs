@@ -1,4 +1,5 @@
 using ePicSearch.Services;
+using ePicSearch.Entities;
 
 namespace ePicSearch.Views
 {
@@ -29,11 +30,21 @@ namespace ePicSearch.Views
             // Check if the adventure name already exists in the set
             if (!adventureSet.Add(adventureName)) // Returns false if the name already exists
             {
-                await DisplayAlert("Name Already Exists", "This adventure name already exists. Please choose a different name.", "OK");
+                await DisplayAlert("Oops!", "This adventure name already exists. Please choose a different name.", "OK");
                 return;
             }
 
             bool keepTakingPhotos = true;
+            bool isError = false;
+            int photoNumber = 1;
+
+            var existingPhotos = _photoManager.GetPhotosForAdventure(adventureName);
+            if (existingPhotos != null && existingPhotos.Count > 0)
+            {
+                // Resume from the next photo number if photos exist already
+                photoNumber = existingPhotos.Max(p => p.SerialNumber) + 1; 
+            }
+
             while (keepTakingPhotos)
             {
                 if (MediaPicker.IsCaptureSupported)
@@ -65,13 +76,22 @@ namespace ePicSearch.Views
                     catch (Exception ex)
                     {
                         await DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
+                        isError = true;
+                        break;
                     }
                 }
                 else
                 {
                     await DisplayAlert("Error", "Camera is not supported", "OK");
+                    isError = true;
                     break;
                 }
+            }
+
+            if (isError)
+            {
+                await HandleError(sender, e);
+                return;
             }
 
             adventureSet.Add(adventureName);
@@ -79,6 +99,21 @@ namespace ePicSearch.Views
 
             await DisplayAlert($"Adventure {adventureName} Saved", null, "OK");
             await Navigation.PopAsync();
+        }
+
+        private async Task HandleError(object sender, EventArgs e)
+        {
+            bool continueProcess = await DisplayAlert("Error", "Failed to complete the process. Your progress has been saved. Do you want to continue?", "Yes", "No");
+
+            if (continueProcess)
+            {
+                // Continue the process by calling OnStartCreatingClicked again
+                OnStartCreatingClicked(sender, e);
+            }
+            else
+            {
+                await Navigation.PopAsync();
+            }
         }
     }
 }

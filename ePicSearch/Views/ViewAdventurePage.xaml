@@ -1,0 +1,30 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ePicSearch.Views.ViewAdventurePage">
+    <StackLayout Padding="10">
+
+        <!-- Adventure Name at the Top -->
+        <Label x:Name="AdventureNameLabel" FontSize="24" HorizontalOptions="Center" TextColor="Black" />
+
+        <ListView x:Name="PhotoListView" HasUnevenRows="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Vertical" Padding="10">
+                            <!-- Display photo -->
+                            <Image Source="{Binding FilePath}" HeightRequest="150" WidthRequest="150" Aspect="AspectFill" />
+
+                            <!-- Conditionally display the photo code -->
+                            <Label Text="Photo Code:" FontSize="14" TextColor="Gray" IsVisible="{Binding ShowCode}" />
+                            <Label Text="{Binding Code}" FontSize="16" TextColor="Black" IsVisible="{Binding ShowCode}" />
+
+                            <!-- Serial number displayed normally -->
+                            <Label Text="{Binding DisplaySerialNumber}" FontSize="16" TextColor="Black" />
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+    </StackLayout>
+</ContentPage>
