@@ -7,10 +7,10 @@ namespace ePicSearch.Views
     {
         private readonly PhotoManager _photoManager;
 
-        public ViewAdventurePage(string adventureName)
+        public ViewAdventurePage(string adventureName, PhotoManager photoManager)
         {
             InitializeComponent();
-            _photoManager = new PhotoManager(new PhotoStorageService(), new CodeGenerator());
+            _photoManager = photoManager;
 
             AdventureNameLabel.Text = adventureName;
 
@@ -23,10 +23,13 @@ namespace ePicSearch.Views
 
             if (photos != null && photos.Count > 0)
             {
-                // Reverse the order of photos so the latest comes first
+                // Order photos by SerialNumber descending (latest first)
                 var orderedPhotos = photos.OrderByDescending(p => p.SerialNumber).ToList();
 
-                PhotoListView.ItemsSource = orderedPhotos;
+                // Project into PhotoDisplayInfo without using totalPhotos
+                var displayPhotos = orderedPhotos.Select((photo, index) => new PhotoDisplayInfo(photo, index)).ToList();
+
+                PhotoListView.ItemsSource = displayPhotos;
             }
             else
             {

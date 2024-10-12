@@ -1,5 +1,4 @@
-﻿
-namespace ePicSearch.Services
+﻿namespace ePicSearch.Services
 {
     public class CodeGenerator
     {

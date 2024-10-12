@@ -4,7 +4,6 @@
              x:Class="ePicSearch.Views.ViewAdventurePage">
     <StackLayout Padding="10">
 
-        <!-- Adventure Name at the Top -->
         <Label x:Name="AdventureNameLabel" FontSize="24" HorizontalOptions="Center" TextColor="Black" />
 
         <ListView x:Name="PhotoListView" HasUnevenRows="True">
@@ -13,14 +12,25 @@
                     <ViewCell>
                         <StackLayout Orientation="Vertical" Padding="10">
                             <!-- Display photo -->
-                            <Image Source="{Binding FilePath}" HeightRequest="150" WidthRequest="150" Aspect="AspectFill" />
+                            <Image Source="{Binding Photo.FilePath}" 
+                                   HeightRequest="150" 
+                                   WidthRequest="150" 
+                                   Aspect="AspectFill" />
 
                             <!-- Conditionally display the photo code -->
-                            <Label Text="Photo Code:" FontSize="14" TextColor="Gray" IsVisible="{Binding Source={RelativeSource AncestorType={x:Type local:ViewAdventurePage}}, Path=ShouldShowCode}" />
-                            <Label Text="{Binding Code}" FontSize="16" TextColor="Black" IsVisible="{Binding Source={RelativeSource AncestorType={x:Type local:ViewAdventurePage}}, Path=ShouldShowCode}" />
-
+                            <Label Text="Photo Code:" 
+                                   FontSize="14" 
+                                   TextColor="Gray" 
+                                   IsVisible="{Binding ShouldShowCode}" />
+                            <Label Text="{Binding Photo.Code}" 
+                                   FontSize="16" 
+                                   TextColor="Black" 
+                                   IsVisible="{Binding ShouldShowCode}" />
+                            
                             <!-- Display serial number or "Treasure!" -->
-                            <Label Text="{Binding Source={RelativeSource AncestorType={x:Type local:ViewAdventurePage}}, Path=GetDisplaySerialNumber}" FontSize="16" TextColor="Black" />
+                            <Label Text="{Binding DisplaySerialNumber}" 
+                                   FontSize="16" 
+                                   TextColor="Black" />
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>

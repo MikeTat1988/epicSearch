@@ -1,5 +1,4 @@
 using ePicSearch.Services;
-using ePicSearch.Entities;
 
 namespace ePicSearch.Views
 {
@@ -7,12 +6,14 @@ namespace ePicSearch.Views
     {
         private readonly PhotoManager _photoManager;
 
-        public NewAdventurePage()
+        // Use Dependency Injection to provide PhotoManager instance
+        public NewAdventurePage(PhotoManager photoManager)
         {
             InitializeComponent();
-            _photoManager = new PhotoManager(new PhotoStorageService(), new CodeGenerator());
+            _photoManager = photoManager;
         }
 
+        // Handles starting the creation of a new adventure
         private async void OnStartCreatingClicked(object sender, EventArgs e)
         {
             string adventureName = AdventureNameEntry.Text;
@@ -24,11 +25,9 @@ namespace ePicSearch.Views
                 return;
             }
 
-            string adventures = Preferences.Get("Adventures", string.Empty);
-            var adventureSet = new HashSet<string>(adventures.Split(';').Where(a => !string.IsNullOrEmpty(a)));
+            var existingAdventures = _photoManager.GetPhotosForAdventure(string.Empty).Select(p => p.AdventureName).Distinct().ToList();
 
-            // Check if the adventure name already exists in the set
-            if (!adventureSet.Add(adventureName)) // Returns false if the name already exists
+            if (existingAdventures.Contains(adventureName))
             {
                 await DisplayAlert("Oops!", "This adventure name already exists. Please choose a different name.", "OK");
                 return;
@@ -36,14 +35,6 @@ namespace ePicSearch.Views
 
             bool keepTakingPhotos = true;
             bool isError = false;
-            int photoNumber = 1;
-
-            var existingPhotos = _photoManager.GetPhotosForAdventure(adventureName);
-            if (existingPhotos != null && existingPhotos.Count > 0)
-            {
-                // Resume from the next photo number if photos exist already
-                photoNumber = existingPhotos.Max(p => p.SerialNumber) + 1; 
-            }
 
             while (keepTakingPhotos)
             {
@@ -67,11 +58,10 @@ namespace ePicSearch.Views
                         }
                         else
                         {
-                            await DisplayAlert($"Clue photo Saved!", $"Code: {photoInfo.Code}, go hide it!", "OK");
+                            await DisplayAlert("Clue photo Saved!", $"Code: {photoInfo.Code}, go hide it!", "OK");
                         }
 
                         keepTakingPhotos = await DisplayAlert("Another clue?", null, "Yes", "No");
-
                     }
                     catch (Exception ex)
                     {
@@ -94,9 +84,6 @@ namespace ePicSearch.Views
                 return;
             }
 
-            adventureSet.Add(adventureName);
-            Preferences.Set("Adventures", string.Join(";", adventureSet));
-
             await DisplayAlert($"Adventure {adventureName} Saved", null, "OK");
             await Navigation.PopAsync();
         }
@@ -107,7 +94,6 @@ namespace ePicSearch.Views
 
             if (continueProcess)
             {
-                // Continue the process by calling OnStartCreatingClicked again
                 OnStartCreatingClicked(sender, e);
             }
             else

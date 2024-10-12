@@ -1,45 +1,77 @@
 ﻿using ePicSearch.Entities;
+using Newtonsoft.Json;
 
 namespace ePicSearch.Services
 {
-    public class PhotoManager(PhotoStorageService photoStorageService, CodeGenerator codeGenerator)
+    public class PhotoManager(PhotoStorageService photoStorageService, CodeGenerator codeGenerator, JsonStorageService jsonStorageService)
     {
         private readonly PhotoStorageService _photoStorageService = photoStorageService;
         private readonly CodeGenerator _codeGenerator = codeGenerator;
-        private List<PhotoInfo> _photoList = new List<PhotoInfo>();
+        private readonly JsonStorageService _jsonStorageService = jsonStorageService;
+        private readonly string JsonFilePath = Path.Combine(FileSystem.AppDataDirectory, "adventures.json");
 
         public async Task<PhotoInfo> CapturePhoto(FileResult photo, string adventureName)
         {
             string photoCode = _codeGenerator.GenerateCode();
-            int serialNumber = _photoList.Count + 1;
-
             var photoInfo = new PhotoInfo
             {
-                FilePath = photo.FullPath,  // FullPath for now to get the actual file path
-                Name = $"{photoCode}_{serialNumber}",
+                FilePath = photo.FullPath,
+                Name = $"{photoCode}_{GetNextSerialNumber(adventureName)}",
                 Code = photoCode,
-                SerialNumber = serialNumber,
                 AdventureName = adventureName
             };
 
-            // Save the photo to to the corresponding adventure folder
+            // Save photo to disk and update JSON file
             photoInfo.FilePath = await _photoStorageService.SavePhotoAsync(photo, photoInfo);
-
-            // Delete the original photo after it's been saved to the adventure folder
-            if (File.Exists(photo.FullPath))
-            {
-                File.Delete(photo.FullPath);
-            }
-
-            _photoList.Add(photoInfo);
+            SavePhotoToAdventure(photoInfo);
 
             return photoInfo;
         }
 
+        public List<string> GetAllAdventureNames()
+        {
+            var adventures = _jsonStorageService.LoadAdventuresFromJson();
+            return adventures
+                .Select(p => p.AdventureName)
+                .Where(name => !string.IsNullOrWhiteSpace(name))
+                .Distinct()
+                .ToList();
+        }
+
         public List<PhotoInfo> GetPhotosForAdventure(string adventureName)
         {
-            //TODO: In a real implementation, this would retrieve previously saved photo data
-            return _photoList.Where(p => p.AdventureName == adventureName).ToList();
+            var adventures = LoadAdventuresFromJson();
+            return adventures.Where(p => p.AdventureName == adventureName).ToList();
+        }
+
+        public void DeletePhoto(PhotoInfo photo)
+        {
+            var adventures = LoadAdventuresFromJson();
+            adventures.RemoveAll(p => p.FilePath == photo.FilePath);
+            SaveAdventuresToJson(adventures);
+        }
+
+        private void SavePhotoToAdventure(PhotoInfo photoInfo)
+        {
+            var adventures = LoadAdventuresFromJson();
+            adventures.Add(photoInfo);
+            SaveAdventuresToJson(adventures);
+        }
+
+        private List<PhotoInfo> LoadAdventuresFromJson()
+        {
+            return _jsonStorageService.LoadAdventuresFromJson();
+        }
+
+        private void SaveAdventuresToJson(List<PhotoInfo> adventures)
+        {
+            _jsonStorageService.SaveAdventuresToJson(adventures);
+        }
+
+        private int GetNextSerialNumber(string adventureName)
+        {
+            var adventures = LoadAdventuresFromJson();
+            return adventures.Where(p => p.AdventureName == adventureName).Select(p => p.SerialNumber).DefaultIfEmpty(0).Max() + 1;
         }
     }
 }

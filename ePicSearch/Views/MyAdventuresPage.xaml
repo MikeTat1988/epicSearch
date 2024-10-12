@@ -18,7 +18,7 @@
 
         <!-- ListView for Adventures -->
         <ListView x:Name="AdventuresList" 
-                  ItemSelected="OnAdventureSelected" 
+                  ItemSelected="OnViewAdventureClicked" 
                   HasUnevenRows="True"
                   IsVisible="True">
             <ListView.ItemTemplate>
