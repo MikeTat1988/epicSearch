@@ -8,18 +8,20 @@ namespace ePicSearch.Services
         private readonly PhotoStorageService _photoStorageService = photoStorageService;
         private readonly CodeGenerator _codeGenerator = codeGenerator;
         private readonly JsonStorageService _jsonStorageService = jsonStorageService;
-        private readonly string JsonFilePath = Path.Combine(FileSystem.AppDataDirectory, "adventures.json");
 
         public async Task<PhotoInfo> CapturePhoto(FileResult photo, string adventureName)
         {
             string photoCode = _codeGenerator.GenerateCode();
+            int serialNumber = GetNextSerialNumber(adventureName);
+
             var photoInfo = new PhotoInfo
             {
                 FilePath = photo.FullPath,
                 Name = $"{photoCode}_{GetNextSerialNumber(adventureName)}",
                 Code = photoCode,
-                AdventureName = adventureName
-            };
+                AdventureName = adventureName,
+                SerialNumber = serialNumber
+            }; 
 
             // Save photo to disk and update JSON file
             photoInfo.FilePath = await _photoStorageService.SavePhotoAsync(photo, photoInfo);

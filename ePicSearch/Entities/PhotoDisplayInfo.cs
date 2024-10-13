@@ -6,10 +6,10 @@
         public string DisplaySerialNumber { get; set; } = "";
         public bool ShouldShowCode { get; set; } = false;
 
-        public PhotoDisplayInfo(PhotoInfo photo, int index)
+        public PhotoDisplayInfo(PhotoInfo photo, int index, int totalPhotos)
         {
             Photo = photo;
-            DisplaySerialNumber = (index == 0) ? "Treasure!" : (index + 1).ToString();
+            DisplaySerialNumber = (index == totalPhotos - 1) ? "Treasure!" : (index + 1).ToString();
             ShouldShowCode = (index != 0);
         }
     }

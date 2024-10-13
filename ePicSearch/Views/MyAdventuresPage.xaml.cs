@@ -52,12 +52,19 @@ namespace ePicSearch.Views
                 bool confirm = await DisplayAlert($"Confirm delete {adventureName}", null, "Yes", "No");
                 if (confirm)
                 {
-                    var photos = _photoManager.GetPhotosForAdventure(adventureName);
-                    foreach (var photo in photos)
+                    try
                     {
-                        _photoManager.DeletePhoto(photo);
+                        var photos = _photoManager.GetPhotosForAdventure(adventureName);
+                        foreach (var photo in photos)
+                        {
+                            _photoManager.DeletePhoto(photo);
+                        }
+                        LoadAdventures();
                     }
-                    LoadAdventures();
+                    catch (Exception ex)
+                    {
+                        await DisplayAlert("Error", $"Failed to delete adventure {adventureName}: {ex.Message}", "OK");
+                    }
                 }
             }
         }

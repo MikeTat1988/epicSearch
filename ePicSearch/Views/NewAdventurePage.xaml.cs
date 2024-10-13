@@ -25,9 +25,9 @@ namespace ePicSearch.Views
                 return;
             }
 
-            var existingAdventures = _photoManager.GetPhotosForAdventure(string.Empty).Select(p => p.AdventureName).Distinct().ToList();
+            var existingAdventures = _photoManager.GetAllAdventureNames();
 
-            if (existingAdventures.Contains(adventureName))
+            if (existingAdventures.Contains(adventureName, StringComparer.OrdinalIgnoreCase))
             {
                 await DisplayAlert("Oops!", "This adventure name already exists. Please choose a different name.", "OK");
                 return;

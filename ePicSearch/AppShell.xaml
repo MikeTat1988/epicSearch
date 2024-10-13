@@ -7,7 +7,6 @@
     Title="ePicSearch">
 
     <ShellContent
-        Title="Home"
         ContentTemplate="{DataTemplate views:MainPage}"
         Route="MainPage" />
 

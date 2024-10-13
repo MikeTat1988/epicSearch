@@ -10,28 +10,29 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <StackLayout Orientation="Vertical" Padding="10">
-                            <!-- Display photo -->
-                            <Image Source="{Binding Photo.FilePath}" 
-                                   HeightRequest="150" 
-                                   WidthRequest="150" 
-                                   Aspect="AspectFill" />
+                        <Grid Padding="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
 
-                            <!-- Conditionally display the photo code -->
-                            <Label Text="Photo Code:" 
-                                   FontSize="14" 
-                                   TextColor="Gray" 
-                                   IsVisible="{Binding ShouldShowCode}" />
-                            <Label Text="{Binding Photo.Code}" 
-                                   FontSize="16" 
-                                   TextColor="Black" 
-                                   IsVisible="{Binding ShouldShowCode}" />
-                            
-                            <!-- Display serial number or "Treasure!" -->
-                            <Label Text="{Binding DisplaySerialNumber}" 
-                                   FontSize="16" 
-                                   TextColor="Black" />
-                        </StackLayout>
+                            <!-- Photo -->
+                            <Image Source="{Binding Photo.FilePath}" 
+                                 HeightRequest="150" 
+                                 WidthRequest="150" 
+                                 Aspect="AspectFill" 
+                                 Grid.Column="0" />
+
+                            <!-- Photo Data -->
+                            <StackLayout Grid.Column="1" 
+                                     VerticalOptions="Center" 
+                                     HorizontalOptions="CenterAndExpand" 
+                                     Spacing="5">
+                                <Label Text="Code:" FontSize="14" TextColor="Gray" IsVisible="{Binding ShouldShowCode}" />
+                                <Label Text="{Binding Photo.Code}" FontSize="16" TextColor="Black" IsVisible="{Binding ShouldShowCode}" />
+                                <Label Text="{Binding DisplaySerialNumber}" FontSize="16" TextColor="Black" />
+                            </StackLayout>
+                        </Grid>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
