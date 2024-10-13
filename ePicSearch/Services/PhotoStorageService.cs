@@ -6,9 +6,8 @@ namespace ePicSearch.Services
     {
         public async Task<string> SavePhotoAsync(FileResult photo, PhotoInfo photoInfo)
         {
-            string adventureFolderPath = Path.Combine(FileSystem.AppDataDirectory, photoInfo.AdventureName);
+            string adventureFolderPath = Path.Combine(GetAppDataDirectory(), photoInfo.AdventureName);
 
-            // Create a folder for the current adventure if it doesn't exist
             if (!Directory.Exists(adventureFolderPath))
             {
                 Directory.CreateDirectory(adventureFolderPath);
@@ -16,15 +15,62 @@ namespace ePicSearch.Services
 
             // Append the correct file extension
             string fileExtension = Path.GetExtension(photo.FileName);
-            string localPath = Path.Combine(adventureFolderPath, $"{photoInfo.Name}{fileExtension}");
+            string newFileName = $"{photoInfo.Name}{fileExtension}";
+            string newFilePath = Path.Combine(adventureFolderPath, newFileName);
 
-            using (Stream sourceStream = await photo.OpenReadAsync())
-            using (FileStream localFileStream = File.OpenWrite(localPath))
+            // Copy the photo from the original path to the new path
+            try
             {
-                await sourceStream.CopyToAsync(localFileStream);
+                File.Copy(photo.FullPath, newFilePath, overwrite: true);
+            }
+            catch (Exception ex)
+            {
+                throw new IOException($"Failed to copy photo from {photo.FullPath} to {newFilePath}: {ex.Message}", ex);
             }
 
-            return localPath;
+            // Delete the original photo to prevent duplication using the DeletePhoto method
+            try
+            {
+                DeletePhoto(photo.FullPath);
+            }
+            catch (Exception ex)
+            {
+                throw new IOException($"Failed to delete original photo at {photo.FullPath}: {ex.Message}", ex);
+            }
+
+            return newFilePath;
         }
+
+        public static void DeletePhoto(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    File.Delete(filePath);
+                }
+                catch (Exception ex)
+                {
+                    throw new IOException($"Error deleting file at {filePath}: {ex.Message}", ex);
+                }
+            }
+        }
+
+        public string GetPhotoPath(string fileName, string adventureName)
+        {
+            string adventureFolderPath = Path.Combine(GetAppDataDirectory(), adventureName);
+            string fullPath = Path.Combine(adventureFolderPath, fileName);
+
+            if (File.Exists(fullPath))
+            {
+                return fullPath;
+            }
+            else
+            {
+                throw new FileNotFoundException($"Photo file not found: {fullPath}");
+            }
+        }
+
+        protected virtual string GetAppDataDirectory() =>  FileSystem.AppDataDirectory;
     }
 }
