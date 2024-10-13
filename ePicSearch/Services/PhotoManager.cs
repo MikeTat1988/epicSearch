@@ -1,15 +1,16 @@
 ﻿using ePicSearch.Entities;
-using Newtonsoft.Json;
+using ePicSearch.Core.Entities;
+using ePicSearch.Core.Services;
 
 namespace ePicSearch.Services
 {
-    public class PhotoManager(PhotoStorageService photoStorageService, CodeGenerator codeGenerator, JsonStorageService jsonStorageService)
+    public class PhotoManager(PhotoStorageServiceCore photoStorageService, CodeGenerator codeGenerator, JsonStorageService jsonStorageService)
     {
-        private readonly PhotoStorageService _photoStorageService = photoStorageService;
+        private readonly PhotoStorageServiceCore _photoStorageService = photoStorageService;
         private readonly CodeGenerator _codeGenerator = codeGenerator;
         private readonly JsonStorageService _jsonStorageService = jsonStorageService;
 
-        public async Task<PhotoInfo> CapturePhoto(FileResult photo, string adventureName)
+        public async Task<PhotoInfo> CapturePhoto(IFileResult photo, string adventureName)
         {
             string photoCode = _codeGenerator.GenerateCode();
             int serialNumber = GetNextSerialNumber(adventureName);

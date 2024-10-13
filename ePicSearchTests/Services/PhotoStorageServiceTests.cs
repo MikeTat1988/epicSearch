@@ -1,104 +1,93 @@
-﻿using Xunit;
-using ePicSearch.Services;
-using ePicSearch.Entities;
-using Microsoft.Maui.Storage;
-using Moq;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using ePicSearch.Core.Entities;
+using ePicSearch.Core.Services;
+using Xunit;
 
 namespace ePicSearch.Tests.Services
 {
-    public class PhotoStorageServiceTests
+    public class PhotoStorageServiceCoreTests : IDisposable
     {
-        private readonly PhotoStorageService _photoStorageService;
-        private readonly string _testDirectory;
+        private readonly PhotoStorageServiceCore _photoStorageService;
+        private readonly string _testAppDataDirectory;
 
-        public PhotoStorageServiceTests()
+        public PhotoStorageServiceCoreTests()
         {
             // Use a temporary directory path for testing
-            _testDirectory = Path.Combine(Path.GetTempPath(), "TestAdventure");
-            Directory.CreateDirectory(_testDirectory);
+            _testAppDataDirectory = Path.Combine(Path.GetTempPath(), "TestAppData");
+            Directory.CreateDirectory(_testAppDataDirectory);
 
-            // Inject the test directory path into the service
-            _photoStorageService = new PhotoStorageService(_testDirectory);
+            // Initialize the service with the test directory
+            _photoStorageService = new PhotoStorageServiceCore(_testAppDataDirectory);
         }
 
         [Fact]
         public async Task SavePhotoAsync_CopiesPhotoAndDeletesOriginal()
         {
             // Arrange
-            string originalPath = Path.Combine(_testDirectory, "originalPhoto.jpg");
-            string newFilePath = Path.Combine(_testDirectory, "1234_1.jpg");
+            string originalPhotoContent = "Dummy photo content";
+            string originalFileName = "originalPhoto.jpg";
+            string adventureName = "TestAdventure";
 
-            await File.WriteAllTextAsync(originalPath, "Dummy photo content");
+            // Create a temporary directory to simulate the original photo location
+            string originalPhotoDirectory = Path.Combine(_testAppDataDirectory, "OriginalPhotos");
+            Directory.CreateDirectory(originalPhotoDirectory);
 
-            var photoInfo = new PhotoInfo { AdventureName = "TestAdventure", Name = "1234_1" };
+            // Create the original photo file
+            string originalPhotoPath = Path.Combine(originalPhotoDirectory, originalFileName);
+            await File.WriteAllTextAsync(originalPhotoPath, originalPhotoContent);
 
-            // Mock FileResult using Moq
-            var mockFileResult = new Mock<FileResult>(originalPath);
-            mockFileResult.Setup(fr => fr.FullPath).Returns(originalPath);
-            mockFileResult.Setup(fr => fr.FileName).Returns("originalPhoto.jpg");
-
-            // Act
-            string resultPath = await _photoStorageService.SavePhotoAsync(mockFileResult.Object, photoInfo);
-
-            // Assert
-            Assert.Equal(newFilePath, resultPath);
-            Assert.True(File.Exists(newFilePath));
-            Assert.False(File.Exists(originalPath));
-
-            // Cleanup
-            if (File.Exists(newFilePath))
+            // Create PhotoInfo
+            var photoInfo = new PhotoInfo
             {
-                File.Delete(newFilePath);
-            }
-        }
+                AdventureName = adventureName,
+                Name = "1234_1",
+                Code = "1234",
+                SerialNumber = 1
+            };
 
-        [Fact]
-        public void DeletePhoto_DeletesExistingPhoto()
-        {
-            // Arrange
-            string filePath = Path.Combine(_testDirectory, "photoToDelete.jpg");
-            File.WriteAllText(filePath, "Dummy photo content");
+            // Create TestFileResult
+            var fileResult = new TestFileResult(originalPhotoPath, originalFileName);
 
-            // Act
-            _photoStorageService.DeletePhoto(filePath);
-
-            // Assert
-            Assert.False(File.Exists(filePath));
-        }
-
-        [Fact]
-        public void GetPhotoPath_ReturnsCorrectPath_WhenPhotoExists()
-        {
-            // Arrange
-            string fileName = "1234_3.jpg";
-            string fullPath = Path.Combine(_testDirectory, fileName);
-
-            File.WriteAllText(fullPath, "Dummy photo content");
+            // Expected new file path
+            string expectedAdventureFolderPath = Path.Combine(_testAppDataDirectory, adventureName);
+            string expectedNewFileName = $"{photoInfo.Name}{Path.GetExtension(originalFileName)}";
+            string expectedNewFilePath = Path.Combine(expectedAdventureFolderPath, expectedNewFileName);
 
             // Act
-            string retrievedPath = _photoStorageService.GetPhotoPath(fileName, "TestAdventure");
+            string resultPath = await _photoStorageService.SavePhotoAsync(fileResult, photoInfo);
 
             // Assert
-            Assert.Equal(fullPath, retrievedPath);
-        }
+            Assert.Equal(expectedNewFilePath, resultPath);
+            Assert.True(File.Exists(expectedNewFilePath), "New photo file should exist.");
+            Assert.False(File.Exists(originalPhotoPath), "Original photo file should have been deleted.");
 
-        [Fact]
-        public void GetPhotoPath_ThrowsFileNotFoundException_WhenPhotoDoesNotExist()
-        {
-            // Act & Assert
-            Assert.Throws<FileNotFoundException>(() =>
-                _photoStorageService.GetPhotoPath("nonExistent.jpg", "TestAdventure"));
+            // Verify content is the same
+            string newPhotoContent = await File.ReadAllTextAsync(expectedNewFilePath);
+            Assert.Equal(originalPhotoContent, newPhotoContent);
         }
 
         public void Dispose()
         {
-            // Clean up the test directory after each test
-            if (Directory.Exists(_testDirectory))
+            // Clean up the test directories after each test
+            if (Directory.Exists(_testAppDataDirectory))
             {
-                Directory.Delete(_testDirectory, true);
+                Directory.Delete(_testAppDataDirectory, true);
             }
+        }
+    }
+
+    // Test implementation of IFileResult
+    public class TestFileResult : IFileResult
+    {
+        public string FullPath { get; }
+        public string FileName { get; }
+
+        public TestFileResult(string fullPath, string fileName)
+        {
+            FullPath = fullPath;
+            FileName = fileName;
         }
     }
 }

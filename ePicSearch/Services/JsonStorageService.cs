@@ -1,4 +1,5 @@
 ﻿using ePicSearch.Entities;
+using ePicSearch.Core.Entities; //TODO: maybe remove
 using Newtonsoft.Json;
 
 namespace ePicSearch.Services

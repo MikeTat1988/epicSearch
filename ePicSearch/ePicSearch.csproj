@@ -66,6 +66,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\ePicSearch.Core\ePicSearch.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="Views\MyAdventuresPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

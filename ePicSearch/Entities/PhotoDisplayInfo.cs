@@ -1,4 +1,5 @@
-﻿namespace ePicSearch.Entities
+﻿using ePicSearch.Core.Entities;
+namespace ePicSearch.Entities
 {
     public class PhotoDisplayInfo
     {

@@ -1,4 +1,5 @@
 using ePicSearch.Services;
+using ePicSearch.Core.Services;
 
 namespace ePicSearch.Views
 {
@@ -50,7 +51,8 @@ namespace ePicSearch.Views
                             return;
                         }
 
-                        var photoInfo = await _photoManager.CapturePhoto(photo, adventureName);
+                        IFileResult appFileResult = new AppFileResult(photo);
+                        var photoInfo = await _photoManager.CapturePhoto(appFileResult, adventureName);
 
                         if (photoInfo.SerialNumber == 1)
                         {

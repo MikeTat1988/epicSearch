@@ -1,13 +1,19 @@
-﻿using ePicSearch.Entities;
-using ePicSearch.Core.Entities;
+﻿using ePicSearch.Core.Entities;
 
-namespace ePicSearch.Services
+namespace ePicSearch.Core.Services
 {
-    public class PhotoStorageService
+    public class PhotoStorageServiceCore
     {
-        public async Task<string> SavePhotoAsync(FileResult photo, PhotoInfo photoInfo)
+        private readonly string _appDataDirectory;
+
+        public PhotoStorageServiceCore(string appDataDirectory)
         {
-            string adventureFolderPath = Path.Combine(GetAppDataDirectory(), photoInfo.AdventureName);
+            _appDataDirectory = appDataDirectory;
+        }
+
+        public async Task<string> SavePhotoAsync(IFileResult photo, PhotoInfo photoInfo)
+        {
+            string adventureFolderPath = Path.Combine(_appDataDirectory, photoInfo.AdventureName);
 
             if (!Directory.Exists(adventureFolderPath))
             {
@@ -29,7 +35,7 @@ namespace ePicSearch.Services
                 throw new IOException($"Failed to copy photo from {photo.FullPath} to {newFilePath}: {ex.Message}", ex);
             }
 
-            // Delete the original photo to prevent duplication using the DeletePhoto method
+            // Delete the original photo to prevent duplication
             try
             {
                 DeletePhoto(photo.FullPath);
@@ -59,7 +65,7 @@ namespace ePicSearch.Services
 
         public string GetPhotoPath(string fileName, string adventureName)
         {
-            string adventureFolderPath = Path.Combine(GetAppDataDirectory(), adventureName);
+            string adventureFolderPath = Path.Combine(_appDataDirectory, adventureName);
             string fullPath = Path.Combine(adventureFolderPath, fileName);
 
             if (File.Exists(fullPath))
@@ -71,7 +77,5 @@ namespace ePicSearch.Services
                 throw new FileNotFoundException($"Photo file not found: {fullPath}");
             }
         }
-
-        protected virtual string GetAppDataDirectory() =>  FileSystem.AppDataDirectory;
     }
 }

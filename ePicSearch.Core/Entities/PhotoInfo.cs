@@ -1,7 +1,6 @@
-﻿namespace ePicSearch.Entities
+﻿namespace ePicSearch.Core.Entities
 {
-    //TODO: change back
-    public class PhotoInfo2
+    public class PhotoInfo
     {
         public string FilePath { get; set; } = ""; 
         public string Name { get; set; } = "";
