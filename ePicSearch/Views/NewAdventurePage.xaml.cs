@@ -1,5 +1,5 @@
 using ePicSearch.Services;
-using ePicSearch.Core.Services;
+using ePicSearch.Infrastructure.Services;
 
 namespace ePicSearch.Views
 {

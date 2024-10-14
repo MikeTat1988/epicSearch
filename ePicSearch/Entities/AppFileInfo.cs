@@ -1,4 +1,4 @@
-﻿using ePicSearch.Core.Services;
+﻿using ePicSearch.Infrastructure.Services;
 using Microsoft.Maui.Storage;
 
 namespace ePicSearch.Services

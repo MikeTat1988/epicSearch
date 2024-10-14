@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ePicSearch.Core\ePicSearch.Infrastructure.csproj" />
     <ProjectReference Include="..\ePicSearch\ePicSearch.csproj" />
   </ItemGroup>
 

@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Maui.Storage;
-using ePicSearch.Core.Services;
+using ePicSearch.Infrastructure.Services;
 using ePicSearch.Views;
 using ePicSearch.Services; // For PhotoManager, CodeGenerator
-using Microsoft.Maui.Controls;
 
 namespace ePicSearch
 {

@@ -1,6 +1,6 @@
-﻿using ePicSearch.Core.Entities;
+﻿using ePicSearch.Infrastructure.Entities;
 
-namespace ePicSearch.Core.Services
+namespace ePicSearch.Infrastructure.Services
 {
     public class PhotoStorageServiceCore
     {

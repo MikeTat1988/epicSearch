@@ -1,6 +1,5 @@
-﻿using ePicSearch.Entities;
-using ePicSearch.Core.Entities;
-using ePicSearch.Core.Services;
+﻿using ePicSearch.Infrastructure.Entities;
+using ePicSearch.Infrastructure.Services;
 
 namespace ePicSearch.Services
 {

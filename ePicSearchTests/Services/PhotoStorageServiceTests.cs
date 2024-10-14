@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using ePicSearch.Core.Entities;
-using ePicSearch.Core.Services;
-using Xunit;
+using ePicSearch.Infrastructure.Services;
+using ePicSearch.Infrastructure.Entities;
 
 namespace ePicSearch.Tests.Services
 {
