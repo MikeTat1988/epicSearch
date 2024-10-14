@@ -12,12 +12,12 @@ namespace ePicSearch.Infrastructure.Services
         public async Task<PhotoInfo> CapturePhoto(IFileResult photo, string adventureName)
         {
             string photoCode = _codeGenerator.GenerateCode();
-            int serialNumber = GetNextSerialNumber(adventureName);
+            int serialNumber = GetNextAvailableSerialNumberForAdventure(adventureName);
 
             var photoInfo = new PhotoInfo
             {
                 FilePath = photo.FullPath,
-                Name = $"{photoCode}_{GetNextSerialNumber(adventureName)}",
+                Name = $"{photoCode}_{serialNumber}",
                 Code = photoCode,
                 AdventureName = adventureName,
                 SerialNumber = serialNumber
@@ -25,44 +25,43 @@ namespace ePicSearch.Infrastructure.Services
 
             // Save photo to disk and update JSON file
             photoInfo.FilePath = await _photoStorageService.SavePhotoAsync(photo, photoInfo);
-            SavePhotoToAdventure(photoInfo);
+            AddPhotoToAdventure(photoInfo);
 
             return photoInfo;
         }
 
         public List<string> GetAllAdventureNames()
         {
-            var adventures = _jsonStorageService.LoadAdventuresFromJson();
-            return adventures
-                .Select(p => p.AdventureName)
-                .Where(name => !string.IsNullOrWhiteSpace(name))
-                .Distinct()
-                .ToList();
+            return _jsonStorageService.GetAllAdventureNames();
         }
 
         public List<PhotoInfo> GetPhotosForAdventure(string adventureName)
         {
-            var adventures = LoadAdventuresFromJson();
-            return adventures.Where(p => p.AdventureName == adventureName).ToList();
+            return _jsonStorageService.GetPhotosForAdventure(adventureName);
         }
 
         public void DeletePhoto(PhotoInfo photo)
         {
-            var adventures = LoadAdventuresFromJson();
-            adventures.RemoveAll(p => p.FilePath == photo.FilePath);
-            SaveAdventuresToJson(adventures);
+            bool isDeleted = PhotoStorageService.DeletePhoto(photo.FilePath);
+
+            if (isDeleted)
+            {
+                RemovePhotoFromAdventure(photo.FilePath);
+            }
         }
 
-        private void SavePhotoToAdventure(PhotoInfo photoInfo)
+        private void AddPhotoToAdventure(PhotoInfo photoInfo)
         {
-            var adventures = LoadAdventuresFromJson();
+            var adventures = _jsonStorageService.LoadAdventuresFromJson();
             adventures.Add(photoInfo);
-            SaveAdventuresToJson(adventures);
+            _jsonStorageService.SaveAdventuresToJson(adventures);
         }
 
-        private List<PhotoInfo> LoadAdventuresFromJson()
+        private void RemovePhotoFromAdventure(string filePath)
         {
-            return _jsonStorageService.LoadAdventuresFromJson();
+            var adventures = _jsonStorageService.LoadAdventuresFromJson();
+            adventures.RemoveAll(p => p.FilePath == filePath);
+            _jsonStorageService.SaveAdventuresToJson(adventures);
         }
 
         private void SaveAdventuresToJson(List<PhotoInfo> adventures)
@@ -70,10 +69,14 @@ namespace ePicSearch.Infrastructure.Services
             _jsonStorageService.SaveAdventuresToJson(adventures);
         }
 
-        private int GetNextSerialNumber(string adventureName)
+        private int GetNextAvailableSerialNumberForAdventure(string adventureName)
         {
-            var adventures = LoadAdventuresFromJson();
-            return adventures.Where(p => p.AdventureName == adventureName).Select(p => p.SerialNumber).DefaultIfEmpty(0).Max() + 1;
+            var adventures = _jsonStorageService.LoadAdventuresFromJson();
+            return adventures
+                .Where(p => p.AdventureName == adventureName)
+                .Select(p => p.SerialNumber)
+                .DefaultIfEmpty(0)
+                .Max() + 1;
         }
     }
 }

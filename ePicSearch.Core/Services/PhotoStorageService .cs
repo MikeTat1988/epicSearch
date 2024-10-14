@@ -3,14 +3,9 @@ using ePicSearch.Infrastructure.Entities.Interfaces;
 
 namespace ePicSearch.Infrastructure.Services
 {
-    public class PhotoStorageService
+    public class PhotoStorageService(IFileSystemService fileSystemService)
     {
-        private readonly string _appDataDirectory;
-
-        public PhotoStorageService(IFileSystemService fileSystemService)
-        {
-            _appDataDirectory = fileSystemService.GetAppDataDirectory();
-        }
+        private readonly string _appDataDirectory = fileSystemService.GetAppDataDirectory();
 
         public async Task<string> SavePhotoAsync(IFileResult photo, PhotoInfo photoInfo)
         {
@@ -23,45 +18,42 @@ namespace ePicSearch.Infrastructure.Services
 
             // Append the correct file extension
             string fileExtension = Path.GetExtension(photo.FileName);
-            string newFileName = $"{photoInfo.Name}{fileExtension}";
-            string newFilePath = Path.Combine(adventureFolderPath, newFileName);
+            string newFilePath = Path.Combine(adventureFolderPath, $"{photoInfo.Name}{fileExtension}");
 
-            // Copy the photo from the original path to the new path
+            // Copy the photo from the original path to the adventure filder
             try
             {
-                File.Copy(photo.FullPath, newFilePath, overwrite: true);
-            }
-            catch (Exception ex)
-            {
-                throw new IOException($"Failed to copy photo from {photo.FullPath} to {newFilePath}: {ex.Message}", ex);
-            }
+                using var sourceStream = File.OpenRead(photo.FullPath);
+                using var destinationStream = File.Create(newFilePath);
 
-            // Delete the original photo to prevent duplication
-            try
-            {
+                await sourceStream.CopyToAsync(destinationStream);
+
                 DeletePhoto(photo.FullPath);
             }
             catch (Exception ex)
             {
-                throw new IOException($"Failed to delete original photo at {photo.FullPath}: {ex.Message}", ex);
+                throw new IOException($"Failed to save photo: {ex.Message}", ex);
             }
 
             return newFilePath;
         }
 
-        public static void DeletePhoto(string filePath)
+        public static bool DeletePhoto(string filePath)
         {
             if (File.Exists(filePath))
             {
                 try
                 {
                     File.Delete(filePath);
+                    return true;
                 }
                 catch (Exception ex)
                 {
                     throw new IOException($"Error deleting file at {filePath}: {ex.Message}", ex);
                 }
             }
+
+            return false;
         }
 
         public string GetPhotoPath(string fileName, string adventureName)

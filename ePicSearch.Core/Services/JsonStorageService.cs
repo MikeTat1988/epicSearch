@@ -31,5 +31,21 @@ namespace ePicSearch.Infrastructure.Services
             var json = JsonConvert.SerializeObject(adventures, Formatting.Indented);
             _fileSystemService.WriteAllText(_jsonFilePath, json);
         }
+
+        public List<string> GetAllAdventureNames()
+        {
+            var adventures = LoadAdventuresFromJson();
+            return adventures
+                .Select(p => p.AdventureName)
+                .Where(name => !string.IsNullOrWhiteSpace(name))
+                .Distinct()
+                .ToList();
+        }
+
+        public List<PhotoInfo> GetPhotosForAdventure(string adventureName)
+        {
+            var adventures = LoadAdventuresFromJson();
+            return adventures.Where(p => p.AdventureName == adventureName).ToList();
+        }
     }
 }
