@@ -3,12 +3,13 @@ using System.IO;
 using System.Threading.Tasks;
 using ePicSearch.Infrastructure.Services;
 using ePicSearch.Infrastructure.Entities;
+using ePicSearch.Infrastructure.Entities.Interfaces;
 
 namespace ePicSearch.Tests.Services
 {
     public class PhotoStorageServiceCoreTests : IDisposable
     {
-        private readonly PhotoStorageServiceCore _photoStorageService;
+        private readonly PhotoStorageService _photoStorageService;
         private readonly string _testAppDataDirectory;
 
         public PhotoStorageServiceCoreTests()
@@ -17,8 +18,11 @@ namespace ePicSearch.Tests.Services
             _testAppDataDirectory = Path.Combine(Path.GetTempPath(), "TestAppData");
             Directory.CreateDirectory(_testAppDataDirectory);
 
-            // Initialize the service with the test directory
-            _photoStorageService = new PhotoStorageServiceCore(_testAppDataDirectory);
+            // Mock IFileSystemService to return the test directory
+            var mockFileSystemService = new TestFileSystemService(_testAppDataDirectory);
+
+            // Initialize the service with the mocked IFileSystemService
+            _photoStorageService = new PhotoStorageService(mockFileSystemService);
         }
 
         [Fact]
@@ -75,6 +79,25 @@ namespace ePicSearch.Tests.Services
                 Directory.Delete(_testAppDataDirectory, true);
             }
         }
+    }
+
+    // Test implementation of IFileSystemService
+    public class TestFileSystemService : IFileSystemService
+    {
+        private readonly string _appDataDirectory;
+
+        public TestFileSystemService(string appDataDirectory)
+        {
+            _appDataDirectory = appDataDirectory;
+        }
+
+        public string GetAppDataDirectory() => _appDataDirectory;
+
+        public bool FileExists(string path) => File.Exists(path);
+
+        public string ReadAllText(string path) => File.ReadAllText(path);
+
+        public void WriteAllText(string path, string content) => File.WriteAllText(path, content);
     }
 
     // Test implementation of IFileResult

@@ -1,14 +1,15 @@
 ﻿using ePicSearch.Infrastructure.Entities;
+using ePicSearch.Infrastructure.Entities.Interfaces;
 
 namespace ePicSearch.Infrastructure.Services
 {
-    public class PhotoStorageServiceCore
+    public class PhotoStorageService
     {
         private readonly string _appDataDirectory;
 
-        public PhotoStorageServiceCore(string appDataDirectory)
+        public PhotoStorageService(IFileSystemService fileSystemService)
         {
-            _appDataDirectory = appDataDirectory;
+            _appDataDirectory = fileSystemService.GetAppDataDirectory();
         }
 
         public async Task<string> SavePhotoAsync(IFileResult photo, PhotoInfo photoInfo)

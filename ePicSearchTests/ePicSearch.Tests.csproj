@@ -32,5 +32,10 @@
   <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
-
+	
+	<ItemGroup>
+		<None Update="Resources\**\*">
+			<ExcludeFromAppPackage>true</ExcludeFromAppPackage>
+		</None>
+	</ItemGroup>
 </Project>

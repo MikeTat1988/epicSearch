@@ -1,7 +1,4 @@
-using ePicSearch.Entities;
-using ePicSearch.Services;
-using Microsoft.Maui.Controls;
-using System.Linq;
+using ePicSearch.Infrastructure.Services;
 
 namespace ePicSearch.Views
 {

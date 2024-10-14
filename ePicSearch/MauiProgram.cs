@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using ePicSearch.Infrastructure.Services;
 using ePicSearch.Views;
-using ePicSearch.Services; // For PhotoManager, CodeGenerator
+using ePicSearch.Infrastructure.Entities.Interfaces;
+using ePicSearch.Services;
 
 namespace ePicSearch
 {
@@ -19,13 +20,11 @@ namespace ePicSearch
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            // Get the app data directory from MAUI
-            string appDataDirectory = FileSystem.AppDataDirectory;
-
             // Register services with the app data directory
             builder.Services
+                .AddSingleton<IFileSystemService, FileSystemService>()
                 .AddSingleton<JsonStorageService>()
-                .AddSingleton<PhotoStorageServiceCore>(sp => new PhotoStorageServiceCore(appDataDirectory))
+                .AddSingleton<PhotoStorageService>()
                 .AddSingleton<CodeGenerator>()
                 .AddSingleton<PhotoManager>()
                 .AddSingleton<MainPage>()

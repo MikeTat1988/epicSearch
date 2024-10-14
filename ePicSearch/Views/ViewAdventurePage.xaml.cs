@@ -1,5 +1,5 @@
 using ePicSearch.Entities;
-using ePicSearch.Services;
+using ePicSearch.Infrastructure.Services;
 
 namespace ePicSearch.Views
 {

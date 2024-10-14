@@ -1,5 +1,6 @@
-using ePicSearch.Services;
 using ePicSearch.Infrastructure.Services;
+using ePicSearch.Infrastructure.Entities.Interfaces;
+using ePicSearch.Entities;
 
 namespace ePicSearch.Views
 {
@@ -7,14 +8,12 @@ namespace ePicSearch.Views
     {
         private readonly PhotoManager _photoManager;
 
-        // Use Dependency Injection to provide PhotoManager instance
         public NewAdventurePage(PhotoManager photoManager)
         {
             InitializeComponent();
             _photoManager = photoManager;
         }
 
-        // Handles starting the creation of a new adventure
         private async void OnStartCreatingClicked(object sender, EventArgs e)
         {
             string adventureName = AdventureNameEntry.Text;

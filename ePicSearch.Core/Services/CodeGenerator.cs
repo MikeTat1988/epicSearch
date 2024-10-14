@@ -1,4 +1,4 @@
-﻿namespace ePicSearch.Services
+﻿namespace ePicSearch.Infrastructure.Services
 {
     public class CodeGenerator
     {

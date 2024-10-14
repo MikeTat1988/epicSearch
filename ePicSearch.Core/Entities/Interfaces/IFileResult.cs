@@ -1,4 +1,4 @@
-﻿namespace ePicSearch.Infrastructure.Services
+﻿namespace ePicSearch.Infrastructure.Entities.Interfaces
 {
     public interface IFileResult
     {

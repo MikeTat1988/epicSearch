@@ -1,16 +1,10 @@
-﻿using ePicSearch.Infrastructure.Services;
-using Microsoft.Maui.Storage;
+﻿using ePicSearch.Infrastructure.Entities.Interfaces;
 
-namespace ePicSearch.Services
+namespace ePicSearch.Entities
 {
-    public class AppFileResult : IFileResult
+    public class AppFileResult(FileResult fileResult) : IFileResult
     {
-        private readonly FileResult _fileResult;
-
-        public AppFileResult(FileResult fileResult)
-        {
-            _fileResult = fileResult;
-        }
+        private readonly FileResult _fileResult = fileResult;
 
         public string FullPath => _fileResult.FullPath;
         public string FileName => _fileResult.FileName;

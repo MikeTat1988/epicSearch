@@ -1,11 +1,11 @@
 ﻿using ePicSearch.Infrastructure.Entities;
-using ePicSearch.Infrastructure.Services;
+using ePicSearch.Infrastructure.Entities.Interfaces;
 
-namespace ePicSearch.Services
+namespace ePicSearch.Infrastructure.Services
 {
-    public class PhotoManager(PhotoStorageServiceCore photoStorageService, CodeGenerator codeGenerator, JsonStorageService jsonStorageService)
+    public class PhotoManager(PhotoStorageService photoStorageService, CodeGenerator codeGenerator, JsonStorageService jsonStorageService)
     {
-        private readonly PhotoStorageServiceCore _photoStorageService = photoStorageService;
+        private readonly PhotoStorageService _photoStorageService = photoStorageService;
         private readonly CodeGenerator _codeGenerator = codeGenerator;
         private readonly JsonStorageService _jsonStorageService = jsonStorageService;
 
@@ -21,7 +21,7 @@ namespace ePicSearch.Services
                 Code = photoCode,
                 AdventureName = adventureName,
                 SerialNumber = serialNumber
-            }; 
+            };
 
             // Save photo to disk and update JSON file
             photoInfo.FilePath = await _photoStorageService.SavePhotoAsync(photo, photoInfo);
