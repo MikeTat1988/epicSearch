@@ -1,16 +1,20 @@
 ﻿using ePicSearch.Infrastructure.Services;
+using Microsoft.Extensions.Logging;
 
 namespace ePicSearch.Views
 {
     public partial class MainPage : ContentPage
     {
         private readonly PhotoManager _photoManager;
+        private readonly ILogger<MainPage> _logger;
 
-        // Use Dependency Injection to provide PhotoManager instance
-        public MainPage(PhotoManager photoManager)
+        public MainPage(PhotoManager photoManager, ILogger<MainPage> logger)
         {
             InitializeComponent();
             _photoManager = photoManager;
+            _logger = logger;
+
+            _logger.LogInformation("MainPage initialized.");
         }
 
         private async void OnSettingsClicked(object sender, EventArgs e)
@@ -20,13 +24,11 @@ namespace ePicSearch.Views
 
         private async void OnMyAdventuresClicked(object sender, EventArgs e)
         {
-            // Pass the PhotoManager instance when navigating to MyAdventuresPage
             await Navigation.PushAsync(new MyAdventuresPage(_photoManager));
         }
 
         private async void OnCreateNewAdventureClicked(object sender, EventArgs e)
         {
-            // Pass the PhotoManager instance when navigating to NewAdventurePage
             await Navigation.PushAsync(new NewAdventurePage(_photoManager));
         }
 
