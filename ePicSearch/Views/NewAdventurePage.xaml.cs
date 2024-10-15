@@ -1,6 +1,7 @@
 using ePicSearch.Infrastructure.Services;
 using ePicSearch.Infrastructure.Entities.Interfaces;
 using ePicSearch.Entities;
+using ePicSearch.Infrastructure.Entities;
 
 namespace ePicSearch.Views
 {
@@ -16,25 +17,14 @@ namespace ePicSearch.Views
 
         private async void OnStartCreatingClicked(object sender, EventArgs e)
         {
-            string adventureName = AdventureNameEntry.Text;
+            var adventureName = await GetValidAdventureNameAsync();
 
-            if (string.IsNullOrEmpty(adventureName))
+            if (adventureName == null)
             {
-                ErrorMessage.Text = "Please enter a name for your adventure.";
-                ErrorMessage.IsVisible = true;
-                return;
-            }
-
-            var existingAdventures = _photoManager.GetAllAdventureNames();
-
-            if (existingAdventures.Contains(adventureName, StringComparer.OrdinalIgnoreCase))
-            {
-                await DisplayAlert("Oops!", "This adventure name already exists. Please choose a different name.", "OK");
-                return;
+                return; // Validation failed, exit the method.
             }
 
             bool keepTakingPhotos = true;
-            bool isError = false;
 
             while (keepTakingPhotos)
             {
@@ -53,45 +43,36 @@ namespace ePicSearch.Views
                         IFileResult appFileResult = new AppFileResult(photo);
                         var photoInfo = await _photoManager.CapturePhoto(appFileResult, adventureName);
 
-                        if (photoInfo.SerialNumber == 1)
+                        if (photoInfo == null)
                         {
-                            await DisplayAlert("Treasure Photo Saved!", $"Code: {photoInfo.Code}, go hide it!", "OK");
+                            await HandleError("Failed to save the photo", sender, e);
+                            return;
                         }
-                        else
-                        {
-                            await DisplayAlert("Clue photo Saved!", $"Code: {photoInfo.Code}, go hide it!", "OK");
-                        }
+
+                        await DisplayPhotoSavedMessage(photoInfo);
 
                         keepTakingPhotos = await DisplayAlert("Another clue?", null, "Yes", "No");
                     }
                     catch (Exception ex)
                     {
-                        await DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
-                        isError = true;
-                        break;
+                        await HandleError(ex.Message, sender, e);
+                        return;
                     }
                 }
                 else
                 {
-                    await DisplayAlert("Error", "Camera is not supported", "OK");
-                    isError = true;
-                    break;
+                    await HandleError("Camera is not supported.", sender, e);
+                    return;
                 }
-            }
-
-            if (isError)
-            {
-                await HandleError(sender, e);
-                return;
             }
 
             await DisplayAlert($"Adventure {adventureName} Saved", null, "OK");
             await Navigation.PopAsync();
         }
 
-        private async Task HandleError(object sender, EventArgs e)
+        private async Task HandleError(string errorMessage, object sender, EventArgs e)
         {
-            bool continueProcess = await DisplayAlert("Error", "Failed to complete the process. Your progress has been saved. Do you want to continue?", "Yes", "No");
+            bool continueProcess = await DisplayAlert("Error", $"{errorMessage} Your progress has been saved. Do you want to continue?", "Yes", "No");
 
             if (continueProcess)
             {
@@ -100,6 +81,40 @@ namespace ePicSearch.Views
             else
             {
                 await Navigation.PopAsync();
+            }
+        }
+
+        private async Task<string?> GetValidAdventureNameAsync()
+        {
+            string adventureName = AdventureNameEntry.Text;
+
+            if (string.IsNullOrEmpty(adventureName))
+            {
+                ErrorMessage.Text = "Please enter a name for your adventure.";
+                ErrorMessage.IsVisible = true;
+                return null;
+            }
+
+            var existingAdventures = _photoManager.GetAllAdventureNames();
+
+            if (existingAdventures.Contains(adventureName, StringComparer.OrdinalIgnoreCase))
+            {
+                await DisplayAlert("Oops!", "This adventure name already exists. Please choose a different name.", "OK");
+                return null;
+            }
+
+            return adventureName;
+        }
+
+        private async Task DisplayPhotoSavedMessage(PhotoInfo photoInfo)
+        {
+            if (photoInfo.SerialNumber == 1)
+            {
+                await DisplayAlert("Treasure Photo Saved!", $"Code: {photoInfo.Code}, go hide it!", "OK");
+            }
+            else
+            {
+                await DisplayAlert("Clue Photo Saved!", $"Code: {photoInfo.Code}, go hide it!", "OK");
             }
         }
     }

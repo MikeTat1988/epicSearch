@@ -14,7 +14,7 @@ namespace ePicSearch.Infrastructure.Services
         private readonly JsonStorageService _jsonStorageService = jsonStorageService;
         private readonly ILogger<PhotoManager> _logger = logger;
 
-        public async Task<PhotoInfo> CapturePhoto(IFileResult photo, string adventureName)
+        public async Task<PhotoInfo?> CapturePhoto(IFileResult photo, string adventureName)
         {
             string photoCode = _codeGenerator.GenerateCode();
             int serialNumber = GetNextAvailableSerialNumberForAdventure(adventureName);
@@ -28,10 +28,24 @@ namespace ePicSearch.Infrastructure.Services
                 SerialNumber = serialNumber
             };
 
-            // Save photo to disk and update JSON file
-            photoInfo.FilePath = await _photoStorageService.SavePhotoAsync(photo, photoInfo);
-            AddPhotoToAdventure(photoInfo);
+            // Save photo 
+            var newFilePath = await _photoStorageService.SavePhotoAsync(photo, photoInfo);
 
+            if (string.IsNullOrEmpty(newFilePath))
+            {
+                _logger.LogWarning($"Failed to save photo for adventure: {adventureName}");
+                return null;
+            }
+
+            photoInfo.FilePath = newFilePath;
+
+            if (!AddPhotoToAdventure(photoInfo))
+            {
+                _logger.LogWarning($"Failed to update JSON for adventure: {adventureName}");
+                return null; // Return null if JSON update fails
+            }
+
+            _logger.LogInformation($"Photo captured and saved successfully for {adventureName}");
             return photoInfo;
         }
 
@@ -46,31 +60,41 @@ namespace ePicSearch.Infrastructure.Services
 
             if (folderDeleted)
             {
-                RemovePhotosFromJson(photos);
-                return true;
+                if (RemovePhotosFromJson(photos))
+                {
+                    _logger.LogInformation($"Successfully deleted adventure: {adventureName}");
+                    return true;
+                }
+                else
+                {
+                    _logger.LogWarning($"Failed to update JSON after deleting adventure: {adventureName}");
+                }
             }
+
+            _logger.LogWarning($"Failed to delete adventure folder for: {adventureName}");
             return false;
         }
 
-        private void AddPhotoToAdventure(PhotoInfo photoInfo)
+        private bool AddPhotoToAdventure(PhotoInfo photoInfo)
         {
             var adventures = _jsonStorageService.LoadAdventuresFromJson();
             adventures.Add(photoInfo);
-            SaveAdventuresToJson(adventures);
-            _logger.LogInformation($"Added photo to adventure: {photoInfo.AdventureName}");
+            return _jsonStorageService.SaveAdventuresToJson(adventures);
         }
 
-        private void RemovePhotosFromJson(List<PhotoInfo> photos)
+        private bool RemovePhotosFromJson(List<PhotoInfo> photos)
         {
             var allPhotos = _jsonStorageService.LoadAdventuresFromJson();
             allPhotos.RemoveAll(p => photos.Any(photo => photo.FilePath == p.FilePath));
-            SaveAdventuresToJson(allPhotos);
-            _logger.LogInformation("Adventure photos removed from JSON and synced.");
-        }
 
-        private void SaveAdventuresToJson(List<PhotoInfo> adventures)
-        {
-            _jsonStorageService.SaveAdventuresToJson(adventures);
+            if(_jsonStorageService.SaveAdventuresToJson(allPhotos))
+            {
+                _logger.LogInformation("Adventure photos removed from JSON and synced.");
+                return true;
+            }
+
+            _logger.LogError("Failed to update JSON after removing adventure photos.");
+            return false;
         }
 
         private int GetNextAvailableSerialNumberForAdventure(string adventureName)

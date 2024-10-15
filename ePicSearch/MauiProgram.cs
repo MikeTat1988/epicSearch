@@ -15,14 +15,15 @@ namespace ePicSearch
 
             var logFilePath = Path.Combine(FileSystem.AppDataDirectory, "logs.txt");
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.File(
-                    logFilePath,
-                    //rollingInterval: RollingInterval.Day,  // Create a new log file each day
-                    rollOnFileSizeLimit: true,  // Roll over when file size is exceeded
-                    fileSizeLimitBytes: 10 * 1024 * 1024,  // 10 MB limit
-                    retainedFileCountLimit: 1) // Keep only the last 1 file
-                .CreateLogger();
+            .MinimumLevel.Debug()  // Set minimum log level
+            .Enrich.FromLogContext() 
+            .WriteTo.File(
+                logFilePath,
+                outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}",
+                rollOnFileSizeLimit: true,  // Roll over when file size exceeds the limit
+                fileSizeLimitBytes: 10 * 1024 * 1024,  // 10 MB file size limit
+                retainedFileCountLimit: 1)  // Keep only the last log file
+            .CreateLogger();
 
             builder
                 .UseMauiApp<App>()

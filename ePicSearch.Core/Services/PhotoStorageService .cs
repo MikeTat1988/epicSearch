@@ -8,49 +8,65 @@ namespace ePicSearch.Infrastructure.Services
     {
         private readonly string _appDataDirectory = fileSystemService.GetAppDataDirectory();
         private readonly ILogger<PhotoStorageService> _logger = logger;
+
         public async Task<string> SavePhotoAsync(IFileResult photo, PhotoInfo photoInfo)
         {
-            string adventureFolderPath = Path.Combine(_appDataDirectory, photoInfo.AdventureName);
-
-            if (!Directory.Exists(adventureFolderPath))
-            {
-                Directory.CreateDirectory(adventureFolderPath);
-            }
-
-            // Append the correct file extension
-            string fileExtension = Path.GetExtension(photo.FileName);
-            string newFilePath = Path.Combine(adventureFolderPath, $"{photoInfo.Name}{fileExtension}");
-
-            // Copy the photo from the original path to the adventure filder
             try
             {
+                string adventureFolderPath = Path.Combine(_appDataDirectory, photoInfo.AdventureName);
+
+                if (!Directory.Exists(adventureFolderPath))
+                {
+                    Directory.CreateDirectory(adventureFolderPath);
+                }
+
+                // Append the correct file extension
+                string fileExtension = Path.GetExtension(photo.FileName);
+                string newFilePath = Path.Combine(adventureFolderPath, $"{photoInfo.Name}{fileExtension}");
+
+                // Copy the photo from the original path to the adventure filder
+
                 using var sourceStream = File.OpenRead(photo.FullPath);
                 using var destinationStream = File.Create(newFilePath);
 
                 await sourceStream.CopyToAsync(destinationStream);
 
-                DeletePhoto(photo.FullPath);
+                if (!DeletePhoto(photo.FullPath))
+                {
+                    _logger.LogWarning($"Failed to delete original photo: {photo.FullPath}");
+                }
+
+                return newFilePath;
             }
             catch (Exception ex)
             {
-                throw new IOException($"Failed to save photo: {ex.Message}", ex);
+                _logger.LogError(ex, $"Failed to save photo: {ex.Message}");
+                return string.Empty;
             }
-
-            return newFilePath;
         }
 
-        public static bool DeletePhoto(string filePath)
+        public bool DeletePhoto(string filePath)
         {
             if (File.Exists(filePath))
             {
                 try
                 {
-                    File.Delete(filePath);
-                    return true;
+                    if (File.Exists(filePath))
+                    {
+                        File.Delete(filePath);
+                        _logger.LogInformation($"Photo deleted: {filePath}");
+                        return true;
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"Photo not found: {filePath}");
+                        return false;
+                    }
                 }
                 catch (Exception ex)
                 {
-                    throw new IOException($"Error deleting file at {filePath}: {ex.Message}", ex);
+                    _logger.LogError(ex, $"Error deleting photo: {ex.Message}");
+                    return false;
                 }
             }
 
