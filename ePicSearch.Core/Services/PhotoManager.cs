@@ -1,13 +1,18 @@
 ﻿using ePicSearch.Infrastructure.Entities;
 using ePicSearch.Infrastructure.Entities.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace ePicSearch.Infrastructure.Services
 {
-    public class PhotoManager(PhotoStorageService photoStorageService, CodeGenerator codeGenerator, JsonStorageService jsonStorageService)
+    public class PhotoManager(PhotoStorageService photoStorageService, 
+        CodeGenerator codeGenerator, 
+        JsonStorageService jsonStorageService, 
+        ILogger<PhotoManager> logger)
     {
         private readonly PhotoStorageService _photoStorageService = photoStorageService;
         private readonly CodeGenerator _codeGenerator = codeGenerator;
         private readonly JsonStorageService _jsonStorageService = jsonStorageService;
+        private readonly ILogger<PhotoManager> _logger = logger;
 
         public async Task<PhotoInfo> CapturePhoto(IFileResult photo, string adventureName)
         {
@@ -30,38 +35,37 @@ namespace ePicSearch.Infrastructure.Services
             return photoInfo;
         }
 
-        public List<string> GetAllAdventureNames()
-        {
-            return _jsonStorageService.GetAllAdventureNames();
-        }
+        public List<string> GetAllAdventureNames() => _jsonStorageService.GetAllAdventureNames();
 
-        public List<PhotoInfo> GetPhotosForAdventure(string adventureName)
-        {
-            return _jsonStorageService.GetPhotosForAdventure(adventureName);
-        }
+        public List<PhotoInfo> GetPhotosForAdventure(string adventureName) => _jsonStorageService.GetPhotosForAdventure(adventureName);
 
-        public void DeletePhoto(PhotoInfo photo)
+        public bool DeleteAdventure(string adventureName)
         {
-            bool isDeleted = PhotoStorageService.DeletePhoto(photo.FilePath);
+            var photos = GetPhotosForAdventure(adventureName);
+            bool folderDeleted = _photoStorageService.DeleteAdventureFolder(adventureName);
 
-            if (isDeleted)
+            if (folderDeleted)
             {
-                RemovePhotoFromAdventure(photo.FilePath);
+                RemovePhotosFromJson(photos);
+                return true;
             }
+            return false;
         }
 
         private void AddPhotoToAdventure(PhotoInfo photoInfo)
         {
             var adventures = _jsonStorageService.LoadAdventuresFromJson();
             adventures.Add(photoInfo);
-            _jsonStorageService.SaveAdventuresToJson(adventures);
+            SaveAdventuresToJson(adventures);
+            _logger.LogInformation($"Added photo to adventure: {photoInfo.AdventureName}");
         }
 
-        private void RemovePhotoFromAdventure(string filePath)
+        private void RemovePhotosFromJson(List<PhotoInfo> photos)
         {
-            var adventures = _jsonStorageService.LoadAdventuresFromJson();
-            adventures.RemoveAll(p => p.FilePath == filePath);
-            _jsonStorageService.SaveAdventuresToJson(adventures);
+            var allPhotos = _jsonStorageService.LoadAdventuresFromJson();
+            allPhotos.RemoveAll(p => photos.Any(photo => photo.FilePath == p.FilePath));
+            SaveAdventuresToJson(allPhotos);
+            _logger.LogInformation("Adventure photos removed from JSON and synced.");
         }
 
         private void SaveAdventuresToJson(List<PhotoInfo> adventures)

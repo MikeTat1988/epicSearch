@@ -1,12 +1,13 @@
 ﻿using ePicSearch.Infrastructure.Entities;
 using ePicSearch.Infrastructure.Entities.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace ePicSearch.Infrastructure.Services
 {
-    public class PhotoStorageService(IFileSystemService fileSystemService)
+    public class PhotoStorageService(IFileSystemService fileSystemService, ILogger<PhotoStorageService> logger)
     {
         private readonly string _appDataDirectory = fileSystemService.GetAppDataDirectory();
-
+        private readonly ILogger<PhotoStorageService> _logger = logger;
         public async Task<string> SavePhotoAsync(IFileResult photo, PhotoInfo photoInfo)
         {
             string adventureFolderPath = Path.Combine(_appDataDirectory, photoInfo.AdventureName);
@@ -55,6 +56,31 @@ namespace ePicSearch.Infrastructure.Services
 
             return false;
         }
+
+        public bool DeleteAdventureFolder(string adventureName)
+        {
+            string adventureFolderPath = Path.Combine(_appDataDirectory, adventureName);
+
+            try
+            {
+                if (Directory.Exists(adventureFolderPath))
+                {
+                    _logger.LogInformation($"Deleting folder for adventure: {adventureName}");
+                    Directory.Delete(adventureFolderPath, true);  // Recursively delete contents
+                }
+                else
+                {
+                    _logger.LogWarning($"Adventure folder not found: {adventureName}");
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error deleting folder for adventure: {adventureName}");
+                return false;
+            }
+        }
+
 
         public string GetPhotoPath(string fileName, string adventureName)
         {

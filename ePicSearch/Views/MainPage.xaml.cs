@@ -24,7 +24,7 @@ namespace ePicSearch.Views
 
         private async void OnMyAdventuresClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MyAdventuresPage(_photoManager));
+            await Navigation.PushAsync(new MyAdventuresPage(_photoManager, _logger));
         }
 
         private async void OnCreateNewAdventureClicked(object sender, EventArgs e)
