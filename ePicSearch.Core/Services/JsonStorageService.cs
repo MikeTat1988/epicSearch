@@ -10,6 +10,8 @@ namespace ePicSearch.Infrastructure.Services
         private readonly IFileSystemService _fileSystemService;
         private readonly ILogger<JsonStorageService> _logger;
         private readonly string _jsonFilePath;
+        private List<PhotoInfo> _cache;  // Cache to minimize I/O
+        private bool _isCacheDirty = false;  // Track changes
 
         public JsonStorageService(IFileSystemService fileSystemService, ILogger<JsonStorageService> logger)
         {
@@ -18,9 +20,10 @@ namespace ePicSearch.Infrastructure.Services
             _logger = logger;
 
             _logger.LogInformation($"Initialized with file path: {_jsonFilePath}");
+            _cache = LoadAdventuresFromFile();
         }
 
-        public List<PhotoInfo> LoadAdventuresFromJson()
+        public List<PhotoInfo> LoadAdventuresFromFile()
         {
             _logger.LogInformation($"Loading adventures from JSON.");
 
@@ -34,7 +37,7 @@ namespace ePicSearch.Infrastructure.Services
             {
                 var json = _fileSystemService.ReadAllText(_jsonFilePath);
                 var adventures = JsonConvert.DeserializeObject<List<PhotoInfo>>(json) ?? new List<PhotoInfo>();
-                _logger.LogInformation($"Successfully loaded {adventures.Count} adventures.");
+                _logger.LogInformation($"Loaded {adventures.Count} adventures from JSON.");
                 return adventures;
             }
             catch (Exception ex)
@@ -44,48 +47,58 @@ namespace ePicSearch.Infrastructure.Services
             }
         }
 
+        public List<PhotoInfo> LoadAdventuresFromJson()
+        {
+            _logger.LogInformation("Fetching adventures from cache.");
+            return _cache;
+        }
+
         public bool SaveAdventuresToJson(List<PhotoInfo> adventures)
         {
-            _logger.LogInformation($"Saving {adventures.Count} adventures to JSON.");
+            _logger.LogInformation($"Updating cache with {adventures.Count} adventures.");
+            _cache = new List<PhotoInfo>(adventures);
+            _isCacheDirty = true;
 
-            try
-            {
-                var json = JsonConvert.SerializeObject(adventures, Formatting.Indented);
-                _fileSystemService.WriteAllText(_jsonFilePath, json);
-                _logger.LogInformation($"Adventures successfully saved.");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error saving adventures to JSON.");
-                return false;
-            }
+            _logger.LogInformation("Cache updated");
+            return true;
         }
 
         public List<string> GetAllAdventureNames()
         {
-            _logger.LogInformation($"Retrieving all adventure names.");
-
-            var adventures = LoadAdventuresFromJson();
-            var adventureNames = adventures
+            _logger.LogInformation($"Fetching all adventure names from cache.");
+            return _cache
                 .Select(p => p.AdventureName)
-                .Where(name => !string.IsNullOrWhiteSpace(name))
                 .Distinct()
                 .ToList();
-
-            _logger.LogInformation($"Retrieved {adventureNames.Count} unique adventure names.");
-            return adventureNames;
         }
 
         public List<PhotoInfo> GetPhotosForAdventure(string adventureName)
         {
             _logger.LogInformation($"Retrieving photos for adventure: {adventureName}");
 
-            var adventures = LoadAdventuresFromJson();
-            var photos = adventures.Where(p => p.AdventureName == adventureName).ToList();
+            return _cache.Where(p => p.AdventureName == adventureName).ToList();
+        }
 
-            _logger.LogInformation($"Retrieved {photos.Count} photos for adventure: {adventureName}");
-            return photos;
+        public void SyncCacheToFile()
+        {
+            if (!_isCacheDirty)
+            {
+                _logger.LogInformation("Cache is clean. No need to sync with JSON.");
+                return;
+            }
+
+            try
+            {
+                _logger.LogInformation("Syncing cache with JSON file.");
+                var json = JsonConvert.SerializeObject(_cache, Formatting.Indented);
+                _fileSystemService.WriteAllText(_jsonFilePath, json);
+                _isCacheDirty = false;  // Reset dirty flag
+                _logger.LogInformation("Cache successfully synced to JSON.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error syncing cache to JSON.");
+            }
         }
     }
 }

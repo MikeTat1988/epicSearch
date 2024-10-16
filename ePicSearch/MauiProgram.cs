@@ -19,7 +19,7 @@ namespace ePicSearch
             .Enrich.FromLogContext() 
             .WriteTo.File(
                 logFilePath,
-                outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}",
+                outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff } [{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}",
                 rollOnFileSizeLimit: true,  // Roll over when file size exceeds the limit
                 fileSizeLimitBytes: 10 * 1024 * 1024,  // 10 MB file size limit
                 retainedFileCountLimit: 1)  // Keep only the last log file
