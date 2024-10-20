@@ -47,13 +47,13 @@ namespace ePicSearch.Infrastructure.Services
             }
         }
 
-        public List<PhotoInfo> LoadAdventuresFromJson()
+        public List<PhotoInfo> LoadAllAdventures()
         {
             _logger.LogInformation("Fetching adventures from cache.");
             return _cache;
         }
 
-        public bool SaveAdventuresToJson(List<PhotoInfo> adventures)
+        public bool SaveAllAdventures(List<PhotoInfo> adventures)
         {
             _logger.LogInformation($"Updating cache with {adventures.Count} adventures.");
             _cache = new List<PhotoInfo>(adventures);
@@ -90,7 +90,9 @@ namespace ePicSearch.Infrastructure.Services
             try
             {
                 _logger.LogInformation("Syncing cache with JSON file.");
+                _logger.LogInformation($"cache written : {_cache}");
                 var json = JsonConvert.SerializeObject(_cache, Formatting.Indented);
+
                 _fileSystemService.WriteAllText(_jsonFilePath, json);
                 _isCacheDirty = false;  // Reset dirty flag
                 _logger.LogInformation("Cache successfully synced to JSON.");

@@ -1,20 +1,81 @@
 ﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:blur="clr-namespace:ePicSearch.Behaviors"
              x:Class="ePicSearch.Views.MainPage">
-    <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="20">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="150" />
+            <!-- Button rows-->
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            
+            <RowDefinition Height="*" />
+            <!-- Low Button rows-->
+            <RowDefinition Height="120" />
+        </Grid.RowDefinitions>
 
-        <!-- Button for Settings -->
-        <Button x:Name="SettingsBtn" Text="Settings" Clicked="OnSettingsClicked" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-        <!-- Button for My Adventures -->
-        <Button x:Name="MyAdventuresBtn" Text="My Adventures" Clicked="OnMyAdventuresClicked" />
+        <Image x:Name="BackgroundImage"
+               Source="mainpage_background.webp"
+               Aspect="AspectFill"
+               Grid.RowSpan="5"
+               Grid.ColumnSpan="3">
+            <Image.Behaviors>
+                <blur:BlurBehavior  Radius="0" x:Name="BlurEffect"/>
+            </Image.Behaviors>
+        </Image>
 
-        <!-- Button for New Adventure -->
-        <Button x:Name="CreateNewAdventureBtn" Text="Create New Adventure" Clicked="OnCreateNewAdventureClicked" />
+        <!-- My Adventures Button -->
+        <ImageButton Source="start_adventure_button.webp"
+                Clicked="OnMyAdventuresClicked"
+                x:Name="MyAdventuresButton"
+                WidthRequest="180"
+                Aspect="AspectFit"
+                Grid.Row="1"
+                Grid.Column="1"
+                HorizontalOptions="Center"
+                VerticalOptions="Start"
+                Opacity="0"/>
 
-        <!-- Button for Quit App -->
-        <Button x:Name="QuitBtn" Text="Quit" Clicked="OnQuitClicked" />
+        <!-- Create Adventure Button -->
+        <ImageButton  Source="create_adventure_button.webp"
+                Clicked="OnCreateNewAdventureClicked"
+                x:Name="CreateAdventureButton"
+                WidthRequest="200"
+                Aspect="AspectFit"
+                Grid.Row="2"
+                Grid.Column="1"
+                HorizontalOptions="Center"
+                VerticalOptions="Start"
+                Opacity="0"/>
 
-    </StackLayout>
+        <!-- Exit Button in Row 0, Column 0 -->
+        <ImageButton  Source="quit_button.webp"
+                    Clicked="OnQuitClicked"
+                    x:Name="QuitButton"
+                    WidthRequest="60"
+                    HeightRequest="60"
+                    Grid.Row="4"
+                    Grid.Column="0"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Opacity="0"/>
+
+        <!-- Settings Button in Row 0, Column 2 -->
+        <ImageButton Source="settings_button.webp"
+                    Clicked="OnSettingsClicked"
+                    x:Name="SettingsButton"
+                    WidthRequest="60"
+                    HeightRequest="60"
+                    Grid.Row="4"
+                    Grid.Column="2"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Opacity="0"/>
+    </Grid>
 </ContentPage>
-

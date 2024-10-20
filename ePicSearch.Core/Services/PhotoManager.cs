@@ -1,6 +1,7 @@
 ﻿using ePicSearch.Infrastructure.Entities;
 using ePicSearch.Infrastructure.Entities.Interfaces;
 using Microsoft.Extensions.Logging;
+using static ePicSearch.Infrastructure.Services.PhotoStorageService;
 
 namespace ePicSearch.Infrastructure.Services
 {
@@ -49,6 +50,32 @@ namespace ePicSearch.Infrastructure.Services
             return photoInfo;
         }
 
+        public bool UpdatePhotoState(PhotoInfo updatedPhoto)
+        {
+            var allPhotos = _jsonStorageService.LoadAllAdventures();
+
+            _logger.LogInformation($"Updating photo state for {updatedPhoto.FilePath}");
+
+            // Find the existing photo and update its state
+            var photoToUpdate = allPhotos.FirstOrDefault(p => p.FilePath == updatedPhoto.FilePath);
+            if (photoToUpdate != null)
+            {
+                photoToUpdate.IsLocked = updatedPhoto.IsLocked;
+
+                // Save the updated list back to the cache
+                _jsonStorageService.SaveAllAdventures(allPhotos);
+
+                _logger.LogInformation($"Updated photo state for {updatedPhoto.FilePath}");
+
+                return true;
+            }
+            else
+            {
+                _logger.LogWarning($"Could not find the photo to update: {updatedPhoto.FilePath}");
+                return false;
+            }
+        }
+
         public List<string> GetAllAdventureNames() => _jsonStorageService.GetAllAdventureNames();
 
         public List<PhotoInfo> GetPhotosForAdventure(string adventureName) => _jsonStorageService.GetPhotosForAdventure(adventureName);
@@ -56,38 +83,49 @@ namespace ePicSearch.Infrastructure.Services
         public bool DeleteAdventure(string adventureName)
         {
             var photos = GetPhotosForAdventure(adventureName);
-            bool folderDeleted = _photoStorageService.DeleteAdventureFolder(adventureName);
+            _logger.LogInformation($"Loaded photos : \n {string.Join(",\n", photos)} for  {adventureName}");
 
-            if (folderDeleted)
+            var deleteResult = _photoStorageService.DeleteAdventureFolder(adventureName);
+
+            switch (deleteResult)
             {
-                if (RemovePhotosFromJson(photos))
-                {
-                    _logger.LogInformation($"Successfully deleted adventure: {adventureName}");
-                    return true;
-                }
-                else
-                {
-                    _logger.LogWarning($"Failed to update JSON after deleting adventure: {adventureName}");
-                }
+                case DeleteFolderResult.Success:
+
+                case DeleteFolderResult.NotFound:
+
+                    if (RemovePhotosFromJson(photos))
+                    {
+                        _jsonStorageService.SyncCacheToFile();
+                        _logger.LogInformation($"Successfully deleted adventure: {adventureName}");
+                        return true;
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"Failed to update JSON after deleting adventure: {adventureName}");
+                    }
+                    break;
+
+                case DeleteFolderResult.Failure:
+                    _logger.LogWarning($"Failed to delete adventure folder for: {adventureName} due to an error.");
+                    break;
             }
 
-            _logger.LogWarning($"Failed to delete adventure folder for: {adventureName}");
             return false;
         }
 
         private bool AddPhotoToAdventure(PhotoInfo photoInfo)
         {
-            var adventures = _jsonStorageService.LoadAdventuresFromJson();
+            var adventures = _jsonStorageService.LoadAllAdventures();
             adventures.Add(photoInfo);
-            return _jsonStorageService.SaveAdventuresToJson(adventures);
+            return _jsonStorageService.SaveAllAdventures(adventures);
         }
 
         private bool RemovePhotosFromJson(List<PhotoInfo> photos)
         {
-            var allPhotos = _jsonStorageService.LoadAdventuresFromJson();
+            var allPhotos = _jsonStorageService.LoadAllAdventures();
             allPhotos.RemoveAll(p => photos.Any(photo => photo.FilePath == p.FilePath));
 
-            if(_jsonStorageService.SaveAdventuresToJson(allPhotos))
+            if(_jsonStorageService.SaveAllAdventures(allPhotos))
             {
                 _logger.LogInformation("Adventure photos removed from JSON and synced.");
                 return true;
@@ -99,7 +137,7 @@ namespace ePicSearch.Infrastructure.Services
 
         private int GetNextAvailableSerialNumberForAdventure(string adventureName)
         {
-            var adventures = _jsonStorageService.LoadAdventuresFromJson();
+            var adventures = _jsonStorageService.LoadAllAdventures();
             return adventures
                 .Where(p => p.AdventureName == adventureName)
                 .Select(p => p.SerialNumber)

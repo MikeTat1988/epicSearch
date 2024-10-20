@@ -1,6 +1,4 @@
-﻿using ePicSearch.Views;
-using ePicSearch.Services;
-using ePicSearch.Infrastructure.Services;
+﻿using ePicSearch.Infrastructure.Services;
 
 namespace ePicSearch
 {

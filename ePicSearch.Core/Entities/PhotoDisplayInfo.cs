@@ -10,6 +10,7 @@ namespace ePicSearch.Entities
         public PhotoDisplayInfo(PhotoInfo photo, int index, int totalPhotos)
         {
             Photo = photo;
+            Photo.IsLocked = (index != totalPhotos - 1); 
             DisplaySerialNumber = (index == totalPhotos - 1) ? "Treasure!" : (index + 1).ToString();
             ShouldShowCode = (index != 0);
         }

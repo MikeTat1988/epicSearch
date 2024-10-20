@@ -73,7 +73,7 @@ namespace ePicSearch.Infrastructure.Services
             return false;
         }
 
-        public bool DeleteAdventureFolder(string adventureName)
+        public DeleteFolderResult DeleteAdventureFolder(string adventureName)
         {
             string adventureFolderPath = Path.Combine(_appDataDirectory, adventureName);
 
@@ -83,20 +83,20 @@ namespace ePicSearch.Infrastructure.Services
                 {
                     _logger.LogInformation($"Deleting folder for adventure: {adventureName}");
                     Directory.Delete(adventureFolderPath, true);  // Recursively delete contents
+                    return DeleteFolderResult.Success;
                 }
                 else
                 {
                     _logger.LogWarning($"Adventure folder not found: {adventureName}");
-                }
-                return true;
+                    return DeleteFolderResult.NotFound;
+                }                
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error deleting folder for adventure: {adventureName}");
-                return false;
+                return DeleteFolderResult.Failure;
             }
         }
-
 
         public string GetPhotoPath(string fileName, string adventureName)
         {
@@ -111,6 +111,13 @@ namespace ePicSearch.Infrastructure.Services
             {
                 throw new FileNotFoundException($"Photo file not found: {fullPath}");
             }
+        }
+
+        public enum DeleteFolderResult
+        {
+            Success,
+            NotFound,
+            Failure
         }
     }
 }

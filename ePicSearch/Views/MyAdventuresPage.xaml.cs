@@ -37,11 +37,15 @@ namespace ePicSearch.Views
             }
         }
 
-        private async void OnViewAdventureClicked(object sender, EventArgs e)
+        private async void OnPlayAdventureClicked(object sender, EventArgs e)
         {
             if (sender is Button button && button.CommandParameter is string adventureName)
             {
-                await Navigation.PushAsync(new ViewAdventurePage(adventureName, _photoManager));
+                var logger = DependencyService.Get<ILogger<GamePage>>();
+
+                _logger.LogInformation($"Attempting to play adventure {adventureName}");
+
+                await Navigation.PushAsync(new GamePage(adventureName, logger, _photoManager));
             }
         }
 

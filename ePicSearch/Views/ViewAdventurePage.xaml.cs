@@ -17,6 +17,7 @@ namespace ePicSearch.Views
             LoadPhotos(adventureName);
         }
 
+        //TODO: maybe remove after finishing GamePAge?
         private void LoadPhotos(string adventureName)
         {
             var photos = _photoManager.GetPhotosForAdventure(adventureName);

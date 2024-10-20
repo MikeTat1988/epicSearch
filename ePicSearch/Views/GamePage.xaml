@@ -1,0 +1,58 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ePicSearch.Views.GamePage">
+    <StackLayout Padding="10" Spacing="20">
+        <Label Text="{Binding AdventureName}" FontSize="24" HorizontalOptions="Center" TextColor="Black" />
+
+        <CollectionView x:Name="PhotoCollectionView"
+                ItemsSource="{Binding Photos}"
+                HorizontalScrollBarVisibility="Never"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="CenterAndExpand">
+            <CollectionView.ItemsLayout>
+                <!-- Set to Horizontal List -->
+                <LinearItemsLayout Orientation="Horizontal" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="5">
+                        <!-- Base Layer: Actual Photo -->
+                        <Image Source="{Binding Photo.FilePath}" 
+                           Aspect="AspectFill" 
+                           HeightRequest="150" 
+                           WidthRequest="150">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding BindingContext.ShowPhotoCommand, Source={x:Reference PhotoCollectionView}}"
+                                                  CommandParameter="{Binding .}" />
+                                </Image.GestureRecognizers>
+                            </Image>
+
+                        <!-- Overlay Layer: Question Mark -->
+                        <Image Source="question_mark1.webp"
+                           IsVisible="{Binding IsLocked}"
+                           Aspect="AspectFit"
+                           HeightRequest="150" 
+                           WidthRequest="150"
+                           Opacity="0.6" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+
+        <!-- Full-Screen Photo Modal (Initially Hidden) -->
+        <ContentView x:Name="PhotoModal" IsVisible="False" BackgroundColor="#000000AA">
+            <Grid VerticalOptions="Center" HorizontalOptions="Center">
+                <!-- Full-Screen Photo or Question Mark -->
+                <Image x:Name="FullScreenPhoto" Aspect="AspectFit" HeightRequest="300" WidthRequest="300" />
+
+                <!-- Code Entry Overlay when Locked -->
+                <StackLayout x:Name="CodeEntryOverlay" IsVisible="False" BackgroundColor="#FFFFFFDD" Padding="20" VerticalOptions="End">
+                    <Entry x:Name="FullScreenCodeEntry" Placeholder="Enter unlock code" WidthRequest="200"/>
+                    <Button Text="Unlock" Command="{Binding UnlockPhotoCommand}" 
+                            CommandParameter="{Binding Text, Source={x:Reference FullScreenCodeEntry}}" />
+                </StackLayout>
+            </Grid>
+        </ContentView>
+    </StackLayout>
+</ContentPage>

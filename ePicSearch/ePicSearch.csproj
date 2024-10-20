@@ -51,10 +51,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.91" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.91" />
-		<PackageReference Include="Microsoft.Maui.Graphics.Skia" Version="8.0.92" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Serilog" Version="4.0.2" />
 		<PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
@@ -66,6 +66,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\GamePage.xaml.cs">
+	    <DependentUpon>GamePage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\SplashCreen.xaml.cs">
 	    <DependentUpon>SplashCreen.xaml</DependentUpon>
 	  </Compile>
@@ -77,6 +80,9 @@
 		</MauiXaml>
 		<MauiXaml Update="Views\NewAdventurePage.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\GamePage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\SplashCreen.xaml">
 		  <Generator>MSBuild:Compile</Generator>

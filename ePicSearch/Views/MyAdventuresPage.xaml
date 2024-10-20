@@ -30,7 +30,7 @@
 
                                 <!-- Buttons  -->
                                 <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="Center">
-                                    <Button Text="View" Clicked="OnViewAdventureClicked" CommandParameter="{Binding .}" />
+                                    <Button Text="Play" Clicked="OnPlayAdventureClicked" CommandParameter="{Binding .}" />
                                     <Button Text="Delete" Clicked="OnDeleteAdventureClicked" CommandParameter="{Binding .}" />
                                 </StackLayout>
                             </StackLayout>

@@ -4,6 +4,7 @@ using ePicSearch.Views;
 using ePicSearch.Infrastructure.Entities.Interfaces;
 using ePicSearch.Services;
 using Serilog;
+using CommunityToolkit.Maui;
 
 namespace ePicSearch
 {
@@ -27,6 +28,7 @@ namespace ePicSearch
 
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
