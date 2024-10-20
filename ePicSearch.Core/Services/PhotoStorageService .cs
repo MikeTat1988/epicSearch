@@ -73,7 +73,7 @@ namespace ePicSearch.Infrastructure.Services
             return false;
         }
 
-        public DeleteFolderResult DeleteAdventureFolder(string adventureName)
+        public async Task<DeleteFolderResult> DeleteAdventureFolderAsync(string adventureName)
         {
             string adventureFolderPath = Path.Combine(_appDataDirectory, adventureName);
 
@@ -82,7 +82,7 @@ namespace ePicSearch.Infrastructure.Services
                 if (Directory.Exists(adventureFolderPath))
                 {
                     _logger.LogInformation($"Deleting folder for adventure: {adventureName}");
-                    Directory.Delete(adventureFolderPath, true);  // Recursively delete contents
+                    await Task.Run(() => Directory.Delete(adventureFolderPath, true));   // Recursively delete contents
                     return DeleteFolderResult.Success;
                 }
                 else

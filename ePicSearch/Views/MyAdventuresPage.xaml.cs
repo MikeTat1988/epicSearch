@@ -7,19 +7,25 @@ namespace ePicSearch.Views
     {
         private readonly PhotoManager _photoManager;
         private readonly ILogger<MainPage> _logger;
+        private readonly ILogger<GamePage> _gamePageLogger;
 
         // Use Dependency Injection to provide PhotoManager instance
-        public MyAdventuresPage(PhotoManager photoManager, ILogger<MainPage> logger)
+        public MyAdventuresPage(PhotoManager photoManager, ILogger<MainPage> logger, ILogger<GamePage> gamePageLogger)
         {
             InitializeComponent();
             _photoManager = photoManager;
             _logger = logger;
+            _gamePageLogger = gamePageLogger;
+
             LoadAdventures();
         }
 
         // Load adventures from JSON to display in the UI
         private void LoadAdventures()
         {
+            _logger.LogInformation($"Attempting to load all adventures");
+            AdventuresList.ItemsSource = null;
+
             var adventures = _photoManager.GetAllAdventureNames();
 
             if (adventures.Count > 0)
@@ -35,17 +41,16 @@ namespace ePicSearch.Views
                 DeleteAllButton.IsVisible = false;
                 NoAdventuresGrid.IsVisible = true;
             }
+            _logger.LogInformation($"Done loading adventures");
         }
 
         private async void OnPlayAdventureClicked(object sender, EventArgs e)
         {
             if (sender is Button button && button.CommandParameter is string adventureName)
             {
-                var logger = DependencyService.Get<ILogger<GamePage>>();
-
                 _logger.LogInformation($"Attempting to play adventure {adventureName}");
 
-                await Navigation.PushAsync(new GamePage(adventureName, logger, _photoManager));
+                await Navigation.PushAsync(new GamePage(adventureName, _gamePageLogger, _photoManager));
             }
         }
 
@@ -61,18 +66,19 @@ namespace ePicSearch.Views
                         _logger.LogInformation($"Attempting to delete adventure: {adventureName}");
 
                         // Delete all photos and adventure folder
-                        bool photosDeleted = _photoManager.DeleteAdventure(adventureName);
+                        bool photosDeleted = await _photoManager.DeleteAdventureAsync(adventureName);
 
                         if (photosDeleted)
                         {
                             _logger.LogInformation($"Successfully deleted adventure: {adventureName}");
-                            LoadAdventures();
                         }
                         else
                         {
                             _logger.LogWarning($"Failed to delete photos for adventure: {adventureName}");
                             await DisplayAlert("Error", "Could not delete the photos for the adventure.", "OK");
                         }
+
+                        LoadAdventures();
                     }
                     catch (Exception ex)
                     {
@@ -98,7 +104,7 @@ namespace ePicSearch.Views
 
                     foreach (var adventureName in allAdventureNames)
                     {
-                        bool success = _photoManager.DeleteAdventure(adventureName);
+                        bool success = await _photoManager.DeleteAdventureAsync(adventureName);
                         if (!success)
                         {
                             _logger.LogWarning($"Failed to delete adventure: {adventureName}");

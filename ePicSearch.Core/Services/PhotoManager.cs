@@ -26,7 +26,8 @@ namespace ePicSearch.Infrastructure.Services
                 Name = $"{photoCode}_{serialNumber}",
                 Code = photoCode,
                 AdventureName = adventureName,
-                SerialNumber = serialNumber
+                SerialNumber = serialNumber,
+                IsLocked = true
             };
 
             // Save photo 
@@ -80,34 +81,43 @@ namespace ePicSearch.Infrastructure.Services
 
         public List<PhotoInfo> GetPhotosForAdventure(string adventureName) => _jsonStorageService.GetPhotosForAdventure(adventureName);
 
-        public bool DeleteAdventure(string adventureName)
+        public async Task<bool> DeleteAdventureAsync(string adventureName)
         {
-            var photos = GetPhotosForAdventure(adventureName);
-            _logger.LogInformation($"Loaded photos : \n {string.Join(",\n", photos)} for  {adventureName}");
-
-            var deleteResult = _photoStorageService.DeleteAdventureFolder(adventureName);
-
-            switch (deleteResult)
+            try
             {
-                case DeleteFolderResult.Success:
+                var photos = GetPhotosForAdventure(adventureName);
+                _logger.LogInformation($"Loaded photos : \n {string.Join(",\n", photos)} for  {adventureName}");
 
-                case DeleteFolderResult.NotFound:
+                var deleteResult = await _photoStorageService.DeleteAdventureFolderAsync(adventureName);
 
-                    if (RemovePhotosFromJson(photos))
-                    {
-                        _jsonStorageService.SyncCacheToFile();
-                        _logger.LogInformation($"Successfully deleted adventure: {adventureName}");
-                        return true;
-                    }
-                    else
-                    {
-                        _logger.LogWarning($"Failed to update JSON after deleting adventure: {adventureName}");
-                    }
-                    break;
-
-                case DeleteFolderResult.Failure:
+                if (deleteResult == DeleteFolderResult.Failure)
+                {
                     _logger.LogWarning($"Failed to delete adventure folder for: {adventureName} due to an error.");
-                    break;
+                    return false;
+                }
+
+                if (deleteResult == DeleteFolderResult.NotFound)
+                {
+                    _logger.LogWarning($"Adventure folder not found: {adventureName}. Proceeding with JSON cleanup.");
+                }
+
+                // Remove photos from JSON cache
+                if (!RemovePhotosFromJson(photos))
+                {
+                    _logger.LogWarning($"Failed to update JSON after deleting adventure: {adventureName}");
+                    return false; // Exit if JSON update fails
+                }
+
+                // Ensure the cache syncs to file only if everything else succeeded
+                _jsonStorageService.SyncCacheToFile();
+                _logger.LogInformation($"Successfully deleted adventure: {adventureName}");
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"An error occurred while deleting adventure: {adventureName}");
             }
 
             return false;

@@ -22,14 +22,18 @@ namespace ePicSearch.Views
 		{
 			InitializeComponent();
 
-			_logger = logger;
-			AdventureName = adventureName;
+            _logger = logger;
+            _logger.LogInformation($"GamePage for adventure: {adventureName} initialized");
+
+            AdventureName = adventureName;
 			Photos = new ObservableCollection<PhotoDisplayInfo>();
 
 			ShowPhotoCommand = new Command<PhotoDisplayInfo>(ShowPhoto);
 			UnlockPhotoCommand = new Command<string>(UnlockPhoto);
             _photoManager = photoManager;
             _selectedPhoto = null;
+
+            LoadAdventurePhotos(adventureName);
         }
 
 		private void LoadAdventurePhotos(string adventureName)
@@ -67,7 +71,7 @@ namespace ePicSearch.Views
             if (photoInfo.Photo.IsLocked)
             {
                 // Show the locked overlay image
-                FullScreenPhoto.Source = "question_mark1.png";
+                FullScreenPhoto.Source = "question_mark_1.webp";
                 CodeEntryOverlay.IsVisible = true;
             }
             else
