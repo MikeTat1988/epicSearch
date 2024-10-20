@@ -14,11 +14,11 @@ namespace ePicSearch.Views
         public ObservableCollection<PhotoDisplayInfo> Photos { get; private set; }
         public string AdventureName { get; private set; }
 
-        private readonly ILogger<GamePage> _logger;
+        private readonly ILogger<MainPage> _logger;
         private readonly PhotoManager _photoManager;
         private PhotoDisplayInfo? _selectedPhoto;
 
-        public GamePage(string adventureName, ILogger<GamePage> logger, PhotoManager photoManager)
+        public GamePage(string adventureName, ILogger<MainPage> logger, PhotoManager photoManager)
 		{
 			InitializeComponent();
 

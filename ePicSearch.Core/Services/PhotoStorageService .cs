@@ -82,7 +82,7 @@ namespace ePicSearch.Infrastructure.Services
                 if (Directory.Exists(adventureFolderPath))
                 {
                     _logger.LogInformation($"Deleting folder for adventure: {adventureName}");
-                    await Task.Run(() => Directory.Delete(adventureFolderPath, true));   // Recursively delete contents
+                    Directory.Delete(adventureFolderPath, true);   // Recursively delete contents
                     return DeleteFolderResult.Success;
                 }
                 else

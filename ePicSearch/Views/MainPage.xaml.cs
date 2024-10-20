@@ -8,15 +8,13 @@ namespace ePicSearch.Views
     {
         private readonly PhotoManager _photoManager;
         private readonly ILogger<MainPage> _logger;
-        private readonly ILogger<GamePage> _gamePageLogger;
         private bool _isBlurred = false;
 
-        public MainPage(PhotoManager photoManager, ILogger<MainPage> logger, ILogger<GamePage> gamePageLogger)
+        public MainPage(PhotoManager photoManager, ILogger<MainPage> logger)
         {
             InitializeComponent();
             _photoManager = photoManager;
             _logger = logger;
-            _gamePageLogger = gamePageLogger;
 
             Appearing += MainPage_Appearing;
             _logger.LogInformation("MainPage initialized.");
@@ -67,7 +65,7 @@ namespace ePicSearch.Views
 
         private async void OnMyAdventuresClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MyAdventuresPage(_photoManager, _logger, _gamePageLogger));
+            await Navigation.PushAsync(new MyAdventuresPage(_photoManager, _logger));
         }
 
         private async void OnCreateNewAdventureClicked(object sender, EventArgs e)

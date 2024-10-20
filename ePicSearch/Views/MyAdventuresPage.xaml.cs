@@ -7,15 +7,13 @@ namespace ePicSearch.Views
     {
         private readonly PhotoManager _photoManager;
         private readonly ILogger<MainPage> _logger;
-        private readonly ILogger<GamePage> _gamePageLogger;
 
         // Use Dependency Injection to provide PhotoManager instance
-        public MyAdventuresPage(PhotoManager photoManager, ILogger<MainPage> logger, ILogger<GamePage> gamePageLogger)
+        public MyAdventuresPage(PhotoManager photoManager, ILogger<MainPage> logger)
         {
             InitializeComponent();
             _photoManager = photoManager;
             _logger = logger;
-            _gamePageLogger = gamePageLogger;
 
             LoadAdventures();
         }
@@ -50,7 +48,7 @@ namespace ePicSearch.Views
             {
                 _logger.LogInformation($"Attempting to play adventure {adventureName}");
 
-                await Navigation.PushAsync(new GamePage(adventureName, _gamePageLogger, _photoManager));
+                await Navigation.PushAsync(new GamePage(adventureName,_logger, _photoManager));
             }
         }
 
