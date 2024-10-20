@@ -20,21 +20,18 @@ namespace ePicSearch.Infrastructure.Services
                     Directory.CreateDirectory(adventureFolderPath);
                 }
 
-                // Append the correct file extension
                 string fileExtension = Path.GetExtension(photo.FileName);
                 string newFilePath = Path.Combine(adventureFolderPath, $"{photoInfo.Name}{fileExtension}");
 
                 // Copy the photo from the original path to the adventure filder
-
                 using var sourceStream = File.OpenRead(photo.FullPath);
                 using var destinationStream = File.Create(newFilePath);
 
                 await sourceStream.CopyToAsync(destinationStream);
 
-                if (!DeletePhoto(photo.FullPath))
-                {
-                    _logger.LogWarning($"Failed to delete original photo: {photo.FullPath}");
-                }
+                DeletePhoto(photo.FullPath);
+
+                _logger.LogInformation($"Photo saved to {newFilePath}");
 
                 return newFilePath;
             }
@@ -45,35 +42,7 @@ namespace ePicSearch.Infrastructure.Services
             }
         }
 
-        public bool DeletePhoto(string filePath)
-        {
-            if (File.Exists(filePath))
-            {
-                try
-                {
-                    if (File.Exists(filePath))
-                    {
-                        File.Delete(filePath);
-                        _logger.LogInformation($"Photo deleted: {filePath}");
-                        return true;
-                    }
-                    else
-                    {
-                        _logger.LogWarning($"Photo not found: {filePath}");
-                        return false;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, $"Error deleting photo: {ex.Message}");
-                    return false;
-                }
-            }
-
-            return false;
-        }
-
-        public async Task<DeleteFolderResult> DeleteAdventureFolderAsync(string adventureName)
+        public async Task<DeleteFolderResult> DeleteAllPhotosForAdventureAsync(string adventureName)
         {
             string adventureFolderPath = Path.Combine(_appDataDirectory, adventureName);
 
@@ -82,14 +51,16 @@ namespace ePicSearch.Infrastructure.Services
                 if (Directory.Exists(adventureFolderPath))
                 {
                     _logger.LogInformation($"Deleting folder for adventure: {adventureName}");
-                    Directory.Delete(adventureFolderPath, true);   // Recursively delete contents
+
+                    Directory.Delete(adventureFolderPath, true); 
+
                     return DeleteFolderResult.Success;
                 }
                 else
                 {
                     _logger.LogWarning($"Adventure folder not found: {adventureName}");
                     return DeleteFolderResult.NotFound;
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -98,18 +69,19 @@ namespace ePicSearch.Infrastructure.Services
             }
         }
 
-        public string GetPhotoPath(string fileName, string adventureName)
+        private void DeletePhoto(string filePath)
         {
-            string adventureFolderPath = Path.Combine(_appDataDirectory, adventureName);
-            string fullPath = Path.Combine(adventureFolderPath, fileName);
-
-            if (File.Exists(fullPath))
+            try
             {
-                return fullPath;
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                    _logger.LogInformation($"Deleted original photo: {filePath}");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                throw new FileNotFoundException($"Photo file not found: {fullPath}");
+                _logger.LogError(ex, $"Error deleting original photo: {filePath}");
             }
         }
 

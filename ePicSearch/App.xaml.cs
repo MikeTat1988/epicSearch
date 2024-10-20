@@ -4,18 +4,18 @@ namespace ePicSearch
 {
     public partial class App : Application
     {
-        private readonly JsonStorageService _jsonStorageService;
-        public App(AppShell appShell, JsonStorageService jsonStorageService)
+        private readonly DataStorageService _dataStorageService;
+        public App(AppShell appShell, DataStorageService jsonStorageService)
         {
             InitializeComponent();
             MainPage = appShell;
-            _jsonStorageService = jsonStorageService;
+            _dataStorageService = jsonStorageService;
         }
 
         // Sync cache when the app goes to sleep (background or closing)
         protected override void OnSleep()
         {
-            _jsonStorageService.SyncCacheToFile();
+            _dataStorageService.SyncCacheToFile();
             base.OnSleep();
         }
     }

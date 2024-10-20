@@ -6,11 +6,11 @@ namespace ePicSearch.Views
 {
     public partial class MainPage : ContentPage
     {
-        private readonly PhotoManager _photoManager;
+        private readonly AdventureManager _photoManager;
         private readonly ILogger<MainPage> _logger;
         private bool _isBlurred = false;
 
-        public MainPage(PhotoManager photoManager, ILogger<MainPage> logger)
+        public MainPage(AdventureManager photoManager, ILogger<MainPage> logger)
         {
             InitializeComponent();
             _photoManager = photoManager;

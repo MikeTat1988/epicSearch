@@ -38,10 +38,10 @@ namespace ePicSearch
             // Register services with the app data directory
             builder.Services
                 .AddSingleton<IFileSystemService, FileSystemService>()
-                .AddSingleton<JsonStorageService>()
+                .AddSingleton<DataStorageService>()
                 .AddSingleton<PhotoStorageService>()
                 .AddSingleton<CodeGenerator>()
-                .AddSingleton<PhotoManager>()
+                .AddSingleton<AdventureManager>()
                 .AddSingleton<MainPage>()
                 .AddSingleton<AppShell>();
 

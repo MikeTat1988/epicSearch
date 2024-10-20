@@ -7,9 +7,9 @@ namespace ePicSearch.Views
 {
     public partial class NewAdventurePage : ContentPage
     {
-        private readonly PhotoManager _photoManager;
+        private readonly AdventureManager _photoManager;
 
-        public NewAdventurePage(PhotoManager photoManager)
+        public NewAdventurePage(AdventureManager photoManager)
         {
             InitializeComponent();
             _photoManager = photoManager;

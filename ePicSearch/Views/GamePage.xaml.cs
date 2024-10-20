@@ -15,10 +15,10 @@ namespace ePicSearch.Views
         public string AdventureName { get; private set; }
 
         private readonly ILogger<MainPage> _logger;
-        private readonly PhotoManager _photoManager;
+        private readonly AdventureManager _photoManager;
         private PhotoDisplayInfo? _selectedPhoto;
 
-        public GamePage(string adventureName, ILogger<MainPage> logger, PhotoManager photoManager)
+        public GamePage(string adventureName, ILogger<MainPage> logger, AdventureManager photoManager)
 		{
 			InitializeComponent();
 

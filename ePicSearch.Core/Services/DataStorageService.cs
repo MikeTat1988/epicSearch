@@ -5,17 +5,17 @@ using Newtonsoft.Json;
 
 namespace ePicSearch.Infrastructure.Services
 {
-    public class JsonStorageService
+    public class DataStorageService
     {
         private readonly IFileSystemService _fileSystemService;
-        private readonly ILogger<JsonStorageService> _logger;
+        private readonly ILogger<DataStorageService> _logger;
         private readonly string _jsonFilePath;
-
         private readonly object _cacheLock = new object();
-        private List<PhotoInfo> _cache;  // Cache to minimize I/O
-        private bool _isCacheDirty = false;  // Track changes
 
-        public JsonStorageService(IFileSystemService fileSystemService, ILogger<JsonStorageService> logger)
+        private List<PhotoInfo> _cache;
+        private bool _isCacheDirty = false;
+
+        public DataStorageService(IFileSystemService fileSystemService, ILogger<DataStorageService> logger)
         {
             _fileSystemService = fileSystemService;
             _jsonFilePath = Path.Combine(_fileSystemService.GetAppDataDirectory(), "adventures.json");
@@ -52,38 +52,12 @@ namespace ePicSearch.Infrastructure.Services
             }
         }
 
-        public List<PhotoInfo> LoadAllAdventures()
+        public void RemoveAdventure(string adventureName)
         {
             lock (_cacheLock)
             {
-                _logger.LogInformation("Fetching adventures from cache.");
-
-                return new List<PhotoInfo>(_cache);
-            }
-        }
-
-        public bool SaveAllAdventures(List<PhotoInfo> adventures)
-        {
-            lock (_cacheLock)
-            {
-                _logger.LogInformation($"Updating cache with {adventures.Count} adventures.");
-                _cache = new List<PhotoInfo>(adventures);
+                _cache.RemoveAll(p => p.AdventureName == adventureName);
                 _isCacheDirty = true;
-
-                _logger.LogInformation("Cache updated");
-                return true;
-            }
-        }
-
-        public List<string> GetAllAdventureNames()
-        {
-            lock (_cacheLock)
-            {
-                _logger.LogInformation($"Fetching all adventure names from cache.");
-                return _cache
-                    .Select(p => p.AdventureName)
-                    .Distinct()
-                    .ToList();
             }
         }
 
@@ -91,9 +65,37 @@ namespace ePicSearch.Infrastructure.Services
         {
             lock (_cacheLock)
             {
-                _logger.LogInformation($"Retrieving photos for adventure: {adventureName}");
-
                 return _cache.Where(p => p.AdventureName == adventureName).ToList();
+            }
+        }
+
+        public void AddPhoto(PhotoInfo photoInfo)
+        {
+            lock (_cacheLock)
+            {
+                _cache.Add(photoInfo);
+                _isCacheDirty = true;
+            }
+        }
+
+        public void UpdatePhoto(PhotoInfo updatedPhoto)
+        {
+            lock (_cacheLock)
+            {
+                var existingPhoto = _cache.FirstOrDefault(p => p.FilePath == updatedPhoto.FilePath);
+                if (existingPhoto != null)
+                {
+                    existingPhoto.IsLocked = updatedPhoto.IsLocked;
+                    _isCacheDirty = true;
+                }
+            }
+        }
+
+        public List<string> GetAllAdventureNames()
+        {
+            lock (_cacheLock)
+            {
+                return _cache.Select(p => p.AdventureName).Distinct().ToList();
             }
         }
 
@@ -111,10 +113,10 @@ namespace ePicSearch.Infrastructure.Services
                 {
                     _logger.LogInformation("Syncing cache with JSON file.");
                     _logger.LogInformation($"cache written : \n {string.Join(",\n", _cache)}");
+                    
                     var json = JsonConvert.SerializeObject(_cache, Formatting.Indented);
-
                     _fileSystemService.WriteAllText(_jsonFilePath, json);
-                    _isCacheDirty = false;  // Reset dirty flag
+                    _isCacheDirty = false;  
                     _logger.LogInformation("Cache successfully synced to JSON.");
                 }
                 catch (Exception ex)
