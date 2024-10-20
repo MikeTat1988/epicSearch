@@ -16,13 +16,11 @@
                    VerticalOptions="Center" />
         </Grid>
 
-        <!-- ListView for Adventures -->
-        <ListView x:Name="AdventuresList" 
-                  HasUnevenRows="True"
-                  IsVisible="True">
-            <ListView.ItemTemplate>
+        <!-- CollectionView  for Adventures -->
+        <CollectionView x:Name="AdventuresList" 
+                        IsVisible="True">
+            <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <ViewCell>
                         <Frame BackgroundColor="White" Padding="10" Margin="10" HasShadow="True">
                             <StackLayout Orientation="Vertical" Spacing="10" HorizontalOptions="CenterAndExpand">
                                 <!-- Adventure title  -->
@@ -35,10 +33,9 @@
                                 </StackLayout>
                             </StackLayout>
                         </Frame>
-                    </ViewCell>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
         <!-- "Delete All" button, only shown when adventures exist -->
         <Button x:Name="DeleteAllButton" Text="Delete All" Clicked="OnDeleteAllAdventuresClicked" HorizontalOptions="Center" IsVisible="True" />
