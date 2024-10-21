@@ -7,20 +7,22 @@
         <CollectionView x:Name="PhotoCollectionView"
                 ItemsSource="{Binding Photos}"
                 HorizontalScrollBarVisibility="Never"
+                VerticalScrollBarVisibility="Always"
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="CenterAndExpand">
             <CollectionView.ItemsLayout>
-                <!-- Set to Horizontal List -->
-                <LinearItemsLayout Orientation="Horizontal" />
+                <!-- Set to Vertical List -->
+                <LinearItemsLayout Orientation="Vertical" />
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Padding="5">
+                    <StackLayout>
+                        <Grid Padding="5" Rotation="{Binding Rotation}">
                         <!-- Base Layer: Actual Photo -->
                         <Image Source="{Binding Photo.FilePath}" 
                            Aspect="AspectFill" 
-                           HeightRequest="150" 
-                           WidthRequest="150">
+                           HeightRequest="300" 
+                           WidthRequest="300">
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding BindingContext.ShowPhotoCommand, Source={x:Reference PhotoCollectionView}}"
                                                   CommandParameter="{Binding .}" />
@@ -28,13 +30,17 @@
                             </Image>
 
                         <!-- Overlay Layer: Question Mark -->
-                        <Image Source="question_mark1.webp"
+                        <Image Source="question_mark_1.webp"
                            IsVisible="{Binding Photo.IsLocked}"
                            Aspect="AspectFit"
-                           HeightRequest="150" 
-                           WidthRequest="150"
+                           HeightRequest="300" 
+                           WidthRequest="300"
                            Opacity="0.6" />
                     </Grid>
+                        <!-- Arrow between Photos -->
+                        <Image Source="arrow_down.webp" HeightRequest="50" WidthRequest="50" HorizontalOptions="Center" />
+
+                    </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

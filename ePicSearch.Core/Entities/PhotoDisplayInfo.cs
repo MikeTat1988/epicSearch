@@ -4,15 +4,13 @@ namespace ePicSearch.Entities
     public class PhotoDisplayInfo
     {
         public PhotoInfo Photo { get; set; }
-        public string DisplaySerialNumber { get; set; } = "";
-        public bool ShouldShowCode { get; set; } = false;
+        public double Rotation { get; set; }
 
-        public PhotoDisplayInfo(PhotoInfo photo, int index, int totalPhotos)
+        public PhotoDisplayInfo(PhotoInfo photo, double rotation, int index, int totalPhotos)
         {
             Photo = photo;
-            Photo.IsLocked = (index != totalPhotos - 1); 
-            DisplaySerialNumber = (index == totalPhotos - 1) ? "Treasure!" : (index + 1).ToString();
-            ShouldShowCode = (index != 0);
+            Photo.IsLocked = (index == totalPhotos - 1);
+            Rotation = rotation;
         }
     }
 }

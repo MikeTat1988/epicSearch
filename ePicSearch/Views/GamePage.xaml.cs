@@ -46,9 +46,14 @@ namespace ePicSearch.Views
             {
                 // Order photos by SerialNumber descending (latest first)
                 var orderedPhotos = photos.OrderByDescending(p => p.SerialNumber).ToList();
+                Random random = new Random();
 
                 Photos = new ObservableCollection<PhotoDisplayInfo>(
-                    orderedPhotos.Select((photo, index) => new PhotoDisplayInfo(photo, index, orderedPhotos.Count)));
+                    orderedPhotos.Select((photo, index) =>
+                    new PhotoDisplayInfo(photo,
+                                     random.Next(-15, 15),
+                                     index,
+                                     orderedPhotos.Count)));
 
                 RefreshPhotoView();
 
