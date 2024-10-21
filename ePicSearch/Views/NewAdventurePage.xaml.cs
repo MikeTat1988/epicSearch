@@ -7,12 +7,12 @@ namespace ePicSearch.Views
 {
     public partial class NewAdventurePage : ContentPage
     {
-        private readonly AdventureManager _photoManager;
+        private readonly AdventureManager _adventureManager;
 
-        public NewAdventurePage(AdventureManager photoManager)
+        public NewAdventurePage(AdventureManager adventureManager)
         {
             InitializeComponent();
-            _photoManager = photoManager;
+            _adventureManager = adventureManager;
         }
 
         private async void OnStartCreatingClicked(object sender, EventArgs e)
@@ -41,7 +41,7 @@ namespace ePicSearch.Views
                         }
 
                         IFileResult appFileResult = new AppFileResult(photo);
-                        var photoInfo = await _photoManager.CapturePhoto(appFileResult, adventureName);
+                        var photoInfo = await _adventureManager.CapturePhoto(appFileResult, adventureName);
 
                         if (photoInfo == null)
                         {
@@ -95,7 +95,7 @@ namespace ePicSearch.Views
                 return null;
             }
 
-            var existingAdventures = _photoManager.GetAllAdventureNames();
+            var existingAdventures = _adventureManager.GetAllAdventureNames();
 
             if (existingAdventures.Contains(adventureName, StringComparer.OrdinalIgnoreCase))
             {

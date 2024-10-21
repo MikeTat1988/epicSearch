@@ -93,6 +93,8 @@ namespace ePicSearch.Infrastructure.Services
 
                 _logger.LogInformation($"Adventure deleted successfully: {adventureName}");
 
+                _dataStorageService.SyncCacheToFile();
+
                 return true;
             }
             catch (Exception ex)
