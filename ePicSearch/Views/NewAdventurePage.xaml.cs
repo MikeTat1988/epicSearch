@@ -67,6 +67,7 @@ namespace ePicSearch.Views
             }
 
             await DisplayAlert($"Adventure {adventureName} Saved", null, "OK");
+            _adventureManager.SyncCache();
             await Navigation.PopAsync();
         }
 

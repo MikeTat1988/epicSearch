@@ -55,6 +55,11 @@ namespace ePicSearch.Infrastructure.Services
             }
         }
 
+        public void SyncCache()
+        {
+            _dataStorageService.SyncCacheToFile();
+        }
+
         public bool UpdatePhotoState(PhotoInfo updatedPhoto)
         {
             try

@@ -29,7 +29,7 @@
 
                         <!-- Overlay Layer: Question Mark -->
                         <Image Source="question_mark1.webp"
-                           IsVisible="{Binding IsLocked}"
+                           IsVisible="{Binding Photo.IsLocked}"
                            Aspect="AspectFit"
                            HeightRequest="150" 
                            WidthRequest="150"
