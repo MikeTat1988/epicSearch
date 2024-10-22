@@ -66,9 +66,25 @@ namespace ePicSearch.Views
                 }
             }
 
+            UnlockLastPhoto(adventureName);
+
             await DisplayAlert($"Adventure {adventureName} Saved", null, "OK");
             _adventureManager.SyncCache();
             await Navigation.PopAsync();
+        }
+
+        private void UnlockLastPhoto(string adventureName)
+        {
+            var photos = _adventureManager.GetPhotosForAdventure(adventureName);
+            if (photos != null && photos.Count > 0)
+            {
+                var lastPhoto = photos.OrderByDescending(p => p.SerialNumber).FirstOrDefault();
+                if (lastPhoto != null)
+                {
+                    lastPhoto.IsLocked = false;
+                    _adventureManager.UpdatePhotoState(lastPhoto);
+                }
+            }
         }
 
         private async Task HandleError(string errorMessage, object sender, EventArgs e)

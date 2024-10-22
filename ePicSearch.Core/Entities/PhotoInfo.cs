@@ -10,10 +10,13 @@ namespace ePicSearch.Infrastructure.Entities
         public int SerialNumber { get; set; }
         public string AdventureName { get; set; } = "";
         public bool IsLocked { get; set; }
+        public double Rotation { get; set; }
 
         public override string ToString()
         {
-            return $"PhotoInfo [FilePath: {FilePath}, Name: {Name}, Code: {Code}, SerialNumber: {SerialNumber}, AdventureName: {AdventureName}, IsLocked: {IsLocked}]";
+            return $"PhotoInfo [FilePath: {FilePath}, Name: {Name}, " +
+                $"Code: {Code}, SerialNumber: {SerialNumber}, AdventureName: {AdventureName}, " +
+                $"IsLocked: {IsLocked}, Rotation: {Rotation}]";
         }
     }
 }

@@ -1,4 +1,4 @@
-using ePicSearch.Entities;
+using ePicSearch.Infrastructure.Entities;
 using ePicSearch.Infrastructure.Services;
 using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
@@ -11,13 +11,12 @@ namespace ePicSearch.Views
 		public ICommand ShowPhotoCommand { get; }
         public ICommand UnlockPhotoCommand { get; }
         public ICommand CloseModalCommand { get; }
-        public ObservableCollection<PhotoDisplayInfo> Photos { get; private set; }
+        public ObservableCollection<PhotoInfo> Photos { get; private set; }
         public string AdventureName { get; private set; }
 
         private readonly ILogger<MainPage> _logger;
         private readonly AdventureManager _photoManager;
-        private PhotoDisplayInfo? _selectedPhoto;
-        private readonly Random _random = new();
+        private PhotoInfo? _selectedPhoto;
 
         public GamePage(string adventureName, ILogger<MainPage> logger, AdventureManager photoManager)
 		{
@@ -25,9 +24,9 @@ namespace ePicSearch.Views
 
             _logger = logger;
             AdventureName = adventureName;
-			Photos = new ObservableCollection<PhotoDisplayInfo>();
+			Photos = new ObservableCollection<PhotoInfo>();
 
-			ShowPhotoCommand = new Command<PhotoDisplayInfo>(ShowPhoto);
+			ShowPhotoCommand = new Command<PhotoInfo>(ShowPhoto);
 			UnlockPhotoCommand = new Command<string>(UnlockPhoto);
             CloseModalCommand = new Command(CloseModal);
 
@@ -50,12 +49,7 @@ namespace ePicSearch.Views
                 // Order photos by SerialNumber descending (latest first)
                 var orderedPhotos = photos.OrderByDescending(p => p.SerialNumber).ToList();
 
-                Photos = new ObservableCollection<PhotoDisplayInfo>(
-                    orderedPhotos.Select((photo, index) =>
-                    new PhotoDisplayInfo(photo,
-                                     _random.Next(-15, 15),
-                                     index,
-                                     orderedPhotos.Count)));
+                Photos = new ObservableCollection<PhotoInfo>(photos.OrderByDescending(p => p.SerialNumber));
 
                 RefreshPhotoView();
 
@@ -68,14 +62,14 @@ namespace ePicSearch.Views
             }
 
         }
-        private void ShowPhoto(PhotoDisplayInfo photoInfo)
+        private void ShowPhoto(PhotoInfo photoInfo)
         {
-            _logger.LogInformation($"A photo {photoInfo.ToString} was pressed");
+            _logger.LogInformation($"A photo {photoInfo} was pressed");
 
             _selectedPhoto = photoInfo;
 
             // Set the selected photo to be displayed in the full-screen modal
-            if (photoInfo.Photo.IsLocked)
+            if (photoInfo.IsLocked)
             {
                 // Show the locked overlay image
                 FullScreenPhoto.Source = "question_mark_1.webp";
@@ -83,7 +77,7 @@ namespace ePicSearch.Views
             }
             else
             {
-                FullScreenPhoto.Source = photoInfo.Photo.FilePath;
+                FullScreenPhoto.Source = photoInfo.FilePath;
                 CodeEntryOverlay.IsVisible = false;
             }
 
@@ -101,17 +95,17 @@ namespace ePicSearch.Views
                 return;
             }
 
-            if (_selectedPhoto.Photo.Code == code)
+            if (_selectedPhoto.Code == code)
             {
-                _selectedPhoto.Photo.IsLocked = false;
+                _selectedPhoto.IsLocked = false;
 
                 //updating the xaml modal view
-                FullScreenPhoto.Source = _selectedPhoto.Photo.FilePath;
+                FullScreenPhoto.Source = _selectedPhoto.FilePath;
                 CodeEntryOverlay.IsVisible = false;
 
                 RefreshPhotoView();
 
-                if (_photoManager.UpdatePhotoState(_selectedPhoto.Photo))
+                if (_photoManager.UpdatePhotoState(_selectedPhoto))
                 {
                     _logger.LogInformation($"The photo with {code} was successfully updated in memory");
                 }
@@ -122,7 +116,7 @@ namespace ePicSearch.Views
                     DisplayAlert("Save Error", "Failed to save the changes. Please try again.", "OK");
 
                     // Revert the change in the UI to keep things consistent
-                    _selectedPhoto.Photo.IsLocked = true;
+                    _selectedPhoto.IsLocked = true;
                     RefreshPhotoView();
                 } 
             }

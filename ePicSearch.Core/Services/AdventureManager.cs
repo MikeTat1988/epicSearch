@@ -13,6 +13,7 @@ namespace ePicSearch.Infrastructure.Services
         private readonly CodeGenerator _codeGenerator = codeGenerator;
         private readonly DataStorageService _dataStorageService = dataStorageService;
         private readonly ILogger<AdventureManager> _logger = logger;
+        private readonly Random _random = new();
 
         public async Task<PhotoInfo?> CapturePhoto(IFileResult photo, string adventureName)
         {
@@ -28,7 +29,8 @@ namespace ePicSearch.Infrastructure.Services
                     Code = photoCode,
                     AdventureName = adventureName,
                     SerialNumber = serialNumber,
-                    IsLocked = true
+                    IsLocked = true,
+                    Rotation = _random.Next(-10, 10),
                 };
 
                 // Save photo 
