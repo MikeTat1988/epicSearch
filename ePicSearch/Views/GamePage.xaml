@@ -1,7 +1,11 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ePicSearch.Views.GamePage">
-    <StackLayout Padding="10" Spacing="20">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         <Label Text="{Binding AdventureName}" FontSize="24" HorizontalOptions="Center" TextColor="Black" />
 
         <CollectionView x:Name="PhotoCollectionView"
@@ -21,8 +25,8 @@
                         <!-- Base Layer: Actual Photo -->
                         <Image Source="{Binding Photo.FilePath}" 
                            Aspect="AspectFill" 
-                           HeightRequest="300" 
-                           WidthRequest="300">
+                           HeightRequest="250" 
+                           WidthRequest="250">
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding BindingContext.ShowPhotoCommand, Source={x:Reference PhotoCollectionView}}"
                                                   CommandParameter="{Binding .}" />
@@ -33,9 +37,8 @@
                         <Image Source="question_mark_1.webp"
                            IsVisible="{Binding Photo.IsLocked}"
                            Aspect="AspectFit"
-                           HeightRequest="300" 
-                           WidthRequest="300"
-                           Opacity="0.6" />
+                           HeightRequest="250" 
+                           WidthRequest="250" />
                     </Grid>
                         <!-- Arrow between Photos -->
                         <Image Source="arrow_down.webp" HeightRequest="50" WidthRequest="50" HorizontalOptions="Center" />
@@ -45,12 +48,30 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-
         <!-- Full-Screen Photo Modal (Initially Hidden) -->
-        <ContentView x:Name="PhotoModal" IsVisible="False" BackgroundColor="#000000AA">
+        <ContentView x:Name="PhotoModal" IsVisible="False"
+             BackgroundColor="#CC000000"
+             VerticalOptions="FillAndExpand"
+             HorizontalOptions="FillAndExpand">
+            <ContentView.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CloseModalCommand}" />
+            </ContentView.GestureRecognizers>
+            
             <Grid VerticalOptions="Center" HorizontalOptions="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="200" />
+                </Grid.RowDefinitions>
+                
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer />
+                </Grid.GestureRecognizers>
                 <!-- Full-Screen Photo or Question Mark -->
-                <Image x:Name="FullScreenPhoto" Aspect="AspectFit" HeightRequest="300" WidthRequest="300" />
+                <Image x:Name="FullScreenPhoto" 
+                   Aspect="AspectFit" 
+                   HorizontalOptions="FillAndExpand" 
+                   VerticalOptions="Center" />
 
                 <!-- Code Entry Overlay when Locked -->
                 <StackLayout x:Name="CodeEntryOverlay" IsVisible="False" BackgroundColor="#FFFFFFDD" Padding="20" VerticalOptions="End">
@@ -60,5 +81,5 @@
                 </StackLayout>
             </Grid>
         </ContentView>
-    </StackLayout>
+    </Grid>
 </ContentPage>

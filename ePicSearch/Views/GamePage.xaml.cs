@@ -1,5 +1,4 @@
 using ePicSearch.Entities;
-using ePicSearch.Infrastructure.Entities;
 using ePicSearch.Infrastructure.Services;
 using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
@@ -11,29 +10,33 @@ namespace ePicSearch.Views
 	{
 		public ICommand ShowPhotoCommand { get; }
         public ICommand UnlockPhotoCommand { get; }
+        public ICommand CloseModalCommand { get; }
         public ObservableCollection<PhotoDisplayInfo> Photos { get; private set; }
         public string AdventureName { get; private set; }
 
         private readonly ILogger<MainPage> _logger;
         private readonly AdventureManager _photoManager;
         private PhotoDisplayInfo? _selectedPhoto;
+        private readonly Random _random = new();
 
         public GamePage(string adventureName, ILogger<MainPage> logger, AdventureManager photoManager)
 		{
 			InitializeComponent();
 
             _logger = logger;
-            _logger.LogInformation($"GamePage for adventure: {adventureName} initialized");
-
             AdventureName = adventureName;
 			Photos = new ObservableCollection<PhotoDisplayInfo>();
 
 			ShowPhotoCommand = new Command<PhotoDisplayInfo>(ShowPhoto);
 			UnlockPhotoCommand = new Command<string>(UnlockPhoto);
+            CloseModalCommand = new Command(CloseModal);
+
             _photoManager = photoManager;
             _selectedPhoto = null;
 
             LoadAdventurePhotos(adventureName);
+            BindingContext = this;
+            _logger.LogInformation($"GamePage for adventure: {adventureName} initialized");
         }
 
 		private void LoadAdventurePhotos(string adventureName)
@@ -46,12 +49,11 @@ namespace ePicSearch.Views
             {
                 // Order photos by SerialNumber descending (latest first)
                 var orderedPhotos = photos.OrderByDescending(p => p.SerialNumber).ToList();
-                Random random = new Random();
 
                 Photos = new ObservableCollection<PhotoDisplayInfo>(
                     orderedPhotos.Select((photo, index) =>
                     new PhotoDisplayInfo(photo,
-                                     random.Next(-15, 15),
+                                     _random.Next(-15, 15),
                                      index,
                                      orderedPhotos.Count)));
 
@@ -103,6 +105,10 @@ namespace ePicSearch.Views
             {
                 _selectedPhoto.Photo.IsLocked = false;
 
+                //updating the xaml modal view
+                FullScreenPhoto.Source = _selectedPhoto.Photo.FilePath;
+                CodeEntryOverlay.IsVisible = false;
+
                 RefreshPhotoView();
 
                 if (_photoManager.UpdatePhotoState(_selectedPhoto.Photo))
@@ -123,8 +129,15 @@ namespace ePicSearch.Views
             else
             {
                 _logger.LogInformation($"Thecode for {_selectedPhoto} was wrong");
+                DisplayAlert("Incorrect Code", "The code you entered is incorrect.", "OK");
+
             }
-		}
+        }
+
+        private void CloseModal()
+        {
+            PhotoModal.IsVisible = false;
+        }
 
         private void RefreshPhotoView()
 		{

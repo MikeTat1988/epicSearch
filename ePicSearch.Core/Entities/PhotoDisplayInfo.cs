@@ -9,7 +9,7 @@ namespace ePicSearch.Entities
         public PhotoDisplayInfo(PhotoInfo photo, double rotation, int index, int totalPhotos)
         {
             Photo = photo;
-            Photo.IsLocked = (index == totalPhotos - 1);
+            Photo.IsLocked = (index != totalPhotos - 1);
             Rotation = rotation;
         }
     }
