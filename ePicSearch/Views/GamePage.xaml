@@ -1,7 +1,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ePicSearch.Views.GamePage">
-    <Grid>
+    <Grid BackgroundColor="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -22,10 +22,10 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout>
-                        <Grid Padding="5" Rotation="{Binding Rotation}">
-                        <!-- Base Layer: Actual Photo -->
-                        <Image Source="{Binding FilePath}" 
-                           Aspect="AspectFill" 
+                        <Grid Padding="5" Rotation="{Binding Rotation}" HeightRequest="280" WidthRequest="280">
+                            <!-- Base Layer: Actual Photo -->
+                            <Image Source="{Binding FilePath}" 
+                           Aspect="AspectFit" 
                            HeightRequest="250" 
                            WidthRequest="250">
                                 <Image.GestureRecognizers>
@@ -34,13 +34,13 @@
                                 </Image.GestureRecognizers>
                             </Image>
 
-                        <!-- Overlay Layer: Question Mark -->
-                        <Image Source="question_mark_1.webp"
+                            <!-- Overlay Layer: Question Mark -->
+                            <Image Source="question_mark_1.webp"
                            IsVisible="{Binding IsLocked}"
                            Aspect="AspectFit"
                            HeightRequest="250" 
                            WidthRequest="250" />
-                    </Grid>
+                        </Grid>
                         <!-- Arrow between Photos -->
                         <Image Source="arrow_down.webp" HeightRequest="50" WidthRequest="50" HorizontalOptions="Center" />
 
@@ -56,18 +56,18 @@
              HorizontalOptions="FillAndExpand"
              Grid.Row="0" 
              Grid.RowSpan="2">
-            
+
             <ContentView.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding CloseModalCommand}" />
             </ContentView.GestureRecognizers>
-            
+
             <Grid VerticalOptions="Center" HorizontalOptions="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                
+
                 <Grid.GestureRecognizers>
                     <TapGestureRecognizer />
                 </Grid.GestureRecognizers>

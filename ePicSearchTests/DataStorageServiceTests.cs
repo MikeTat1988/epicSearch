@@ -10,16 +10,13 @@ namespace ePicSearch.Tests
     [TestClass]
     public class DataStorageServiceTests
     {
-        private Mock<IFileSystemService> _mockFileSystemService;
-        private Mock<ILogger<DataStorageService>> _mockLogger;
+        private Mock<IFileSystemService> _mockFileSystemService = new Mock<IFileSystemService>();
+        private Mock<ILogger<DataStorageService>> _mockLogger = new Mock<ILogger<DataStorageService>>();
         private DataStorageService _dataStorageService;
 
         [TestInitialize]
         public void Setup()
         {
-            _mockFileSystemService = new Mock<IFileSystemService>();
-            _mockLogger = new Mock<ILogger<DataStorageService>>();
-
             _mockFileSystemService.Setup(fs => fs.GetAppDataDirectory()).Returns("/mock/path");
 
             _dataStorageService = new DataStorageService(_mockFileSystemService.Object, _mockLogger.Object);
