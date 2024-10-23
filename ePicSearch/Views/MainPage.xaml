@@ -31,7 +31,7 @@
         </Image>
 
         <!-- My Adventures Button -->
-        <ImageButton Source="start_adventure_button.webp"
+        <ImageButton Source="play_adventure_button.webp"
                 Clicked="OnMyAdventuresClicked"
                 x:Name="MyAdventuresButton"
                 WidthRequest="180"
