@@ -59,6 +59,8 @@ namespace ePicSearch.Views
 
                 Photos = new ObservableCollection<PhotoInfo>(photos.OrderByDescending(p => p.SerialNumber));
 
+                Photos[Photos.Count - 1].ShowArrow = false;
+
                 RefreshPhotoView();
 
                 _logger.LogInformation($"All photos for adventure: {adventureName} were loaded into Observable Collection");
@@ -77,12 +79,25 @@ namespace ePicSearch.Views
             BackgroundScrolls.Clear();
 
             // Define fixed heights
+            int numberOfMiddleTilesRounded = CalculateTilesNumber();
+
+            for (int i = 0; i < numberOfMiddleTilesRounded; i++)
+            {
+                BackgroundScrolls.Add(new ScrollMiddleInfo());
+            }
+
+            _logger.LogInformation($"added {BackgroundScrolls.Count} background scroll tiles.");
+            RefreshPhotoView();
+        }
+
+        private int CalculateTilesNumber()
+        {
             double topHeight = 276;
             double bottomHeight = 271;
             double arrowheight = 50;
             double gridPadding = 0;
-            double middleTileHeight = 280;
-            double photoWithArrowAndPaddingHeight = middleTileHeight + gridPadding + arrowheight; 
+            double middleTileHeight = 285;
+            double photoWithArrowAndPaddingHeight = middleTileHeight + gridPadding + arrowheight;
 
             double requiredHeightForPhotos = Photos.Count * photoWithArrowAndPaddingHeight;
             double remainingHeight = requiredHeightForPhotos - topHeight - bottomHeight;
@@ -97,16 +112,9 @@ namespace ePicSearch.Views
             _logger.LogInformation($"Total height is {requiredHeightForPhotos} and there are {Photos.Count} photos. \n" +
                 $"Calculated {tilesNeeded} background scroll tiles needed \n" +
                 $"Rounded to {numberOfMiddleTiles}" +
-                $"min max check - {numberOfMiddleTilesRounded}" +
-                $"double - {Math.Ceiling(5.97)}, int - {(int)Math.Ceiling(5.97)} ");
+                $"min max check - {numberOfMiddleTilesRounded}");
 
-            for (int i = 0; i < numberOfMiddleTilesRounded; i++)
-            {
-                BackgroundScrolls.Add(new ScrollMiddleInfo());
-            }
-
-            _logger.LogInformation($"added {BackgroundScrolls.Count} background scroll tiles.");
-            RefreshPhotoView();
+            return numberOfMiddleTilesRounded;
         }
 
         private void ShowPhoto(PhotoInfo photoInfo)

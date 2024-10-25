@@ -31,6 +31,7 @@ namespace ePicSearch.Infrastructure.Services
                     SerialNumber = serialNumber,
                     IsLocked = true,
                     Rotation = _random.Next(-10, 10),
+                    ShowArrow = true,
                 };
 
                 // Save photo 

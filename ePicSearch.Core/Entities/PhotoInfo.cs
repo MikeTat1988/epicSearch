@@ -11,6 +11,7 @@ namespace ePicSearch.Infrastructure.Entities
         public string AdventureName { get; set; } = "";
         public bool IsLocked { get; set; }
         public double Rotation { get; set; }
+        public bool ShowArrow { get; set; }
 
         public override string ToString()
         {

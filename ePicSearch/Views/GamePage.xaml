@@ -33,7 +33,7 @@
                                 <!-- Base Layer: Actual Photo -->
                                 <Image Source="{Binding ImageSource}"
                                        Aspect="Fill"
-                                       HeightRequest="285"
+                                       HeightRequest="240"
                                        Margin="0, -5, 0, -5">
                                 </Image>
                             </DataTemplate>
@@ -58,8 +58,10 @@
                     <Label Text="{Binding AdventureName}"
                            FontSize="24"
                            HorizontalOptions="Center"
+                           VerticalOptions="Center"
                            TextColor="Black"
-                           Grid.Row="0" />
+                           Grid.Row="0"
+                           HeightRequest="26" />
 
                     <CollectionView x:Name="PhotoCollectionView"
                                     ItemsSource="{Binding Photos}"
@@ -77,7 +79,7 @@
                                 <StackLayout>
                                     <Grid 
                                           Rotation="{Binding Rotation}"
-                                          HeightRequest="250">
+                                          HeightRequest="220">
                                         <!-- Base Layer: Actual Photo -->
                                         <Image Source="{Binding FilePath}"
                                                Aspect="AspectFit"
@@ -100,7 +102,8 @@
                                     <Image Source="arrow_down.webp"
                                            HeightRequest="50"
                                            WidthRequest="50"
-                                           HorizontalOptions="Center" />
+                                           HorizontalOptions="Center" 
+                                           IsVisible="{Binding ShowArrow}"/>
 
                                 </StackLayout>
                             </DataTemplate>
