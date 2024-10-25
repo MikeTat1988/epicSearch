@@ -3,7 +3,7 @@
              x:Class="ePicSearch.Views.NewAdventurePage">
     
     <StackLayout Padding="10" Spacing="20">
-        <ImageButton Source="arrow_down.webp"
+        <ImageButton Source="back_button.png"
                      WidthRequest="50"
                      HeightRequest="50"
                      HorizontalOptions="Start"

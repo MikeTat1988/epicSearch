@@ -6,7 +6,7 @@
                Aspect="AspectFill"
                VerticalOptions="FillAndExpand"
                HorizontalOptions="FillAndExpand" />
-        <ImageButton Source="arrow_down.webp"
+        <ImageButton Source="back_button.png"
                      WidthRequest="50"
                      HeightRequest="50"
                      HorizontalOptions="Start"

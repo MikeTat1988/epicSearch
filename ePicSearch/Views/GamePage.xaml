@@ -42,7 +42,7 @@
                     </CollectionView>
 
                     <!-- Bottom Tile -->
-                    <Image Source="scroll_bottom.webp"
+                    <Image Source="back_button.png"
                            Aspect="Fill"
                            Grid.Row="2"
                            Margin="0, -2, 0, 0" />
