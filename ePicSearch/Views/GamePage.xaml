@@ -2,66 +2,128 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ePicSearch.Views.GamePage">
     <Grid BackgroundColor="Transparent">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Label Text="{Binding AdventureName}" FontSize="24" HorizontalOptions="Center" TextColor="Black" Grid.Row="0"/>
+        <ScrollView>
+            <Grid>
+                <!-- BACKGROUND -->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="276" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="271" />
+                    </Grid.RowDefinitions>
 
-        <CollectionView x:Name="PhotoCollectionView"
-                ItemsSource="{Binding Photos}"
-                HorizontalScrollBarVisibility="Never"
-                VerticalScrollBarVisibility="Always"
-                HorizontalOptions="FillAndExpand"
-                VerticalOptions="CenterAndExpand"
-                Grid.Row="1">
-            <CollectionView.ItemsLayout>
-                <!-- Set to Vertical List -->
-                <LinearItemsLayout Orientation="Vertical" />
-            </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <StackLayout>
-                        <Grid Padding="5" Rotation="{Binding Rotation}" HeightRequest="280" WidthRequest="280">
-                            <!-- Base Layer: Actual Photo -->
-                            <Image Source="{Binding FilePath}" 
-                           Aspect="AspectFit" 
-                           HeightRequest="250" 
-                           WidthRequest="250">
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding BindingContext.ShowPhotoCommand, Source={x:Reference PhotoCollectionView}}"
-                                                  CommandParameter="{Binding .}" />
-                                </Image.GestureRecognizers>
-                            </Image>
+                    <!-- Top Tile -->
+                    <Image Source="scroll_top.webp"
+                           Aspect="Fill"
+                           Grid.Row="0" />
 
-                            <!-- Overlay Layer: Question Mark -->
-                            <Image Source="question_mark_1.webp"
-                           IsVisible="{Binding IsLocked}"
-                           Aspect="AspectFit"
-                           HeightRequest="250" 
-                           WidthRequest="250" />
-                        </Grid>
-                        <!-- Arrow between Photos -->
-                        <Image Source="arrow_down.webp" HeightRequest="50" WidthRequest="50" HorizontalOptions="Center" />
+                    <!-- Middle Tile  -->
+                    <CollectionView x:Name="BackgroundView"
+                                    ItemsSource="{Binding BackgroundScrolls}"
+                                    HorizontalScrollBarVisibility="Never"
+                                    VerticalScrollBarVisibility="Always"
+                                    IsEnabled="False"
+                                    Grid.Row="1"
+                                    SelectionMode="None">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <!-- Base Layer: Actual Photo -->
+                                <Image Source="{Binding ImageSource}"
+                                       Aspect="Fill"
+                                       HeightRequest="285"
+                                       Margin="0, -5, 0, -5">
+                                </Image>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
-                    </StackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                    <!-- Bottom Tile -->
+                    <Image Source="scroll_bottom.webp"
+                           Aspect="Fill"
+                           Grid.Row="2"
+                           Margin="0, -2, 0, 0" />
+                </Grid>
 
+                <!-- FOREGROUND -->
+                    <Grid BackgroundColor="Transparent"
+                      Grid.RowSpan="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Label Text="{Binding AdventureName}"
+                           FontSize="24"
+                           HorizontalOptions="Center"
+                           TextColor="Black"
+                           Grid.Row="0" />
+
+                    <CollectionView x:Name="PhotoCollectionView"
+                                    ItemsSource="{Binding Photos}"
+                                    HorizontalScrollBarVisibility="Never"
+                                    VerticalScrollBarVisibility="Always"
+                                    HorizontalOptions="FillAndExpand"
+                                    VerticalOptions="CenterAndExpand"
+                                    Grid.Row="1">
+                        <CollectionView.ItemsLayout>
+                            <!-- Set to Vertical List -->
+                            <LinearItemsLayout Orientation="Vertical" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout>
+                                    <Grid 
+                                          Rotation="{Binding Rotation}"
+                                          HeightRequest="250">
+                                        <!-- Base Layer: Actual Photo -->
+                                        <Image Source="{Binding FilePath}"
+                                               Aspect="AspectFit"
+                                               HeightRequest="200"
+                                               WidthRequest="250">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding BindingContext.ShowPhotoCommand, Source={x:Reference PhotoCollectionView}}"
+                                                                      CommandParameter="{Binding .}" />
+                                            </Image.GestureRecognizers>
+                                        </Image>
+
+                                        <!-- Overlay Layer: Question Mark -->
+                                        <Image Source="question_mark_1.webp"
+                                               IsVisible="{Binding IsLocked}"
+                                               Aspect="AspectFit"
+                                               HeightRequest="200"
+                                               WidthRequest="250" />
+                                    </Grid>
+                                    <!-- Arrow between Photos -->
+                                    <Image Source="arrow_down.webp"
+                                           HeightRequest="50"
+                                           WidthRequest="50"
+                                           HorizontalOptions="Center" />
+
+                                </StackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </Grid>
+        </ScrollView>
         <!-- Full-Screen Photo Modal (Initially Hidden) -->
-        <ContentView x:Name="PhotoModal" IsVisible="False"
-             BackgroundColor="#CC000000"
-             VerticalOptions="FillAndExpand"
-             HorizontalOptions="FillAndExpand"
-             Grid.Row="0" 
-             Grid.RowSpan="2">
+        <ContentView x:Name="PhotoModal"
+                     IsVisible="False"
+                     BackgroundColor="#CC000000"
+                     VerticalOptions="FillAndExpand"
+                     HorizontalOptions="FillAndExpand"
+                     Grid.Row="0"
+                     Grid.RowSpan="2">
 
             <ContentView.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding CloseModalCommand}" />
             </ContentView.GestureRecognizers>
 
-            <Grid VerticalOptions="Center" HorizontalOptions="Center">
+            <Grid VerticalOptions="Center"
+                  HorizontalOptions="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
@@ -72,15 +134,22 @@
                     <TapGestureRecognizer />
                 </Grid.GestureRecognizers>
                 <!-- Full-Screen Photo or Question Mark -->
-                <Image x:Name="FullScreenPhoto" 
-                   Aspect="AspectFit" 
-                   HorizontalOptions="FillAndExpand" 
-                   VerticalOptions="Center" />
+                <Image x:Name="FullScreenPhoto"
+                       Aspect="AspectFit"
+                       HorizontalOptions="FillAndExpand"
+                       VerticalOptions="Center" />
 
                 <!-- Code Entry Overlay when Locked -->
-                <StackLayout x:Name="CodeEntryOverlay" IsVisible="False" BackgroundColor="#FFFFFFDD" Padding="20" VerticalOptions="End">
-                    <Entry x:Name="FullScreenCodeEntry" Placeholder="Enter unlock code" WidthRequest="200"/>
-                    <Button Text="Unlock" Command="{Binding UnlockPhotoCommand}" 
+                <StackLayout x:Name="CodeEntryOverlay"
+                             IsVisible="False"
+                             BackgroundColor="#FFFFFFDD"
+                             Padding="20"
+                             VerticalOptions="End">
+                    <Entry x:Name="FullScreenCodeEntry"
+                           Placeholder="Enter unlock code"
+                           WidthRequest="200" />
+                    <Button Text="Unlock"
+                            Command="{Binding UnlockPhotoCommand}"
                             CommandParameter="{Binding Text, Source={x:Reference FullScreenCodeEntry}}" />
                 </StackLayout>
             </Grid>

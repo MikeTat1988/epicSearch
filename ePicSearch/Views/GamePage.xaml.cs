@@ -12,6 +12,7 @@ namespace ePicSearch.Views
         public ICommand UnlockPhotoCommand { get; }
         public ICommand CloseModalCommand { get; }
         public ObservableCollection<PhotoInfo> Photos { get; private set; }
+        public ObservableCollection<object> BackgroundScrolls { get; private set; }
         public string AdventureName { get; private set; }
 
         private readonly ILogger<MainPage> _logger;
@@ -25,8 +26,9 @@ namespace ePicSearch.Views
             _logger = logger;
             AdventureName = adventureName;
 			Photos = new ObservableCollection<PhotoInfo>();
+            BackgroundScrolls = new ObservableCollection<object>();
 
-			ShowPhotoCommand = new Command<PhotoInfo>(ShowPhoto);
+            ShowPhotoCommand = new Command<PhotoInfo>(ShowPhoto);
 			UnlockPhotoCommand = new Command<string>(UnlockPhoto);
             CloseModalCommand = new Command(CloseModal);
 
@@ -35,10 +37,16 @@ namespace ePicSearch.Views
 
             LoadAdventurePhotos(adventureName);
             BindingContext = this;
+            SizeChanged += GamePage_SizeChanged;
             _logger.LogInformation($"GamePage for adventure: {adventureName} initialized");
         }
 
-		private void LoadAdventurePhotos(string adventureName)
+        private void GamePage_SizeChanged(object sender, EventArgs e)
+        {
+            CalculateAndPopulateBackgroundScrolls();
+        }
+
+        private void LoadAdventurePhotos(string adventureName)
 		{
             var photos = _photoManager.GetPhotosForAdventure(adventureName);
 
@@ -62,6 +70,45 @@ namespace ePicSearch.Views
             }
 
         }
+
+        private void CalculateAndPopulateBackgroundScrolls()
+        {
+            // Clear existing background scrolls
+            BackgroundScrolls.Clear();
+
+            // Define fixed heights
+            double topHeight = 276;
+            double bottomHeight = 271;
+            double arrowheight = 50;
+            double gridPadding = 0;
+            double middleTileHeight = 280;
+            double photoWithArrowAndPaddingHeight = middleTileHeight + gridPadding + arrowheight; 
+
+            double requiredHeightForPhotos = Photos.Count * photoWithArrowAndPaddingHeight;
+            double remainingHeight = requiredHeightForPhotos - topHeight - bottomHeight;
+            double tilesNeeded = remainingHeight / middleTileHeight;
+
+            // Calculate the number of background scroll tiles needed to fill the remaining space
+            int numberOfMiddleTiles = (int)Math.Ceiling(tilesNeeded);
+
+            // Ensure a minimum number of middle tiles 
+            var numberOfMiddleTilesRounded = Math.Max(numberOfMiddleTiles, 2);
+
+            _logger.LogInformation($"Total height is {requiredHeightForPhotos} and there are {Photos.Count} photos. \n" +
+                $"Calculated {tilesNeeded} background scroll tiles needed \n" +
+                $"Rounded to {numberOfMiddleTiles}" +
+                $"min max check - {numberOfMiddleTilesRounded}" +
+                $"double - {Math.Ceiling(5.97)}, int - {(int)Math.Ceiling(5.97)} ");
+
+            for (int i = 0; i < numberOfMiddleTilesRounded; i++)
+            {
+                BackgroundScrolls.Add(new ScrollMiddleInfo());
+            }
+
+            _logger.LogInformation($"added {BackgroundScrolls.Count} background scroll tiles.");
+            RefreshPhotoView();
+        }
+
         private void ShowPhoto(PhotoInfo photoInfo)
         {
             _logger.LogInformation($"A photo {photoInfo} was pressed");
@@ -137,7 +184,13 @@ namespace ePicSearch.Views
 		{
             PhotoCollectionView.ItemsSource = null;
             PhotoCollectionView.ItemsSource = Photos;
+            BackgroundView.ItemsSource = null;
+            BackgroundView.ItemsSource = BackgroundScrolls;
         }
 
+        public class ScrollMiddleInfo
+        {
+            public string ImageSource { get; set; } = "scroll_middle.webp";
+        }
     }
 }
