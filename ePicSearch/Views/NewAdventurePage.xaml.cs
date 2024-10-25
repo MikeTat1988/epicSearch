@@ -134,5 +134,13 @@ namespace ePicSearch.Views
                 await DisplayAlert("Clue Photo Saved!", $"Code: {photoInfo.Code}, go hide it!", "OK");
             }
         }
+
+        private async void OnBackButtonClicked(object sender, EventArgs e)
+        {
+            if (Navigation.NavigationStack.Count > 1)
+            {
+                await Navigation.PopAsync();
+            }
+        }
     }
 }

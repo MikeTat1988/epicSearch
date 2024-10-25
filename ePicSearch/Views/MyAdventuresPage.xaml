@@ -3,7 +3,13 @@
              x:Class="ePicSearch.Views.MyAdventuresPage">
 
     <StackLayout Padding="10" VerticalOptions="FillAndExpand">
-
+        <ImageButton Source="arrow_down.webp"
+                     WidthRequest="50"
+                     HeightRequest="50"
+                     HorizontalOptions="Start"
+                     VerticalOptions="Start"
+                     Margin="10"
+                     Clicked="OnBackButtonClicked" />
         <Label Text="Your Adventures" FontSize="20" HorizontalOptions="Center" />
 
         <!-- no adventures -->

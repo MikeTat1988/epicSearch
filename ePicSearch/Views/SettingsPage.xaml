@@ -2,9 +2,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ePicSearch.Views.SettingsPage" >
     <Grid>
-       <Image Source="settings_background.webp"
-               Aspect="AspectFill" />
-       <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="20">
+        <Image Source="settings_background.webp"
+               Aspect="AspectFill"
+               VerticalOptions="FillAndExpand"
+               HorizontalOptions="FillAndExpand" />
+        <ImageButton Source="arrow_down.webp"
+                     WidthRequest="50"
+                     HeightRequest="50"
+                     HorizontalOptions="Start"
+                     VerticalOptions="Start"
+                     Margin="10"
+                     Clicked="OnBackButtonClicked" />
+        
+        <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="20">
                 <!--Label Text="Settings Page" /-->
             <Button Text="Clean Logs" Clicked="OnCleanLogsClicked" />
        </StackLayout>
