@@ -31,7 +31,7 @@
                         </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <!-- Base Layer: Actual Photo -->
+                                <!-- the background tile -->
                                 <Image Source="{Binding ImageSource}"
                                        Aspect="Fill"
                                        HeightRequest="240"
@@ -42,18 +42,12 @@
                     </CollectionView>
 
                     <!-- Bottom Tile -->
-                    <Image Source="back_button.png"
+                    <Image Source="scroll_bottom.png"
                            Aspect="Fill"
                            Grid.Row="2"
                            Margin="0, -2, 0, 0" />
                 </Grid>
-                <ImageButton Source="arrow_down.webp"
-                             WidthRequest="50"
-                             HeightRequest="50"
-                             HorizontalOptions="Start"
-                             VerticalOptions="Start"
-                             Margin="10"
-                             Clicked="OnBackButtonClicked" />
+                
                 <!-- FOREGROUND -->
                     <Grid BackgroundColor="Transparent"
                       Grid.RowSpan="3">
@@ -117,6 +111,13 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </Grid>
+                <ImageButton Source="bsck_button.png"
+                             WidthRequest="50"
+                             HeightRequest="50"
+                             HorizontalOptions="Start"
+                             VerticalOptions="Start"
+                             Margin="10"
+                             Clicked="OnBackButtonClicked" />
             </Grid>
         </ScrollView>
         <!-- Full-Screen Photo Modal (Initially Hidden) -->
@@ -157,11 +158,24 @@
                              VerticalOptions="End">
                     <Entry x:Name="FullScreenCodeEntry"
                            Placeholder="Enter unlock code"
+                           Keyboard="Numeric"
+                           MaxLength="4"
                            WidthRequest="200" />
                     <Button Text="Unlock"
                             Command="{Binding UnlockPhotoCommand}"
                             CommandParameter="{Binding Text, Source={x:Reference FullScreenCodeEntry}}" />
+                    
                 </StackLayout>
+                <ContentView x:Name="OopsPopup"
+                             IsVisible="False"
+                             BackgroundColor="#00000088"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             Opacity="0">
+                    <Image Source="oops_character.webp"
+                           WidthRequest="200"
+                           HeightRequest="200" />
+                </ContentView>
             </Grid>
         </ContentView>
     </Grid>

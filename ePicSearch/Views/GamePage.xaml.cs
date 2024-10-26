@@ -140,13 +140,20 @@ namespace ePicSearch.Views
             PhotoModal.IsVisible = true;
         }
 
-        private void UnlockPhoto(string code)
+        private async void UnlockPhoto(string code)
 		{
             _logger.LogInformation($"A code {code} was proposed to unlock a photo");
 
             if (_selectedPhoto == null)
             {
                 _logger.LogWarning("No photos were selected");
+                return;
+            }
+
+            // Ensure the code is 4 digits and numeric
+            if (code.Length != 4 || !code.All(char.IsDigit))
+            {
+                await ShowOopsPopup();
                 return;
             }
 
@@ -162,13 +169,14 @@ namespace ePicSearch.Views
 
                 if (_photoManager.UpdatePhotoState(_selectedPhoto))
                 {
+                    _photoManager.SyncCache();
                     _logger.LogInformation($"The photo with {code} was successfully updated in memory");
                 }
                 else
                 {
                     _logger.LogError($"{_selectedPhoto} failed to be updated in memory");
 
-                    DisplayAlert("Save Error", "Failed to save the changes. Please try again.", "OK");
+                    await DisplayAlert("Save Error", "Failed to save the changes. Please try again.", "OK");
 
                     // Revert the change in the UI to keep things consistent
                     _selectedPhoto.IsLocked = true;
@@ -178,9 +186,21 @@ namespace ePicSearch.Views
             else
             {
                 _logger.LogInformation($"Thecode for {_selectedPhoto} was wrong");
-                DisplayAlert("Incorrect Code", "The code you entered is incorrect.", "OK");
+                await DisplayAlert("Incorrect Code", "The code you entered is incorrect.", "OK");
 
             }
+        }
+
+        private async Task ShowOopsPopup()
+        {
+            OopsPopup.IsVisible = true;
+
+            await OopsPopup.FadeTo(1, 250);
+
+            await Task.Delay(1000);
+
+            await OopsPopup.FadeTo(0, 250);
+            OopsPopup.IsVisible = false;
         }
 
         private async void OnBackButtonClicked(object sender, EventArgs e)

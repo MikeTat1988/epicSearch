@@ -33,6 +33,8 @@ namespace ePicSearch
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("LuckiestGuy-Regular.ttf", "LuckiestGuy"); 
+
                 });
 
             // Register services with the app data directory
