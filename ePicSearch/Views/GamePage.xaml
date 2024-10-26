@@ -78,19 +78,44 @@
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <StackLayout>
-                                    <Grid 
-                                          Rotation="{Binding Rotation}"
+                                    <Grid Rotation="{Binding Rotation}"
                                           HeightRequest="220">
-                                        <!-- Base Layer: Actual Photo -->
-                                        <Image Source="{Binding FilePath}"
-                                               Aspect="AspectFit"
-                                               HeightRequest="200"
-                                               WidthRequest="250">
-                                            <Image.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding BindingContext.ShowPhotoCommand, Source={x:Reference PhotoCollectionView}}"
-                                                                      CommandParameter="{Binding .}" />
-                                            </Image.GestureRecognizers>
-                                        </Image>
+                                        <Grid HeightRequest="220"
+                                              WidthRequest="200">
+                                            <!-- Base Layer: Actual Photo -->
+                                            <Image Source="{Binding FilePath}"
+                                                   Aspect="AspectFit"
+                                                   HeightRequest="200"
+                                                   WidthRequest="200">
+                                                <Image.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding BindingContext.ShowPhotoCommand, Source={x:Reference PhotoCollectionView}}"
+                                                                          CommandParameter="{Binding .}" />
+                                                </Image.GestureRecognizers>
+                                            </Image>
+
+                                            <Image Source="check.webp"
+                                                   Aspect="AspectFit"
+                                                   HeightRequest="50"
+                                                   WidthRequest="50"
+                                                   HorizontalOptions="End"
+                                                   VerticalOptions="End"
+                                                   Margin="5">
+                                                <Image.Triggers>
+                                                    <DataTrigger TargetType="Image"
+                                                                 Binding="{Binding IsLocked}"
+                                                                 Value="False">
+                                                        <Setter Property="IsVisible"
+                                                                Value="True" />
+                                                    </DataTrigger>
+                                                    <DataTrigger TargetType="Image"
+                                                                 Binding="{Binding IsLocked}"
+                                                                 Value="True">
+                                                        <Setter Property="IsVisible"
+                                                                Value="False" />
+                                                    </DataTrigger>
+                                                </Image.Triggers>
+                                            </Image>
+                                        </Grid>
 
                                         <!-- Overlay Layer: Question Mark -->
                                         <Image Source="question_mark_1.webp"
@@ -98,6 +123,8 @@
                                                Aspect="AspectFit"
                                                HeightRequest="200"
                                                WidthRequest="250" />
+
+                                        
                                     </Grid>
                                     <!-- Arrow between Photos -->
                                     <Image Source="arrow_down.webp"
