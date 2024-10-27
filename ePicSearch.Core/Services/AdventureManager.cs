@@ -64,6 +64,28 @@ namespace ePicSearch.Infrastructure.Services
             _dataStorageService.SyncCacheToFile();
         }
 
+        public string GenerateCode()
+        {
+            return _codeGenerator.GenerateCode();
+        }
+
+        public AdventureData? GetAdventureData(string adventureName)
+        {
+            return _dataStorageService.GetAdventureData(adventureName);
+        }
+
+        public void AddAdventure(AdventureData adventureData)
+        {
+            _dataStorageService.AddAdventure(adventureData);
+            _dataStorageService.SyncCacheToFile();
+        }
+
+        public void UpdateAdventure(AdventureData adventureData)
+        {
+            _dataStorageService.UpdateAdventureData(adventureData);
+            _dataStorageService.SyncCacheToFile();
+        }
+
         public bool UpdatePhotoState(PhotoInfo updatedPhoto)
         {
             try

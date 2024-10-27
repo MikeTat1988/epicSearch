@@ -26,16 +26,23 @@ namespace ePicSearch.Tests
         public void LoadAdventuresFromFile_ShouldLoadValidAdventures()
         {
             // Arrange
-            var mockJson = "[{\"FilePath\":\"/path/photo1.jpg\",\"Name\":\"photo1\",\"Code\":\"1234\",\"SerialNumber\":1,\"AdventureName\":\"test\",\"IsLocked\":true}]";
+            var mockJson = "{ \"Photos\": [{ \"FilePath\": \"/path/photo1.jpg\", \"Name\": \"photo1\", \"Code\": \"1234\", \"SerialNumber\": 1, \"AdventureName\": \"test\", \"IsLocked\": true }],"
+             + " \"Adventures\": [{ \"AdventureName\": \"testAdventure\", \"IsComplete\": false, \"PhotoCount\": 1, \"LastPhotoCaptured\": \"/path/photo1.jpg\", \"LastPhotoCode\": \"1234\" }] }";
+
             _mockFileSystemService.Setup(fs => fs.FileExists(It.IsAny<string>())).Returns(true);
             _mockFileSystemService.Setup(fs => fs.ReadAllText(It.IsAny<string>())).Returns(mockJson);
 
             // Act
-            var result = _dataStorageService.LoadFromFile<PhotoInfo>();
+            _dataStorageService.LoadDataFromFile();
+            var photos = _dataStorageService.GetPhotosForAdventure("test");
+            var adventures = _dataStorageService.GetAllAdventureNames();
 
             // Assert
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual("photo1", result[0].Name);
+            Assert.AreEqual(1, photos.Count, "Expected 1 photo to be loaded.");
+            Assert.AreEqual("photo1", photos[0].Name, "Photo name does not match.");
+
+            Assert.AreEqual(1, adventures.Count, "Expected 1 adventure to be loaded.");
+            Assert.AreEqual("testAdventure", adventures[0], "Adventure name does not match.");
         }
 
         [TestMethod]
@@ -45,10 +52,13 @@ namespace ePicSearch.Tests
             _mockFileSystemService.Setup(fs => fs.FileExists(It.IsAny<string>())).Returns(false);
 
             // Act
-            var result = _dataStorageService.LoadFromFile<PhotoInfo>();
+            _dataStorageService.LoadDataFromFile();
+            var photos = _dataStorageService.GetPhotosForAdventure("test");
+            var adventures = _dataStorageService.GetAllAdventureNames();
 
-            // Assert
-            Assert.AreEqual(0, result.Count);
+            // Assert: Verify both photos and adventures are empty
+            Assert.AreEqual(0, photos.Count, "Expected 0 photos when file does not exist.");
+            Assert.AreEqual(0, adventures.Count, "Expected 0 adventures when file does not exist.");
         }
 
         [TestMethod]

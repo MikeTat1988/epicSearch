@@ -153,8 +153,24 @@ namespace ePicSearch.Views
                 return;
             }
 
-            // Pass the adventure name and any initial data (for simplicity, we're setting defaults)
-            await Navigation.PushAsync(new CameraPage(adventureName, photoCount: 0));
+            var adventureData = _adventureManager.GetAdventureData(adventureName);
+
+            if (adventureData == null)
+            {
+                // Create a new AdventureData instance if none exists
+                adventureData = new AdventureData
+                {
+                    AdventureName = adventureName,
+                    IsComplete = false,
+                    PhotoCount = 0,
+                    LastPhotoCaptured = null,
+                    LastPhotoCode = null
+                };
+
+                _adventureManager.AddAdventure(adventureData);
+            }
+
+            await Navigation.PushAsync(new CameraPage(adventureData, _adventureManager));
         }
     }
 }

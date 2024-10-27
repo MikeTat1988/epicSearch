@@ -23,33 +23,37 @@ namespace ePicSearch.Infrastructure.Services
             _logger = logger;
 
             _logger.LogInformation($"Initialized with file path: {_jsonFilePath}");
-            _photoCache = LoadFromFile<PhotoInfo>();
-            _adventureCache = LoadFromFile<AdventureData>();
+            LoadDataFromFile();
         }
 
-        public List<T> LoadFromFile<T>() where T : new()
+        public void LoadDataFromFile()
         {
             lock (_cacheLock)
             {
-                _logger.LogInformation($"Loading {typeof(T).Name} from JSON.");
+                _logger.LogInformation($"Loading from JSON.");
 
                 if (!_fileSystemService.FileExists(_jsonFilePath))
                 {
-                    _logger.LogWarning($"JSON file not found for  {typeof(T).Name}. Returning empty adventure list.");
-                    return new List<T>();
+                    _logger.LogWarning($"JSON file not found. Initializing with empty data store.");
+                    _photoCache = new List<PhotoInfo>();
+                    _adventureCache = new List<AdventureData>();
                 }
 
                 try
                 {
                     var json = _fileSystemService.ReadAllText(_jsonFilePath);
-                    var data = JsonConvert.DeserializeObject<List<T>>(json) ?? new List<T>();
-                    _logger.LogInformation($"Loaded {data.Count} items of type {typeof(T).Name} from JSON.");
-                    return data;
+                    var dataStore = JsonConvert.DeserializeObject<DataStore>(json) ?? new DataStore();
+
+                    _photoCache = dataStore.Photos ?? new List<PhotoInfo>();
+                    _adventureCache = dataStore.Adventures ?? new List<AdventureData>();
+
+                    _logger.LogInformation($"Loaded {_photoCache.Count} photos and {_adventureCache.Count} adventures from JSON.");
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, $"Error loading {typeof(T).Name} data from JSON.");
-                    return new List<T>();
+                    _logger.LogError(ex, "Error loading data from JSON.");
+                    _photoCache = new List<PhotoInfo>();
+                    _adventureCache = new List<AdventureData>();
                 }
             }
         }
@@ -130,7 +134,7 @@ namespace ePicSearch.Infrastructure.Services
         {
             lock (_cacheLock)
             {
-                return _photoCache.Select(p => p.AdventureName).Distinct().ToList();
+                return _adventureCache.Select(a => a.AdventureName).Distinct().ToList();
             }
         }
 
@@ -146,14 +150,13 @@ namespace ePicSearch.Infrastructure.Services
 
                 try
                 {
-                    var data = new
+                    _logger.LogInformation("Syncing cache with JSON file.");
+
+                    var data = new DataStore
                     {
                         Photos = _photoCache,
                         Adventures = _adventureCache
                     };
-
-                    _logger.LogInformation("Syncing cache with JSON file.");
-                    _logger.LogInformation($"cache written : \n {string.Join(",\n", _photoCache)}");
 
                     var json = JsonConvert.SerializeObject(data, Formatting.Indented);
                     _fileSystemService.WriteAllText(_jsonFilePath, json);

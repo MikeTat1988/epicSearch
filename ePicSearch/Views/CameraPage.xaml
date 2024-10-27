@@ -10,7 +10,49 @@
                 HorizontalOptions="Center"
                 Clicked="OnCapturePhotoClicked" />
 
-        <!-- Placeholder for modals (Treasure and Clue Photo Modals) -->
-        <!-- We will define these in Checkpoint 3 -->
+        <ContentView x:Name="TreasurePhotoModal"
+                     IsVisible="False"
+                     BackgroundColor="#CCFFFFFF"
+                     VerticalOptions="FillAndExpand"
+                     HorizontalOptions="FillAndExpand"
+                     Padding="20">
+            <Grid VerticalOptions="Center"
+                  HorizontalOptions="Center"
+                  WidthRequest="300"
+                  HeightRequest="200">
+
+                <Image Source="tutorial_popup.webp"
+                       WidthRequest="500"
+                       HeightRequest="300"
+                       HorizontalOptions="Center" />
+
+                <StackLayout VerticalOptions="Center">
+                    <Label FontFamily="LuckiestGuy"
+                           Text="Great!"
+                           HorizontalOptions="Center"
+                           TextColor="Black"
+                           FontSize="20" />
+                    <Label FontFamily="LuckiestGuy"
+                           Text="A treasure photo was taken!"
+                           HorizontalOptions="Center"
+                           TextColor="Black"
+                           FontSize="20" />
+                </StackLayout>
+
+                <Label x:Name="TreasureCodeLabel"
+                       FontFamily="LuckiestGuy"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Start"
+                       TextColor="Black"
+                       FontSize="20" />
+
+                <Button Text="Next Clue"
+                        Clicked="OnNextClueClicked"
+                        HorizontalOptions="Center"
+                        VerticalOptions="End"
+                        WidthRequest="120"
+                        Margin="0,10,0,10" />
+            </Grid>
+        </ContentView>
     </Grid>
 </ContentPage>
