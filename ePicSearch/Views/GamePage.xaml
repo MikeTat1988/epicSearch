@@ -118,13 +118,30 @@
                                         </Grid>
 
                                         <!-- Overlay Layer: Question Mark -->
-                                        <Image Source="question_mark_1.webp"
-                                               IsVisible="{Binding IsLocked}"
+                                        <Image IsVisible="{Binding IsLocked}"
                                                Aspect="AspectFit"
                                                HeightRequest="200"
-                                               WidthRequest="250" />
+                                               WidthRequest="250">
+                                            <Image.Triggers>
+                                                <!-- Show treasure photo if IsTreasurePhoto is true -->
+                                                <DataTrigger TargetType="Image"
+                                                             Binding="{Binding IsTreasurePhoto}"
+                                                             Value="True">
+                                                    <Setter Property="Source"
+                                                            Value="treasure_photo.webp" />
+                                                </DataTrigger>
 
-                                        
+                                                <!-- Show question mark if IsTreasurePhoto is false -->
+                                                <DataTrigger TargetType="Image"
+                                                             Binding="{Binding IsTreasurePhoto}"
+                                                             Value="False">
+                                                    <Setter Property="Source"
+                                                            Value="question_mark_1.webp" />
+                                                </DataTrigger>
+                                            </Image.Triggers>
+                                        </Image>
+
+
                                     </Grid>
                                     <!-- Arrow between Photos -->
                                     <Image Source="arrow_down.webp"
@@ -138,7 +155,7 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </Grid>
-                <ImageButton Source="bsck_button.png"
+                <ImageButton Source="back_button.png"
                              WidthRequest="50"
                              HeightRequest="50"
                              HorizontalOptions="Start"

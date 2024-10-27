@@ -12,6 +12,7 @@ namespace ePicSearch.Infrastructure.Entities
         public bool IsLocked { get; set; }
         public double Rotation { get; set; }
         public bool ShowArrow { get; set; }
+        public bool IsTreasurePhoto { get; set; }
 
         public override string ToString()
         {

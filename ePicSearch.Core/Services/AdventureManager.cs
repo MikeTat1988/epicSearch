@@ -32,6 +32,7 @@ namespace ePicSearch.Infrastructure.Services
                     IsLocked = true,
                     Rotation = _random.Next(-10, 10),
                     ShowArrow = true,
+                    IsTreasurePhoto = (serialNumber == 1)
                 };
 
                 // Save photo 

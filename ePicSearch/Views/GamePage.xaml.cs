@@ -107,7 +107,7 @@ namespace ePicSearch.Views
             int numberOfMiddleTiles = (int)Math.Ceiling(tilesNeeded);
 
             // Ensure a minimum number of middle tiles 
-            var numberOfMiddleTilesRounded = Math.Max(numberOfMiddleTiles, 2);
+            var numberOfMiddleTilesRounded = Math.Max(numberOfMiddleTiles, 1);
 
             _logger.LogInformation($"Total height is {requiredHeightForPhotos} and there are {Photos.Count} photos. \n" +
                 $"Calculated {tilesNeeded} background scroll tiles needed \n" +
