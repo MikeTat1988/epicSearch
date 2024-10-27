@@ -12,7 +12,8 @@ namespace ePicSearch.Infrastructure.Services
         private readonly string _jsonFilePath;
         private readonly object _cacheLock = new object();
 
-        private List<PhotoInfo> _cache;
+        private List<PhotoInfo> _photoCache;
+        private List<AdventureData> _adventureCache;
         private bool _isCacheDirty = false;
 
         public DataStorageService(IFileSystemService fileSystemService, ILogger<DataStorageService> logger)
@@ -22,32 +23,33 @@ namespace ePicSearch.Infrastructure.Services
             _logger = logger;
 
             _logger.LogInformation($"Initialized with file path: {_jsonFilePath}");
-            _cache = LoadAdventuresFromFile();
+            _photoCache = LoadFromFile<PhotoInfo>();
+            _adventureCache = LoadFromFile<AdventureData>();
         }
 
-        public List<PhotoInfo> LoadAdventuresFromFile()
+        public List<T> LoadFromFile<T>() where T : new()
         {
             lock (_cacheLock)
             {
-                _logger.LogInformation($"Loading adventures from JSON.");
+                _logger.LogInformation($"Loading {typeof(T).Name} from JSON.");
 
                 if (!_fileSystemService.FileExists(_jsonFilePath))
                 {
-                    _logger.LogWarning($"JSON file not found. Returning empty adventure list.");
-                    return new List<PhotoInfo>();
+                    _logger.LogWarning($"JSON file not found for  {typeof(T).Name}. Returning empty adventure list.");
+                    return new List<T>();
                 }
 
                 try
                 {
                     var json = _fileSystemService.ReadAllText(_jsonFilePath);
-                    var adventures = JsonConvert.DeserializeObject<List<PhotoInfo>>(json) ?? new List<PhotoInfo>();
-                    _logger.LogInformation($"Loaded {adventures.Count} adventures from JSON.");
-                    return adventures;
+                    var data = JsonConvert.DeserializeObject<List<T>>(json) ?? new List<T>();
+                    _logger.LogInformation($"Loaded {data.Count} items of type {typeof(T).Name} from JSON.");
+                    return data;
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, $"Error loading adventures from JSON.");
-                    return new List<PhotoInfo>();
+                    _logger.LogError(ex, $"Error loading {typeof(T).Name} data from JSON.");
+                    return new List<T>();
                 }
             }
         }
@@ -56,7 +58,7 @@ namespace ePicSearch.Infrastructure.Services
         {
             lock (_cacheLock)
             {
-                _cache.RemoveAll(p => p.AdventureName == adventureName);
+                _photoCache.RemoveAll(p => p.AdventureName == adventureName);
                 _isCacheDirty = true;
             }
         }
@@ -65,7 +67,15 @@ namespace ePicSearch.Infrastructure.Services
         {
             lock (_cacheLock)
             {
-                return _cache.Where(p => p.AdventureName == adventureName).ToList();
+                return _photoCache.Where(p => p.AdventureName == adventureName).ToList();
+            }
+        }
+
+        public AdventureData? GetAdventureData(string adventureName)
+        {
+            lock (_cacheLock)
+            {
+                return _adventureCache.FirstOrDefault(a => a.AdventureName == adventureName);
             }
         }
 
@@ -73,7 +83,16 @@ namespace ePicSearch.Infrastructure.Services
         {
             lock (_cacheLock)
             {
-                _cache.Add(photoInfo);
+                _photoCache.Add(photoInfo);
+                _isCacheDirty = true;
+            }
+        }
+
+        public void AddAdventure(AdventureData adventureData)
+        {
+            lock (_cacheLock)
+            {
+                _adventureCache.Add(adventureData);
                 _isCacheDirty = true;
             }
         }
@@ -82,10 +101,26 @@ namespace ePicSearch.Infrastructure.Services
         {
             lock (_cacheLock)
             {
-                var existingPhoto = _cache.FirstOrDefault(p => p.FilePath == updatedPhoto.FilePath);
+                var existingPhoto = _photoCache.FirstOrDefault(p => p.FilePath == updatedPhoto.FilePath);
                 if (existingPhoto != null)
                 {
                     existingPhoto.IsLocked = updatedPhoto.IsLocked;
+                    _isCacheDirty = true;
+                }
+            }
+        }
+
+        public void UpdateAdventureData(AdventureData updatedAdventure)
+        {
+            lock (_cacheLock)
+            {
+                var existingAdventure = _adventureCache.FirstOrDefault(a => a.AdventureName == updatedAdventure.AdventureName);
+                if (existingAdventure != null)
+                {
+                    existingAdventure.IsComplete = updatedAdventure.IsComplete;
+                    existingAdventure.PhotoCount = updatedAdventure.PhotoCount;
+                    existingAdventure.LastPhotoCaptured = updatedAdventure.LastPhotoCaptured;
+                    existingAdventure.LastPhotoCode = updatedAdventure.LastPhotoCode;
                     _isCacheDirty = true;
                 }
             }
@@ -95,7 +130,7 @@ namespace ePicSearch.Infrastructure.Services
         {
             lock (_cacheLock)
             {
-                return _cache.Select(p => p.AdventureName).Distinct().ToList();
+                return _photoCache.Select(p => p.AdventureName).Distinct().ToList();
             }
         }
 
@@ -111,10 +146,16 @@ namespace ePicSearch.Infrastructure.Services
 
                 try
                 {
+                    var data = new
+                    {
+                        Photos = _photoCache,
+                        Adventures = _adventureCache
+                    };
+
                     _logger.LogInformation("Syncing cache with JSON file.");
-                    _logger.LogInformation($"cache written : \n {string.Join(",\n", _cache)}");
-                    
-                    var json = JsonConvert.SerializeObject(_cache, Formatting.Indented);
+                    _logger.LogInformation($"cache written : \n {string.Join(",\n", _photoCache)}");
+
+                    var json = JsonConvert.SerializeObject(data, Formatting.Indented);
                     _fileSystemService.WriteAllText(_jsonFilePath, json);
                     _isCacheDirty = false;  
                     _logger.LogInformation("Cache successfully synced to JSON.");

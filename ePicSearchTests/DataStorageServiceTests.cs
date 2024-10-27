@@ -31,7 +31,7 @@ namespace ePicSearch.Tests
             _mockFileSystemService.Setup(fs => fs.ReadAllText(It.IsAny<string>())).Returns(mockJson);
 
             // Act
-            var result = _dataStorageService.LoadAdventuresFromFile();
+            var result = _dataStorageService.LoadFromFile<PhotoInfo>();
 
             // Assert
             Assert.AreEqual(1, result.Count);
@@ -45,7 +45,7 @@ namespace ePicSearch.Tests
             _mockFileSystemService.Setup(fs => fs.FileExists(It.IsAny<string>())).Returns(false);
 
             // Act
-            var result = _dataStorageService.LoadAdventuresFromFile();
+            var result = _dataStorageService.LoadFromFile<PhotoInfo>();
 
             // Assert
             Assert.AreEqual(0, result.Count);
@@ -154,5 +154,65 @@ namespace ePicSearch.Tests
             // Assert
             _mockFileSystemService.Verify(fs => fs.WriteAllText(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
+
+        [TestMethod]
+        public void AddAdventure_ShouldAddAdventureAndRetrieveIt()
+        {
+            // Arrange
+            var adventure = new AdventureData
+            {
+                AdventureName = "testAdventure",
+                IsComplete = false,
+                PhotoCount = 3,
+                LastPhotoCaptured = "/path/photo3.jpg",
+                LastPhotoCode = "5678"
+            };
+
+            // Act
+            _dataStorageService.AddAdventure(adventure);
+            var retrievedAdventure = _dataStorageService.GetAdventureData("testAdventure");
+
+            // Assert
+            Assert.IsNotNull(retrievedAdventure);
+            Assert.AreEqual("testAdventure", retrievedAdventure.AdventureName);
+            Assert.AreEqual(3, retrievedAdventure.PhotoCount);
+            Assert.AreEqual("/path/photo3.jpg", retrievedAdventure.LastPhotoCaptured);
+            Assert.AreEqual("5678", retrievedAdventure.LastPhotoCode);
+        }
+
+        [TestMethod]
+        public void UpdateAdventureData_ShouldUpdateExistingAdventure()
+        {
+            // Arrange
+            var adventure = new AdventureData
+            {
+                AdventureName = "testAdventure",
+                IsComplete = false,
+                PhotoCount = 2,
+                LastPhotoCaptured = "/path/photo2.jpg",
+                LastPhotoCode = "1234"
+            };
+            _dataStorageService.AddAdventure(adventure);
+
+            // Act
+            var updatedAdventure = new AdventureData
+            {
+                AdventureName = "testAdventure",
+                IsComplete = true,
+                PhotoCount = 4,
+                LastPhotoCaptured = "/path/photo4.jpg",
+                LastPhotoCode = "4321"
+            };
+            _dataStorageService.UpdateAdventureData(updatedAdventure);
+            var retrievedAdventure = _dataStorageService.GetAdventureData("testAdventure");
+
+            // Assert
+            Assert.IsNotNull(retrievedAdventure);
+            Assert.IsTrue(retrievedAdventure.IsComplete);
+            Assert.AreEqual(4, retrievedAdventure.PhotoCount);
+            Assert.AreEqual("/path/photo4.jpg", retrievedAdventure.LastPhotoCaptured);
+            Assert.AreEqual("4321", retrievedAdventure.LastPhotoCode);
+        }
+
     }
 }
