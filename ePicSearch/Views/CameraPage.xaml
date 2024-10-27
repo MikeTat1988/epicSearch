@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ePicSearch.Views.CameraPage"
+             Title="CameraPage">
+    <Grid>
+        <!-- Capture Button -->
+        <Button Text="Capture Photo"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Clicked="OnCapturePhotoClicked" />
+
+        <!-- Placeholder for modals (Treasure and Clue Photo Modals) -->
+        <!-- We will define these in Checkpoint 3 -->
+    </Grid>
+</ContentPage>

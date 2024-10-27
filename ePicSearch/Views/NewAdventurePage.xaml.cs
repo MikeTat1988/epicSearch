@@ -142,5 +142,19 @@ namespace ePicSearch.Views
                 await Navigation.PopAsync();
             }
         }
+
+        private async void OnStartCreating2Clicked(object sender, EventArgs e)
+        {
+            var adventureName = AdventureNameEntry.Text;
+            if (string.IsNullOrEmpty(adventureName))
+            {
+                ErrorMessage.Text = "Please enter a name for your adventure.";
+                ErrorMessage.IsVisible = true;
+                return;
+            }
+
+            // Pass the adventure name and any initial data (for simplicity, we're setting defaults)
+            await Navigation.PushAsync(new CameraPage(adventureName, photoCount: 0));
+        }
     }
 }
