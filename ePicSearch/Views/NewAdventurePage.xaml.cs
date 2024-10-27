@@ -21,7 +21,7 @@ namespace ePicSearch.Views
 
             if (adventureName == null)
             {
-                return; // Validation failed, exit the method.
+                return;
             }
 
             bool keepTakingPhotos = true;
@@ -145,30 +145,23 @@ namespace ePicSearch.Views
 
         private async void OnStartCreating2Clicked(object sender, EventArgs e)
         {
-            var adventureName = AdventureNameEntry.Text;
-            if (string.IsNullOrEmpty(adventureName))
+            var adventureName = await GetValidAdventureNameAsync();
+
+            if (adventureName == null)
             {
-                ErrorMessage.Text = "Please enter a name for your adventure.";
-                ErrorMessage.IsVisible = true;
                 return;
             }
 
-            var adventureData = _adventureManager.GetAdventureData(adventureName);
-
-            if (adventureData == null)
+            var adventureData = new AdventureData
             {
-                // Create a new AdventureData instance if none exists
-                adventureData = new AdventureData
-                {
-                    AdventureName = adventureName,
-                    IsComplete = false,
-                    PhotoCount = 0,
-                    LastPhotoCaptured = null,
-                    LastPhotoCode = null
-                };
+                AdventureName = adventureName,
+                IsComplete = false,
+                PhotoCount = 0,
+                LastPhotoCaptured = null,
+                LastPhotoCode = null
+            };
 
-                _adventureManager.AddAdventure(adventureData);
-            }
+            _adventureManager.AddAdventure(adventureData);
 
             await Navigation.PushAsync(new CameraPage(adventureData, _adventureManager));
         }

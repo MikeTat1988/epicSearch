@@ -1,3 +1,4 @@
+using ePicSearch.Entities;
 using ePicSearch.Infrastructure.Entities;
 using ePicSearch.Infrastructure.Services;
 namespace ePicSearch.Views;
@@ -25,51 +26,88 @@ public partial class CameraPage : ContentPage
         }
     }
 
-    private void StartTreasurePhotoCapture()
+    private async void StartTreasurePhotoCapture()
     {
-        string simulatedPhotoPath = "/path/to/treasure_photo.jpg";
-        string generatedCode = _adventureManager.GenerateCode();  // Generate a unique code
+        var photo = await MediaPicker.CapturePhotoAsync();
 
-        // Update adventure data
-        _adventureData.LastPhotoCaptured = simulatedPhotoPath;
-        _adventureData.LastPhotoCode = generatedCode;
-        _adventureData.PhotoCount = 1;  // This is the first photo in the adventure
+        if (photo == null)
+        {
+            await DisplayAlert("Error", "Photo capture failed. Please try again.", "OK");
+            return;
+        }
 
-        // Display the unique code in the TreasureCodeLabel
-        TreasureCodeLabel.Text = $"Code: {generatedCode}";
+        var capturedPhoto = await _adventureManager.CapturePhoto(new AppFileResult(photo), _adventureData.AdventureName);
 
-        // Make the TreasurePhotoModal visible
+        if (capturedPhoto == null)
+        {
+            await DisplayAlert("Error", "Failed to save the photo. Please try again.", "OK");
+            return;
+        }
+
+        AddPhotoToAdventure(capturedPhoto);
+
+        TreasureCodeLabel.Text = $"Code: {capturedPhoto.Code}";
         TreasurePhotoModal.IsVisible = true;
+        await TreasurePhotoModal.FadeTo(1, 250);
+    }
 
-        // Update the adventure data in storage
+    private async void StartCluePhotoLoop()
+    {
+        var photo = await MediaPicker.CapturePhotoAsync();
+
+        if (photo == null)
+        {
+            await DisplayAlert("Error", "Photo capture failed. Please try again.", "OK");
+            return;
+        }
+
+        var capturedPhoto = await _adventureManager.CapturePhoto(new AppFileResult(photo), _adventureData.AdventureName);
+
+        if (capturedPhoto == null)
+        {
+            await DisplayAlert("Error", "Failed to save the photo. Please try again.", "OK");
+            return;
+        }
+
+        AddPhotoToAdventure(capturedPhoto);
+        CluePhotoPromptModal.IsVisible = true;
+    }
+
+    private void AddPhotoToAdventure(PhotoInfo capturedPhoto)
+    {
+        _adventureData.LastPhotoCaptured = capturedPhoto.FilePath;
+        _adventureData.LastPhotoCode = capturedPhoto.Code;
+        _adventureData.PhotoCount++;
         _adventureManager.UpdateAdventure(_adventureData);
     }
 
-    private void OnNextClueClicked(object sender, EventArgs e)
+    private async void OnFirstClueClicked(object sender, EventArgs e)
     {
-        // Hide the TreasurePhotoModal
+        await TreasurePhotoModal.FadeTo(0, 250);
         TreasurePhotoModal.IsVisible = false;
 
-        // Proceed to the clue photo loop
         StartCluePhotoLoop();
     }
 
-    private void StartCluePhotoLoop()
+    private async void OnNextClueClicked(object sender, EventArgs e)
     {
-        // Placeholder for starting the clue photo loop
+        await CluePhotoPromptModal.FadeTo(0, 250);
+        CluePhotoPromptModal.IsVisible = false;
 
-        // This will be implemented in Checkpoint 3.3
-
-        DisplayAlert("Testing StartCluePhotoLoop reached",
-                 _adventureData.ToString(),
-                 "OK");
+        StartCluePhotoLoop(); 
     }
 
-    // Placeholder for photo capture logic, to be implemented in Checkpoint 3
-    private void OnCapturePhotoClicked(object sender, EventArgs e)
+    private async void OnFinishAdventureClicked(object sender, EventArgs e)
     {
-        DisplayAlert("Adventure Data",
-                 _adventureData.ToString(),
-                 "OK");
+        await CluePhotoPromptModal.FadeTo(0, 250);
+        CluePhotoPromptModal.IsVisible = false;
+
+        _adventureData.IsComplete = true;
+        _adventureManager.UpdateAdventure(_adventureData);
+
+        await DisplayAlert("Adventure Completed", null, "OK");
+
+        // Navigate back to the main page or adventures list
+        await Navigation.PopToRootAsync();
     }
 }
