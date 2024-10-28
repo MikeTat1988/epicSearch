@@ -65,11 +65,15 @@ namespace ePicSearch.Views
 
         private async void OnMyAdventuresClicked(object sender, EventArgs e)
         {
+            await MyAdventuresButton.ScaleTo(0.9, 200, Easing.Linear);
+            await MyAdventuresButton.ScaleTo(1.0, 200, Easing.Linear);
             await Navigation.PushAsync(new MyAdventuresPage(_photoManager, _logger));
         }
 
         private async void OnCreateNewAdventureClicked(object sender, EventArgs e)
         {
+            await CreateAdventureButton.ScaleTo(0.9, 200, Easing.Linear);
+            await CreateAdventureButton.ScaleTo(1.0, 200, Easing.Linear);
             await Navigation.PushAsync(new NewAdventurePage(_photoManager));
         }
 

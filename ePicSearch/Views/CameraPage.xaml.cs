@@ -7,6 +7,7 @@ public partial class CameraPage : ContentPage
 {
     private AdventureData _adventureData;
     private readonly AdventureManager _adventureManager;
+    private CancellationTokenSource _cts;
 
     public CameraPage(AdventureData adventureData, AdventureManager adventureManager)
     {
@@ -14,6 +15,9 @@ public partial class CameraPage : ContentPage
 
         _adventureData = adventureData;
         _adventureManager = adventureManager;
+
+        TreasureNextClueButton.Pressed += OnButtonPressed;
+        TreasureNextClueButton.Released += OnButtonReleased;
 
         // Determine the starting point based on photo count
         if (_adventureData.PhotoCount == 0)
@@ -92,7 +96,6 @@ public partial class CameraPage : ContentPage
 
     private async void OnFirstClueClicked(object sender, EventArgs e)
     {
-        await AnimateLongPress(TreasureNextClueButton);
         await TreasurePhotoModal.FadeTo(0, 250);
         TreasurePhotoModal.IsVisible = false;
 
@@ -101,7 +104,11 @@ public partial class CameraPage : ContentPage
 
     private async void OnNextClueClicked(object sender, EventArgs e)
     {
-        await AnimateLongPress(TreasureNextClueButton);
+        await OnNextClueClickedAsync();
+    }
+
+    private async Task OnNextClueClickedAsync()
+    {
         await CluePhotoPromptModal.FadeTo(0, 250);
         CluePhotoPromptModal.IsVisible = false;
 
@@ -122,16 +129,6 @@ public partial class CameraPage : ContentPage
         await Navigation.PopToRootAsync();
     }
 
-    private async Task AnimateLongPress(Button button)
-    {
-        button.Opacity = 1;
-        for (double i = 0.5; i <= 1; i += 0.05)
-        {
-            button.Opacity = i;
-            await Task.Delay(50);
-        }
-    }
-
     private async Task ShowAdventureCompletion()
     {
         var completionImage = new Image
@@ -146,5 +143,49 @@ public partial class CameraPage : ContentPage
         await completionImage.FadeTo(1, 250);
         await Task.Delay(1000);
         await completionImage.FadeTo(0, 250);
+    }
+
+    private async void OnButtonPressed(object sender, EventArgs e)
+    {
+        _cts = new CancellationTokenSource();
+        LongPressProgress.Progress = 0;
+        LongPressProgress.IsVisible = true;
+
+        // Start the progress animation
+       StartLongPressAnimation(_cts.Token);
+    }
+
+    private void OnButtonReleased(object sender, EventArgs e)
+    {
+        // Cancel the long press if released early
+        _cts?.Cancel();
+        LongPressProgress.IsVisible = false;
+        LongPressProgress.Progress = 0;
+    }
+
+    private async void StartLongPressAnimation(CancellationToken token)
+    {
+
+        try
+        {
+            var progressTask = LongPressProgress.ProgressTo(1, 1500, Easing.CubicInOut);
+
+            // Wait for the full duration or until canceled
+            await Task.WhenAny(Task.Delay(1500, token), progressTask);
+
+            if (!token.IsCancellationRequested)
+            {
+                await OnNextClueClickedAsync();
+            }
+        }
+        catch (TaskCanceledException)
+        {
+            // Reset progress if canceled
+            LongPressProgress.Progress = 0;
+        }
+        finally
+        {
+            LongPressProgress.IsVisible = false;
+        }
     }
 }
