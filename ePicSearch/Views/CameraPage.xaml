@@ -2,101 +2,178 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ePicSearch.Views.CameraPage"
-             Title="CameraPage">
+             Title="CameraPage"
+             BackgroundColor="Black">
     <Grid>
+        <!-- Treasure Photo Modal -->
         <ContentView x:Name="TreasurePhotoModal"
                      IsVisible="False"
-                     BackgroundColor="#CCFFFFFF"
+                     BackgroundColor="#CC000000"
                      VerticalOptions="FillAndExpand"
                      HorizontalOptions="FillAndExpand"
                      Padding="20">
             <Grid VerticalOptions="Center"
-                  HorizontalOptions="Center"
-                  WidthRequest="300"
-                  HeightRequest="200">
+                  HorizontalOptions="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70" />
+                    <RowDefinition Height="200" />
+                    <RowDefinition Height="230" />
+                    <RowDefinition Height="100" />
+                    <RowDefinition Height="200" />
+                </Grid.RowDefinitions>
+
+                <!-- Code Display with Paper Background -->
+                <Image Source="code_paper.webp"
+                       HorizontalOptions="Center"
+                       WidthRequest="200"
+                       HeightRequest="100"
+                       Grid.Row="1" />
+                <Label x:Name="TreasureCodeLabel"
+                       FontFamily="LuckiestGuy"
+                       FontSize="30"
+                       TextColor="White"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Grid.Row="1">
+                    <Label.Shadow>
+                        <Shadow Brush="Black"
+                                Offset="2,2"
+                                Radius="5" />
+                    </Label.Shadow>
+                </Label>
 
                 <Image Source="tutorial_popup.webp"
-                       WidthRequest="500"
-                       HeightRequest="300"
+                       Grid.Row="2"
                        HorizontalOptions="Center" />
-
-                <StackLayout VerticalOptions="Center">
-                    <Label FontFamily="LuckiestGuy"
-                           Text="Great!"
+                
+                <!-- Tutorial Message with Background -->
+                <StackLayout Grid.Row="2"
+                             VerticalOptions="Center">
+                    
+                    <Label Text="Great!"
+                           FontFamily="LuckiestGuy"
+                           FontSize="20"
+                           TextColor="White"
                            HorizontalOptions="Center"
-                           TextColor="Black"
+                           VerticalOptions="Center" />
+                    <Label FontFamily="LuckiestGuy"
+                           Text="You captured the Treasure photo!"
+                           HorizontalOptions="Center"
+                           TextColor="White"
                            FontSize="24" />
                     <Label FontFamily="LuckiestGuy"
-                           Text="A treasure photo was taken!"
+                           Text="Go hide it!"
                            HorizontalOptions="Center"
-                           TextColor="Black"
+                           TextColor="White"
                            FontSize="24" />
                 </StackLayout>
 
-                <Label x:Name="TreasureCodeLabel"
-                       FontFamily="LuckiestGuy"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Start"
-                       TextColor="Black"
-                       FontSize="24" />
-
-                <Button Text="Next Clue"
-                        Clicked="OnFirstClueClicked"
+                <!-- Next Clue Button with Press Animation -->
+                <Button x:Name="TreasureNextClueButton"
+                        Text="Next Clue"
+                        WidthRequest="200"
+                        VerticalOptions="Center"
                         HorizontalOptions="Center"
-                        VerticalOptions="End"
-                        WidthRequest="120"
-                        Margin="0,10,0,10" />
+                        FontFamily="LuckiestGuy"
+                        FontSize="24"
+                        Clicked="OnFirstClueClicked"
+                        Grid.Row="3" />
+
+                <!-- Tutorial Popup 2 Image -->
+                <Image Grid.Row="4"
+                       Source="tutorial_popup_2.png"
+                       HeightRequest="150"
+                       HorizontalOptions="Center" />
             </Grid>
         </ContentView>
 
+        <!-- Clue Photo Modal (similar structure to Treasure Photo Modal) -->
         <ContentView x:Name="CluePhotoPromptModal"
                      IsVisible="False"
-                     BackgroundColor="#CCFFFFFF"
+                     BackgroundColor="#CC000000"
                      VerticalOptions="FillAndExpand"
                      HorizontalOptions="FillAndExpand"
-                     Padding="24">
+                     Padding="20">
             <Grid VerticalOptions="Center"
-                  HorizontalOptions="Center"
-                  WidthRequest="300"
-                  HeightRequest="200">
-
-                <Image Source="tutorial_popup.webp"
-                       WidthRequest="500"
-                       HeightRequest="300"
-                       HorizontalOptions="Center" />
-
-                <StackLayout VerticalOptions="Center">
-                    <Label FontFamily="LuckiestGuy"
-                           Text="Clue Captured!"
-                           HorizontalOptions="Center"
-                           TextColor="Black"
-                           FontSize="24" />
-                    <Label FontFamily="LuckiestGuy"
-                           Text="Your next clue is ready!"
-                           HorizontalOptions="Center"
-                           TextColor="Black"
-                           FontSize="24" />
-                </StackLayout>
-
+                  HorizontalOptions="Center">
+                
+                <!-- Define Grid Rows -->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70" />
+                    <RowDefinition Height="200" />
+                    <RowDefinition Height="230" />
+                    <RowDefinition Height="100" />
+                    <RowDefinition Height="200" />
+                </Grid.RowDefinitions>
+                
+                <!-- Code Display with Paper Background -->
+                <Image Source="code_paper.webp"
+                       HorizontalOptions="Center"
+                       WidthRequest="200"
+                       HeightRequest="100"
+                       Grid.Row="1" />
                 <Label x:Name="ClueCodeLabel"
                        FontFamily="LuckiestGuy"
+                       FontSize="30"
+                       TextColor="White"
                        HorizontalOptions="Center"
-                       VerticalOptions="Start"
-                       TextColor="Black"
-                       FontSize="20" />
+                       VerticalOptions="Center"
+                       Grid.Row="1">
+                    <Label.Shadow>
+                        <Shadow Brush="Black"
+                                Offset="2,2"
+                                Radius="5" />
+                    </Label.Shadow>
+                </Label>
+                
+                <!-- MMessage with Background -->
+                <Image Source="tutorial_popup.webp"
+                       HorizontalOptions="Center"
+                       Grid.Row="2" />
 
-                <StackLayout Orientation="Horizontal"
-                             HorizontalOptions="Center"
-                             VerticalOptions="End"
-                             Spacing="20"
-                             Margin="0,10,0,10">
-                    <Button Text="Capture Another Clue"
-                            Clicked="OnNextClueClicked"
-                            WidthRequest="150" />
-                    <Button Text="Finish Adventure"
-                            Clicked="OnFinishAdventureClicked"
-                            WidthRequest="150" />
+                <StackLayout Grid.Row="2" VerticalOptions="Center">
+                    <Label Text="Clue Location Captured!"
+                           FontFamily="LuckiestGuy"
+                           FontSize="20"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                    <Label Text="Go hide the code!"
+                           FontFamily="LuckiestGuy"
+                           FontSize="20"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
                 </StackLayout>
+
+                <!-- Buttons with Press Animation -->
+                <Button x:Name="ClueNextButton"
+                        Text="Capture Another Clue"
+                        LineBreakMode="WordWrap"
+                        WidthRequest="150"
+                        HorizontalOptions="Start"
+                        FontFamily="LuckiestGuy"
+                        FontSize="16"
+                        HeightRequest="70"
+                        Clicked="OnNextClueClicked"
+                        Grid.Row="3"
+                        Margin="-30,0,0,0"/>
+
+                <Button Text="Finish Adventure"
+                        Clicked="OnFinishAdventureClicked"
+                        LineBreakMode="WordWrap"
+                        FontFamily="LuckiestGuy"
+                        FontSize="16"
+                        HeightRequest="70"
+                        WidthRequest="150"
+                        HorizontalOptions="End"
+                        Grid.Row="3"/>
+
+                <!-- Tutorial Popup 2 Image -->
+                <Image Grid.Row="4"
+                       Source="tutorial_popup_2.png"
+                       HeightRequest="150"
+                       HorizontalOptions="Center" />
             </Grid>
         </ContentView>
 

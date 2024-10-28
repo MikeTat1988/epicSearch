@@ -63,6 +63,8 @@ namespace ePicSearch.Infrastructure.Services
             lock (_cacheLock)
             {
                 _photoCache.RemoveAll(p => p.AdventureName == adventureName);
+
+                _adventureCache.RemoveAll(a => a.AdventureName == adventureName);
                 _isCacheDirty = true;
             }
         }

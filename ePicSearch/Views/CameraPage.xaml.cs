@@ -72,6 +72,7 @@ public partial class CameraPage : ContentPage
             }
 
             AddPhotoToAdventure(capturedPhoto);
+            ClueCodeLabel.Text = $"Code: {capturedPhoto.Code}";
             CluePhotoPromptModal.IsVisible = true;
             await CluePhotoPromptModal.FadeTo(1, 250);
         }
@@ -91,6 +92,7 @@ public partial class CameraPage : ContentPage
 
     private async void OnFirstClueClicked(object sender, EventArgs e)
     {
+        await AnimateLongPress(TreasureNextClueButton);
         await TreasurePhotoModal.FadeTo(0, 250);
         TreasurePhotoModal.IsVisible = false;
 
@@ -99,6 +101,7 @@ public partial class CameraPage : ContentPage
 
     private async void OnNextClueClicked(object sender, EventArgs e)
     {
+        await AnimateLongPress(TreasureNextClueButton);
         await CluePhotoPromptModal.FadeTo(0, 250);
         CluePhotoPromptModal.IsVisible = false;
 
@@ -113,9 +116,35 @@ public partial class CameraPage : ContentPage
         _adventureData.IsComplete = true;
         _adventureManager.UpdateAdventure(_adventureData);
 
-        await DisplayAlert("Adventure Completed", null, "OK");
+        await ShowAdventureCompletion();
 
         // Navigate back to the main page or adventures list
         await Navigation.PopToRootAsync();
+    }
+
+    private async Task AnimateLongPress(Button button)
+    {
+        button.Opacity = 1;
+        for (double i = 0.5; i <= 1; i += 0.05)
+        {
+            button.Opacity = i;
+            await Task.Delay(50);
+        }
+    }
+
+    private async Task ShowAdventureCompletion()
+    {
+        var completionImage = new Image
+        {
+            Source = "adventure_finished.png",
+            Opacity = 0,
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.Center
+        };
+
+        Content = new Grid { Children = { completionImage } };
+        await completionImage.FadeTo(1, 250);
+        await Task.Delay(1000);
+        await completionImage.FadeTo(0, 250);
     }
 }
