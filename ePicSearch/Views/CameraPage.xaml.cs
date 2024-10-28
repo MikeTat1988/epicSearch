@@ -51,26 +51,34 @@ public partial class CameraPage : ContentPage
         await TreasurePhotoModal.FadeTo(1, 250);
     }
 
-    private async void StartCluePhotoLoop()
+    private async Task StartCluePhotoLoop()
     {
-        var photo = await MediaPicker.CapturePhotoAsync();
-
-        if (photo == null)
+        try
         {
-            await DisplayAlert("Error", "Photo capture failed. Please try again.", "OK");
-            return;
+            var photo = await MediaPicker.CapturePhotoAsync();
+
+            if (photo == null)
+            {
+                await DisplayAlert("Error", "Photo capture failed. Please try again.", "OK");
+                return;
+            }
+
+            var capturedPhoto = await _adventureManager.CapturePhoto(new AppFileResult(photo), _adventureData.AdventureName);
+
+            if (capturedPhoto == null)
+            {
+                await DisplayAlert("Error", "Failed to save the photo. Please try again.", "OK");
+                return;
+            }
+
+            AddPhotoToAdventure(capturedPhoto);
+            CluePhotoPromptModal.IsVisible = true;
+            await CluePhotoPromptModal.FadeTo(1, 250);
         }
-
-        var capturedPhoto = await _adventureManager.CapturePhoto(new AppFileResult(photo), _adventureData.AdventureName);
-
-        if (capturedPhoto == null)
+        catch (Exception ex)
         {
-            await DisplayAlert("Error", "Failed to save the photo. Please try again.", "OK");
-            return;
+            await DisplayAlert("Error", $"An unexpected error occurred: {ex.Message}", "OK");
         }
-
-        AddPhotoToAdventure(capturedPhoto);
-        CluePhotoPromptModal.IsVisible = true;
     }
 
     private void AddPhotoToAdventure(PhotoInfo capturedPhoto)
@@ -86,7 +94,7 @@ public partial class CameraPage : ContentPage
         await TreasurePhotoModal.FadeTo(0, 250);
         TreasurePhotoModal.IsVisible = false;
 
-        StartCluePhotoLoop();
+        await StartCluePhotoLoop();
     }
 
     private async void OnNextClueClicked(object sender, EventArgs e)
@@ -94,7 +102,7 @@ public partial class CameraPage : ContentPage
         await CluePhotoPromptModal.FadeTo(0, 250);
         CluePhotoPromptModal.IsVisible = false;
 
-        StartCluePhotoLoop(); 
+        await StartCluePhotoLoop(); 
     }
 
     private async void OnFinishAdventureClicked(object sender, EventArgs e)
