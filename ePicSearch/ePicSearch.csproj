@@ -42,9 +42,15 @@
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
+		<MauiFont Include="Resources\Fonts\LuckiestGuy-Regular.ttf" />
 
 		<!-- Raw Assets -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiImage Remove="Resources\Images\loading_screen.png" />
+	  <MauiImage Remove="Resources\Images\loading_screen.webp" />
 	</ItemGroup>
 
 	<ItemGroup>

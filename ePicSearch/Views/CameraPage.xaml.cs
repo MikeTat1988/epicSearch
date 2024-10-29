@@ -8,6 +8,7 @@ public partial class CameraPage : ContentPage
     private AdventureData _adventureData;
     private readonly AdventureManager _adventureManager;
     private CancellationTokenSource _cts;
+    private ProgressBar? _currentLongPressProgress;
 
     public CameraPage(AdventureData adventureData, AdventureManager adventureManager)
     {
@@ -18,6 +19,8 @@ public partial class CameraPage : ContentPage
 
         TreasureNextClueButton.Pressed += OnButtonPressed;
         TreasureNextClueButton.Released += OnButtonReleased;
+        ClueNextButton.Pressed += OnButtonPressed;
+        ClueNextButton.Released += OnButtonReleased;
 
         // Determine the starting point based on photo count
         if (_adventureData.PhotoCount == 0)
@@ -121,6 +124,12 @@ public partial class CameraPage : ContentPage
         CluePhotoPromptModal.IsVisible = false;
 
         _adventureData.IsComplete = true;
+
+        var allPhotos = _adventureManager.GetPhotosForAdventure(_adventureData.AdventureName);
+        var lastPhoto = allPhotos[allPhotos.Count() - 1];
+        lastPhoto.IsLocked = false;
+        _adventureManager.UpdatePhotoState(lastPhoto);
+
         _adventureManager.UpdateAdventure(_adventureData);
 
         await ShowAdventureCompletion();
@@ -131,61 +140,110 @@ public partial class CameraPage : ContentPage
 
     private async Task ShowAdventureCompletion()
     {
-        var completionImage = new Image
+        // Ensure the image is visible and reset its scale and opacity
+        CompletionImage.IsVisible = true;
+        CompletionImage.Scale = 0.5;  // Start small for a strong pop effect
+        CompletionImage.Opacity = 0;
+
+        // Flash effect at the beginning
+        var flashOverlay = new BoxView
         {
-            Source = "adventure_finished.png",
+            BackgroundColor = Colors.White,
             Opacity = 0,
             HorizontalOptions = LayoutOptions.Center,
             VerticalOptions = LayoutOptions.Center
         };
+        (Content as Grid)?.Children.Add(flashOverlay);
 
-        Content = new Grid { Children = { completionImage } };
-        await completionImage.FadeTo(1, 250);
-        await Task.Delay(1000);
-        await completionImage.FadeTo(0, 250);
+        // Pop and bounce animation for the image
+        await Task.WhenAll(
+            CompletionImage.FadeTo(1, 100),                       // Quick fade-in
+            CompletionImage.ScaleTo(1.5, 150, Easing.CubicOut),    // Strong pop to 1.5 scale
+            flashOverlay.FadeTo(0.8, 50),
+            flashOverlay.FadeTo(0, 100)
+        );
+        (Content as Grid)?.Children.Remove(flashOverlay);
+
+        await CompletionImage.ScaleTo(0.9, 100, Easing.CubicIn);   // Slight shrink back
+        await CompletionImage.ScaleTo(1.1, 80, Easing.BounceOut);  // Small bounce up
+        await CompletionImage.ScaleTo(1, 80, Easing.BounceIn);     // Settle to normal scale
+
+        // Hold for a moment before fading out
+        await Task.Delay(800);
+        await CompletionImage.FadeTo(0, 250);
+        CompletionImage.IsVisible = false; // Hide after the animation
     }
+
 
     private async void OnButtonPressed(object sender, EventArgs e)
     {
         _cts = new CancellationTokenSource();
-        LongPressProgress.Progress = 0;
-        LongPressProgress.IsVisible = true;
 
-        // Start the progress animation
-       StartLongPressAnimation(_cts.Token);
+        // Determine which ProgressBar to use
+        if (sender == TreasureNextClueButton)
+        {
+            _currentLongPressProgress = TreasureLongPressProgress;
+        }
+        else if (sender == ClueNextButton)
+        {
+            _currentLongPressProgress = ClueLongPressProgress;
+        }
+        else
+        {
+            return;
+        }
+
+        _currentLongPressProgress.Progress = 0;
+        _currentLongPressProgress.IsVisible = true;
+
+        // Start the progress animation and pass the sender
+        StartLongPressAnimation(_cts.Token, sender as Button);
     }
 
     private void OnButtonReleased(object sender, EventArgs e)
     {
         // Cancel the long press if released early
         _cts?.Cancel();
-        LongPressProgress.IsVisible = false;
-        LongPressProgress.Progress = 0;
+        if (_currentLongPressProgress != null)
+        {
+            _currentLongPressProgress.IsVisible = false;
+            _currentLongPressProgress.Progress = 0;
+        }
     }
 
-    private async void StartLongPressAnimation(CancellationToken token)
+    private async void StartLongPressAnimation(CancellationToken token, Button pressedButton)
     {
+        if (_currentLongPressProgress == null)
+            return;
 
         try
         {
-            var progressTask = LongPressProgress.ProgressTo(1, 1500, Easing.CubicInOut);
+            var progressTask = _currentLongPressProgress.ProgressTo(1, 1500, Easing.CubicInOut);
 
             // Wait for the full duration or until canceled
             await Task.WhenAny(Task.Delay(1500, token), progressTask);
 
             if (!token.IsCancellationRequested)
             {
-                await OnNextClueClickedAsync();
+                if (pressedButton == TreasureNextClueButton)
+                {
+                    OnFirstClueClicked(pressedButton, EventArgs.Empty); //TODO: await maybe?
+                }
+                else if (pressedButton == ClueNextButton)
+                {
+                    await OnNextClueClickedAsync();
+                }
             }
         }
         catch (TaskCanceledException)
         {
             // Reset progress if canceled
-            LongPressProgress.Progress = 0;
+            _currentLongPressProgress.Progress = 0;
         }
         finally
         {
-            LongPressProgress.IsVisible = false;
+            _currentLongPressProgress.IsVisible = false;
+            _currentLongPressProgress = null; // Reset for next use
         }
     }
 }

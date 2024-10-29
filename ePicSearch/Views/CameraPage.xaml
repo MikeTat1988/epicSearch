@@ -31,7 +31,7 @@
                        Grid.Row="1" />
                 <Label x:Name="TreasureCodeLabel"
                        FontFamily="LuckiestGuy"
-                       FontSize="30"
+                       FontSize="26"
                        TextColor="White"
                        HorizontalOptions="Center"
                        VerticalOptions="Center"
@@ -62,11 +62,18 @@
                            HorizontalOptions="Center"
                            TextColor="White"
                            FontSize="24" />
-                    <Label FontFamily="LuckiestGuy"
-                           Text="Go hide it!"
-                           HorizontalOptions="Center"
+                    <Label Text="Write down the code"
+                           FontFamily="LuckiestGuy"
+                           FontSize="20"
                            TextColor="White"
-                           FontSize="24" />
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                    <Label Text="And hide it!"
+                           FontFamily="LuckiestGuy"
+                           FontSize="20"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
                 </StackLayout>
 
                 <!-- Next Clue Button with Press Animation -->
@@ -80,19 +87,18 @@
                             FontFamily="LuckiestGuy"
                             WidthRequest="200"
                             HeightRequest="50"
-                            HorizontalOptions="Center"
                             VerticalOptions="Center"
-                            BackgroundColor="Blue"
-                            Clicked="OnNextClueClicked" />
+                            BackgroundColor="Blue" />
 
                     <!-- Progress Bar overlay on top of the button -->
-                    <ProgressBar x:Name="LongPressProgress"
+                    <ProgressBar x:Name="TreasureLongPressProgress"
                                  Progress="0"
-                                 ProgressColor="Red"
-                                 HeightRequest="50"
+                                 ProgressColor="Green"
+                                 VerticalOptions="End"
+                                 ScaleY="12"
+                                 HeightRequest="48"
                                  HorizontalOptions="FillAndExpand"
-                                 VerticalOptions="FillAndExpand"
-                                 Opacity="0.6" />
+                                 Opacity="0.8" />
                 </Grid>
 
                 <!-- Tutorial Popup 2 Image -->
@@ -148,13 +154,19 @@
                        Grid.Row="2" />
 
                 <StackLayout Grid.Row="2" VerticalOptions="Center">
-                    <Label Text="Clue Location Captured!"
+                    <Label Text="Another Clue!"
                            FontFamily="LuckiestGuy"
                            FontSize="20"
                            TextColor="White"
                            HorizontalOptions="Center"
                            VerticalOptions="Center" />
-                    <Label Text="Go hide the code!"
+                    <Label Text="Write down the code"
+                           FontFamily="LuckiestGuy"
+                           FontSize="20"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                    <Label Text="And hide it!"
                            FontFamily="LuckiestGuy"
                            FontSize="20"
                            TextColor="White"
@@ -163,17 +175,24 @@
                 </StackLayout>
 
                 <!-- Buttons with Press Animation -->
-                <Button x:Name="ClueNextButton"
-                        Text="Capture Another Clue"
-                        LineBreakMode="WordWrap"
-                        WidthRequest="150"
-                        HorizontalOptions="Start"
-                        FontFamily="LuckiestGuy"
-                        FontSize="16"
-                        HeightRequest="70"
-                        Clicked="OnNextClueClicked"
-                        Grid.Row="3"
-                        Margin="-30,0,0,0"/>
+                <Grid HeightRequest="70"
+                      Grid.Row="3"
+                      Margin="-30,0,0,0"
+                      HorizontalOptions="Start">
+                    <Button x:Name="ClueNextButton"
+                            Text="Capture Another Clue"
+                            LineBreakMode="WordWrap"
+                            WidthRequest="150"
+                            FontFamily="LuckiestGuy"
+                            FontSize="16"/>
+                    <ProgressBar x:Name="ClueLongPressProgress"
+                                 Progress="0"
+                                 ProgressColor="Green"
+                                 VerticalOptions="End"
+                                 ScaleY="16"
+                                 HeightRequest="68"
+                                 Opacity="0.6" />
+                </Grid>
 
                 <Button Text="Finish Adventure"
                         Clicked="OnFinishAdventureClicked"
@@ -192,6 +211,13 @@
                        HorizontalOptions="Center" />
             </Grid>
         </ContentView>
-
+        
+        <!-- final Photo -->
+        <Image x:Name="CompletionImage"
+               Source="adventure_finished.png"
+               Opacity="0"
+               IsVisible="False"
+               HorizontalOptions="Center"
+               VerticalOptions="Center" />
     </Grid>
 </ContentPage>
