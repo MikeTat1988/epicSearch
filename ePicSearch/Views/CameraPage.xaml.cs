@@ -140,12 +140,11 @@ public partial class CameraPage : ContentPage
 
     private async Task ShowAdventureCompletion()
     {
-        // Ensure the image is visible and reset its scale and opacity
         CompletionImage.IsVisible = true;
-        CompletionImage.Scale = 0.5;  // Start small for a strong pop effect
+        CompletionImage.Scale = 0.5; 
         CompletionImage.Opacity = 0;
 
-        // Flash effect at the beginning
+        // Flash effect 
         var flashOverlay = new BoxView
         {
             BackgroundColor = Colors.White,
@@ -155,7 +154,6 @@ public partial class CameraPage : ContentPage
         };
         (Content as Grid)?.Children.Add(flashOverlay);
 
-        // Pop and bounce animation for the image
         await Task.WhenAll(
             CompletionImage.FadeTo(1, 100),                       // Quick fade-in
             CompletionImage.ScaleTo(1.5, 150, Easing.CubicOut),    // Strong pop to 1.5 scale
@@ -168,10 +166,9 @@ public partial class CameraPage : ContentPage
         await CompletionImage.ScaleTo(1.1, 80, Easing.BounceOut);  // Small bounce up
         await CompletionImage.ScaleTo(1, 80, Easing.BounceIn);     // Settle to normal scale
 
-        // Hold for a moment before fading out
         await Task.Delay(800);
         await CompletionImage.FadeTo(0, 250);
-        CompletionImage.IsVisible = false; // Hide after the animation
+        CompletionImage.IsVisible = false; 
     }
 
 

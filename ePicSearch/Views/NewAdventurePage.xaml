@@ -16,8 +16,6 @@
 
         <Button Text="Start Creating" Clicked="OnStartCreatingClicked" />
 
-        <Button Text="Start Creating 2.0" Clicked="OnStartCreating2Clicked" />
-
         <Label x:Name="ErrorMessage" Text="" TextColor="Red" IsVisible="False" />
     </StackLayout>
 </ContentPage>

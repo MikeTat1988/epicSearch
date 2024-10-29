@@ -1,6 +1,7 @@
 ﻿using ePicSearch.Behaviors;
 using ePicSearch.Infrastructure.Services;
 using Microsoft.Extensions.Logging;
+using ePicSearch.Helpers;
 
 namespace ePicSearch.Views
 {
@@ -60,25 +61,29 @@ namespace ePicSearch.Views
 
         private async void OnSettingsClicked(object sender, EventArgs e)
         {
+            await AnimationHelper.AnimatePress((View)sender);
+
             await Navigation.PushAsync(new SettingsPage());
         }
 
         private async void OnMyAdventuresClicked(object sender, EventArgs e)
         {
-            await MyAdventuresButton.ScaleTo(0.9, 200, Easing.Linear);
-            await MyAdventuresButton.ScaleTo(1.0, 200, Easing.Linear);
+            await AnimationHelper.AnimatePress((View)sender);
+
             await Navigation.PushAsync(new MyAdventuresPage(_photoManager, _logger));
         }
 
         private async void OnCreateNewAdventureClicked(object sender, EventArgs e)
         {
-            await CreateAdventureButton.ScaleTo(0.9, 200, Easing.Linear);
-            await CreateAdventureButton.ScaleTo(1.0, 200, Easing.Linear);
+            await AnimationHelper.AnimatePress((View)sender);
+
             await Navigation.PushAsync(new NewAdventurePage(_photoManager));
         }
 
-        private void OnQuitClicked(object sender, EventArgs e)
+        private async void OnQuitClicked(object sender, EventArgs e)
         {
+            await AnimationHelper.AnimatePress((View)sender);
+
             Application.Current?.Quit();
         }
     }

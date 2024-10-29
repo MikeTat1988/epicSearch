@@ -2,6 +2,7 @@ using ePicSearch.Infrastructure.Services;
 using ePicSearch.Infrastructure.Entities.Interfaces;
 using ePicSearch.Entities;
 using ePicSearch.Infrastructure.Entities;
+using ePicSearch.Helpers;
 
 namespace ePicSearch.Views
 {
@@ -17,6 +18,8 @@ namespace ePicSearch.Views
 
         private async void OnStartCreatingClicked(object sender, EventArgs e)
         {
+            await AnimationHelper.AnimatePress((View)sender);
+
             var adventureName = await GetValidAdventureNameAsync();
 
             if (adventureName == null)
@@ -24,81 +27,18 @@ namespace ePicSearch.Views
                 return;
             }
 
-            bool keepTakingPhotos = true;
-
-            while (keepTakingPhotos)
+            var adventureData = new AdventureData
             {
-                if (MediaPicker.IsCaptureSupported)
-                {
-                    try
-                    {
-                        FileResult? photo = await MediaPicker.CapturePhotoAsync();
+                AdventureName = adventureName,
+                IsComplete = false,
+                PhotoCount = 0,
+                LastPhotoCaptured = null,
+                LastPhotoCode = null
+            };
 
-                        if (photo == null)
-                        {
-                            await DisplayAlert("No Photo", null, "OK");
-                            return;
-                        }
+            _adventureManager.AddAdventure(adventureData);
 
-                        IFileResult appFileResult = new AppFileResult(photo);
-                        var photoInfo = await _adventureManager.CapturePhoto(appFileResult, adventureName);
-
-                        if (photoInfo == null)
-                        {
-                            await HandleError("Failed to save the photo", sender, e);
-                            return;
-                        }
-
-                        await DisplayPhotoSavedMessage(photoInfo);
-
-                        keepTakingPhotos = await DisplayAlert("Another clue?", null, "Yes", "No");
-                    }
-                    catch (Exception ex)
-                    {
-                        await HandleError(ex.Message, sender, e);
-                        return;
-                    }
-                }
-                else
-                {
-                    await HandleError("Camera is not supported.", sender, e);
-                    return;
-                }
-            }
-
-            UnlockLastPhoto(adventureName);
-
-            await DisplayAlert($"Adventure {adventureName} Saved", null, "OK");
-            _adventureManager.SyncCache();
-            await Navigation.PopAsync();
-        }
-
-        private void UnlockLastPhoto(string adventureName)
-        {
-            var photos = _adventureManager.GetPhotosForAdventure(adventureName);
-            if (photos != null && photos.Count > 0)
-            {
-                var lastPhoto = photos.OrderByDescending(p => p.SerialNumber).FirstOrDefault();
-                if (lastPhoto != null)
-                {
-                    lastPhoto.IsLocked = false;
-                    _adventureManager.UpdatePhotoState(lastPhoto);
-                }
-            }
-        }
-
-        private async Task HandleError(string errorMessage, object sender, EventArgs e)
-        {
-            bool continueProcess = await DisplayAlert("Error", $"{errorMessage} Your progress has been saved. Do you want to continue?", "Yes", "No");
-
-            if (continueProcess)
-            {
-                OnStartCreatingClicked(sender, e);
-            }
-            else
-            {
-                await Navigation.PopAsync();
-            }
+            await Navigation.PushAsync(new CameraPage(adventureData, _adventureManager));
         }
 
         private async Task<string?> GetValidAdventureNameAsync()
@@ -123,47 +63,14 @@ namespace ePicSearch.Views
             return adventureName;
         }
 
-        private async Task DisplayPhotoSavedMessage(PhotoInfo photoInfo)
-        {
-            if (photoInfo.SerialNumber == 1)
-            {
-                await DisplayAlert("Treasure Photo Saved!", $"Code: {photoInfo.Code}, go hide it!", "OK");
-            }
-            else
-            {
-                await DisplayAlert("Clue Photo Saved!", $"Code: {photoInfo.Code}, go hide it!", "OK");
-            }
-        }
-
         private async void OnBackButtonClicked(object sender, EventArgs e)
         {
+            await AnimationHelper.AnimatePress((View)sender);
+
             if (Navigation.NavigationStack.Count > 1)
             {
                 await Navigation.PopAsync();
             }
-        }
-
-        private async void OnStartCreating2Clicked(object sender, EventArgs e)
-        {
-            var adventureName = await GetValidAdventureNameAsync();
-
-            if (adventureName == null)
-            {
-                return;
-            }
-
-            var adventureData = new AdventureData
-            {
-                AdventureName = adventureName,
-                IsComplete = false,
-                PhotoCount = 0,
-                LastPhotoCaptured = null,
-                LastPhotoCode = null
-            };
-
-            _adventureManager.AddAdventure(adventureData);
-
-            await Navigation.PushAsync(new CameraPage(adventureData, _adventureManager));
         }
     }
 }

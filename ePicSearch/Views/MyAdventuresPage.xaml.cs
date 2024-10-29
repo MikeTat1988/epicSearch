@@ -1,3 +1,4 @@
+using ePicSearch.Helpers;
 using ePicSearch.Infrastructure.Services;
 using Microsoft.Extensions.Logging;
 
@@ -53,6 +54,8 @@ namespace ePicSearch.Views
 
         private async void OnDeleteAdventureClicked(object sender, EventArgs e)
         {
+            await AnimationHelper.AnimatePress((View)sender);
+
             if (sender is Button button && button.CommandParameter is string adventureName)
             {
                 bool confirm = await DisplayAlert($"Confirm delete {adventureName}", null, "Yes", "No");
@@ -89,6 +92,8 @@ namespace ePicSearch.Views
 
         private async void OnDeleteAllAdventuresClicked(object sender, EventArgs e)
         {
+            await AnimationHelper.AnimatePress((View)sender);
+
             bool confirm = await DisplayAlert("Confirm Delete All", "Are you sure you want to delete all adventures?", "Yes", "No");
             if (confirm)
             {
@@ -132,6 +137,8 @@ namespace ePicSearch.Views
 
         private async void OnBackButtonClicked(object sender, EventArgs e)
         {
+            await AnimationHelper.AnimatePress((View)sender);
+
             if (Navigation.NavigationStack.Count > 1)
             {
                 await Navigation.PopAsync();

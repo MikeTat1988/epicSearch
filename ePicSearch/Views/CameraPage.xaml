@@ -31,7 +31,7 @@
                        Grid.Row="1" />
                 <Label x:Name="TreasureCodeLabel"
                        FontFamily="LuckiestGuy"
-                       FontSize="26"
+                       FontSize="25"
                        TextColor="White"
                        HorizontalOptions="Center"
                        VerticalOptions="Center"
@@ -43,7 +43,7 @@
                     </Label.Shadow>
                 </Label>
 
-                <Image Source="tutorial_popup.webp"
+                <Image Source="camera_page_frame.webp"
                        Grid.Row="2"
                        HorizontalOptions="Center" />
                 
@@ -136,7 +136,7 @@
                        Grid.Row="1" />
                 <Label x:Name="ClueCodeLabel"
                        FontFamily="LuckiestGuy"
-                       FontSize="30"
+                       FontSize="26"
                        TextColor="White"
                        HorizontalOptions="Center"
                        VerticalOptions="Center"
@@ -149,7 +149,7 @@
                 </Label>
                 
                 <!-- MMessage with Background -->
-                <Image Source="tutorial_popup.webp"
+                <Image Source="camera_page_frame.webp"
                        HorizontalOptions="Center"
                        Grid.Row="2" />
 
@@ -214,7 +214,7 @@
         
         <!-- final Photo -->
         <Image x:Name="CompletionImage"
-               Source="adventure_finished.png"
+               Source="adventure_created.webp"
                Opacity="0"
                IsVisible="False"
                HorizontalOptions="Center"

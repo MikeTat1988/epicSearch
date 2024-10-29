@@ -144,7 +144,7 @@
 
                                     </Grid>
                                     <!-- Arrow between Photos -->
-                                    <Image Source="arrow_down.webp"
+                                    <Image Source="arrow_down.png"
                                            HeightRequest="50"
                                            WidthRequest="50"
                                            HorizontalOptions="Center" 
