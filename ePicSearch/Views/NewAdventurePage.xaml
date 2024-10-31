@@ -1,21 +1,118 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ePicSearch.Views.NewAdventurePage">
-    
-    <StackLayout Padding="10" Spacing="20">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70" />
+            <RowDefinition Height="180" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Image Source="create_adventure_bg.webp"
+               Aspect="AspectFill"
+               VerticalOptions="FillAndExpand"
+               HorizontalOptions="Center" 
+               Grid.RowSpan="3"/>
+
+        <!-- Back Button in Top Row -->
         <ImageButton Source="back_button.png"
+                     BackgroundColor="Transparent"
                      WidthRequest="50"
                      HeightRequest="50"
                      HorizontalOptions="Start"
                      VerticalOptions="Start"
-                     Margin="10"
-                     Clicked="OnBackButtonClicked" />
-        <Label Text="Create a New Adventure" FontSize="20" HorizontalOptions="Center" />
+                     Margin="5"
+                     Clicked="OnBackButtonClicked"
+                     Grid.Row="0" />
+        
+        <StackLayout Grid.Row="1"
+                     VerticalOptions="Center">
+            <Label Text="Create"
+                   FontFamily="LuckiestGuy"
+                   FontSize="40"
+                   TextColor="White"
+                   HorizontalTextAlignment="Center">
+                <Label.Shadow>
+                    <Shadow Brush="Black"
+                            Offset="3,3"
+                            Radius="10" />
+                </Label.Shadow>
+            </Label>
 
-        <Entry x:Name="AdventureNameEntry" Placeholder="Enter adventure name" />
+            <Label Text="New Adventure"
+                   FontFamily="LuckiestGuy"
+                   FontSize="40"
+                   TextColor="White"
+                   HorizontalTextAlignment="Center"
+                   Grid.Row="1">
+                <Label.Shadow>
+                    <Shadow Brush="Black"
+                            Offset="3,3"
+                            Radius="10" />
+                </Label.Shadow>
+            </Label>
+        </StackLayout>
 
-        <Button Text="Start Creating" Clicked="OnStartCreatingClicked" />
+        <Grid Grid.Row="2"
+              VerticalOptions="Start"
+              HorizontalOptions="FillAndExpand"
+              HeightRequest="450">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="100" />
+                <RowDefinition Height="150" />
+                <RowDefinition Height="0.1*" />
+            </Grid.RowDefinitions>
 
-        <Label x:Name="ErrorMessage" Text="" TextColor="Red" IsVisible="False" />
-    </StackLayout>
+            <Image Source="new_adventure_placeholder.webp"
+                   WidthRequest="500"
+                   Grid.RowSpan="6" />
+
+            <!-- Adventure Name Entry -->
+            <Entry x:Name="AdventureNameEntry"
+                   Placeholder="Enter a title"
+                   BackgroundColor="white"
+                   FontSize="20"
+                   FontFamily="LuckiestGuy"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   WidthRequest="140"
+                   Grid.Row="1"
+                   Margin="0,0,0,0" />
+
+            <Label x:Name="ErrorMessage"
+                   Text=""
+                   TextColor="Red"
+                   FontFamily="LuckiestGuy"
+                   IsVisible="False"
+                   FontSize="20"
+                   BackgroundColor="white"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   Margin="0,0,0,0"
+                   Grid.Row="1" />
+
+            <!-- Start Creating Button -->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.2*" />
+                    <ColumnDefinition Width="0.6*" />
+                    <ColumnDefinition Width="0.2*" />
+                </Grid.ColumnDefinitions>
+
+                <ImageButton Source="start_creating.webp"
+                             BackgroundColor="Transparent"
+                             WidthRequest="200"
+                             HorizontalOptions="Center"
+                             VerticalOptions="End"
+                             Margin="0,0,0,0"
+                             Grid.Column="1"
+                             Clicked="OnStartCreatingClicked" />
+            </Grid>
+
+        </Grid>
+
+    </Grid>
 </ContentPage>

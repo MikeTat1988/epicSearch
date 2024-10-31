@@ -1,6 +1,7 @@
 using ePicSearch.Helpers;
 using ePicSearch.Infrastructure.Services;
 using Microsoft.Extensions.Logging;
+using Xamarin.Google.ErrorProne.Annotations;
 
 namespace ePicSearch.Views
 {
@@ -44,8 +45,12 @@ namespace ePicSearch.Views
 
         private async void OnPlayAdventureClicked(object sender, EventArgs e)
         {
-            if (sender is Button button && button.CommandParameter is string adventureName)
+            if (sender is ImageButton button && button.CommandParameter is string adventureName)
             {
+                var parentContainer = button.Parent as VisualElement;
+
+                await AnimationHelper.AnimatePress((View)parentContainer);
+
                 _logger.LogInformation($"Attempting to play adventure {adventureName}");
 
                 await Navigation.PushAsync(new GamePage(adventureName, _logger, _adventureManager));
@@ -54,10 +59,13 @@ namespace ePicSearch.Views
 
         private async void OnDeleteAdventureClicked(object sender, EventArgs e)
         {
-            await AnimationHelper.AnimatePress((View)sender);
-
-            if (sender is Button button && button.CommandParameter is string adventureName)
+            
+            if (sender is ImageButton button && button.CommandParameter is string adventureName)
             {
+                var parentContainer = button.Parent as VisualElement;
+
+                await AnimationHelper.AnimatePress((View)parentContainer);
+
                 bool confirm = await DisplayAlert($"Confirm delete {adventureName}", null, "Yes", "No");
                 if (confirm)
                 {

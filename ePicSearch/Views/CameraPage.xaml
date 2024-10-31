@@ -3,9 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="ePicSearch.Views.CameraPage"
-             Title="CameraPage"
-             BackgroundColor="Black">
+             Title="CameraPage">
     <Grid>
+        <Image Source="create_adventure_bg.webp"
+               Aspect="AspectFill"
+               VerticalOptions="FillAndExpand"
+               HorizontalOptions="Center" />
+        
         <!-- Treasure Photo Modal -->
         <ContentView x:Name="TreasurePhotoModal"
                      IsVisible="False"
@@ -16,64 +20,76 @@
             <Grid VerticalOptions="Center"
                   HorizontalOptions="Center">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="70" />
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="150" />
+                    <RowDefinition Height="180" />
                     <RowDefinition Height="200" />
-                    <RowDefinition Height="230" />
-                    <RowDefinition Height="100" />
                     <RowDefinition Height="200" />
                 </Grid.RowDefinitions>
+                <Grid.Resources>
+                    <ResourceDictionary>
+                        <Style x:Key="CommonLabelStyle"
+                               TargetType="Label">
+                            <Setter Property="FontFamily"
+                                    Value="LuckiestGuy" />
+                            <Setter Property="FontSize"
+                                    Value="24" />
+                            <Setter Property="TextColor"
+                                    Value="White" />
+                            <Setter Property="HorizontalOptions"
+                                    Value="Center" />
+                            <Setter Property="VerticalOptions"
+                                    Value="Center" />
+                            <Setter Property="HorizontalTextAlignment" 
+                                    Value="Center" />
+                            <Setter Property="Shadow">
+                                <Shadow Brush="Black"
+                                        Offset="2,2"
+                                        Radius="2" />
+                            </Setter>
+                        </Style>
+                    </ResourceDictionary>
+                </Grid.Resources>
 
+                <Image Source="camera_page_frame.webp"
+                       Grid.Row="1"
+                       Grid.RowSpan="3"
+                       HorizontalOptions="Center" />
+                
                 <!-- Code Display with Paper Background -->
                 <Image Source="code_paper.webp"
                        HorizontalOptions="Center"
-                       WidthRequest="200"
-                       HeightRequest="100"
-                       Grid.Row="1" />
-                <Label x:Name="TreasureCodeLabel"
-                       FontFamily="LuckiestGuy"
-                       FontSize="25"
-                       TextColor="White"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"
+                       HeightRequest="120"
+                       Rotation="-10"
                        Grid.Row="1">
-                    <Label.Shadow>
+                    <Image.Shadow>
                         <Shadow Brush="Black"
-                                Offset="2,2"
-                                Radius="5" />
-                    </Label.Shadow>
-                </Label>
+                                Offset="7,7"
+                                Radius="10" />
+                    </Image.Shadow>
+                </Image>
 
-                <Image Source="camera_page_frame.webp"
-                       Grid.Row="2"
-                       HorizontalOptions="Center" />
-                
-                <!-- Tutorial Message with Background -->
+                <Label x:Name="TreasureCodeLabel"
+                       Rotation="-10"
+                       FontSize="30"
+                       WidthRequest="200"
+                       Style="{StaticResource CommonLabelStyle}"
+                       Grid.Row="1" />
+
                 <StackLayout Grid.Row="2"
-                             VerticalOptions="Center">
-                    
+                             VerticalOptions="Center"
+                             Rotation="-8">
                     <Label Text="Great!"
-                           FontFamily="LuckiestGuy"
-                           FontSize="20"
-                           TextColor="White"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center" />
-                    <Label FontFamily="LuckiestGuy"
-                           Text="You captured the Treasure photo!"
-                           HorizontalOptions="Center"
-                           TextColor="White"
-                           FontSize="24" />
+                           FontSize="30"
+                           Style="{StaticResource CommonLabelStyle}" />
+                    <Label Text="Treasure photo"                          
+                           Style="{StaticResource CommonLabelStyle}" />
+                    <Label Text="captured!"                          
+                           Style="{StaticResource CommonLabelStyle}" />
                     <Label Text="Write down the code"
-                           FontFamily="LuckiestGuy"
-                           FontSize="20"
-                           TextColor="White"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center" />
+                           Style="{StaticResource CommonLabelStyle}" />
                     <Label Text="And hide it!"
-                           FontFamily="LuckiestGuy"
-                           FontSize="20"
-                           TextColor="White"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center" />
+                           Style="{StaticResource CommonLabelStyle}" />
                 </StackLayout>
 
                 <!-- Next Clue Button with Press Animation -->
@@ -81,35 +97,40 @@
                       VerticalOptions="Center"
                       Grid.Row="3">
 
-                    <!-- Next Clue Button -->
-                    <Button x:Name="TreasureNextClueButton"
-                            Text="Next Clue"
-                            FontFamily="LuckiestGuy"
-                            WidthRequest="200"
-                            HeightRequest="50"
-                            VerticalOptions="Center"
-                            BackgroundColor="Blue" />
+                    <ImageButton x:Name="TreasureNextClueButton"
+                                 BackgroundColor="Transparent"
+                                 Source="next_clue_button.webp"
+                                 WidthRequest="130"
+                                 HeightRequest="150"
+                                 VerticalOptions="Center"
+                                 Rotation="5" />
 
-                    <!-- Progress Bar overlay on top of the button -->
+                    <!-- Progress Bar overlay  -->
                     <ProgressBar x:Name="TreasureLongPressProgress"
+                                 Rotation="5"
                                  Progress="0"
                                  ProgressColor="Green"
                                  VerticalOptions="End"
-                                 ScaleY="12"
-                                 HeightRequest="48"
+                                 ScaleY="36"
+                                 HeightRequest="150"
                                  HorizontalOptions="FillAndExpand"
                                  Opacity="0.8" />
                 </Grid>
-
-                <!-- Tutorial Popup 2 Image -->
-                <Image Grid.Row="4"
-                       Source="tutorial_popup_2.png"
-                       HeightRequest="150"
-                       HorizontalOptions="Center" />
+                <HorizontalStackLayout Spacing="10"
+                                       Padding="10"
+                                       Grid.Row="4"
+                                       HorizontalOptions="Center">
+                    <Image Source="tutorial_3.png"
+                           HeightRequest="100"/>
+                    <Image Source="tutorial_31.png"
+                           HeightRequest="100" />
+                    <Image Source="tutorial_4.png"
+                           HeightRequest="100" />
+                </HorizontalStackLayout>
             </Grid>
         </ContentView>
 
-        <!-- Clue Photo Modal (similar structure to Treasure Photo Modal) -->
+        <!-- Clue Photo Modal  -->
         <ContentView x:Name="CluePhotoPromptModal"
                      IsVisible="False"
                      BackgroundColor="#CC000000"
@@ -118,97 +139,121 @@
                      Padding="20">
             <Grid VerticalOptions="Center"
                   HorizontalOptions="Center">
-                
-                <!-- Define Grid Rows -->
+
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="70" />
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="150" />
+                    <RowDefinition Height="180" />
                     <RowDefinition Height="200" />
-                    <RowDefinition Height="230" />
-                    <RowDefinition Height="100" />
                     <RowDefinition Height="200" />
                 </Grid.RowDefinitions>
-                
+                <Grid.Resources>
+                    <ResourceDictionary>
+                        <Style x:Key="CommonLabelStyle"
+                               TargetType="Label">
+                            <Setter Property="FontFamily"
+                                    Value="LuckiestGuy" />
+                            <Setter Property="FontSize"
+                                    Value="24" />
+                            <Setter Property="TextColor"
+                                    Value="White" />
+                            <Setter Property="HorizontalOptions"
+                                    Value="Center" />
+                            <Setter Property="VerticalOptions"
+                                    Value="Center" />
+                            <Setter Property="HorizontalTextAlignment"
+                                    Value="Center" />
+                            <Setter Property="Shadow">
+                                <Shadow Brush="Black"
+                                        Offset="2,2"
+                                        Radius="2" />
+                            </Setter>
+                        </Style>
+                    </ResourceDictionary>
+                </Grid.Resources>
+
                 <!-- Code Display with Paper Background -->
+                <Image Source="camera_page_frame.webp"
+                       Grid.Row="1"
+                       Grid.RowSpan="3"
+                       HorizontalOptions="Center" />
+
                 <Image Source="code_paper.webp"
                        HorizontalOptions="Center"
-                       WidthRequest="200"
-                       HeightRequest="100"
-                       Grid.Row="1" />
-                <Label x:Name="ClueCodeLabel"
-                       FontFamily="LuckiestGuy"
-                       FontSize="26"
-                       TextColor="White"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"
+                       HeightRequest="120"
+                       Rotation="3"
                        Grid.Row="1">
-                    <Label.Shadow>
+                    <Image.Shadow>
                         <Shadow Brush="Black"
-                                Offset="2,2"
-                                Radius="5" />
-                    </Label.Shadow>
-                </Label>
-                
-                <!-- MMessage with Background -->
-                <Image Source="camera_page_frame.webp"
-                       HorizontalOptions="Center"
-                       Grid.Row="2" />
+                                Offset="7,7"
+                                Radius="10" />
+                    </Image.Shadow>
+                </Image>
 
-                <StackLayout Grid.Row="2" VerticalOptions="Center">
+                <Label x:Name="ClueCodeLabel"
+                       Rotation="3"
+                       FontSize="30"
+                       WidthRequest="200"
+                       Style="{StaticResource CommonLabelStyle}"
+                       Grid.Row="1" />
+
+                <StackLayout Grid.Row="2"
+                             VerticalOptions="Center"
+                             Rotation="6">
                     <Label Text="Another Clue!"
-                           FontFamily="LuckiestGuy"
-                           FontSize="20"
-                           TextColor="White"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center" />
+                           FontSize="30"
+                           Style="{StaticResource CommonLabelStyle}" />
                     <Label Text="Write down the code"
-                           FontFamily="LuckiestGuy"
-                           FontSize="20"
-                           TextColor="White"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center" />
+                           FontSize="27"
+                           Style="{StaticResource CommonLabelStyle}" />
                     <Label Text="And hide it!"
-                           FontFamily="LuckiestGuy"
-                           FontSize="20"
-                           TextColor="White"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"/>
+                           FontSize="30"
+                           Style="{StaticResource CommonLabelStyle}" />
+
                 </StackLayout>
 
                 <!-- Buttons with Press Animation -->
                 <Grid HeightRequest="70"
                       Grid.Row="3"
-                      Margin="-30,0,0,0"
-                      HorizontalOptions="Start">
-                    <Button x:Name="ClueNextButton"
-                            Text="Capture Another Clue"
-                            LineBreakMode="WordWrap"
-                            WidthRequest="150"
-                            FontFamily="LuckiestGuy"
-                            FontSize="16"/>
+                      Margin="30,0,0,0"
+                      HorizontalOptions="Start"
+                      Rotation="8">
+                    <ImageButton  x:Name="ClueNextButton"
+                                  Source="next_clue_button.webp"
+                                  BackgroundColor="Transparent"
+                                  WidthRequest="130"
+                                  HeightRequest="150" />
                     <ProgressBar x:Name="ClueLongPressProgress"
                                  Progress="0"
                                  ProgressColor="Green"
                                  VerticalOptions="End"
-                                 ScaleY="16"
-                                 HeightRequest="68"
+                                 ScaleY="36"
+                                 HeightRequest="50"
                                  Opacity="0.6" />
                 </Grid>
 
-                <Button Text="Finish Adventure"
-                        Clicked="OnFinishAdventureClicked"
-                        LineBreakMode="WordWrap"
-                        FontFamily="LuckiestGuy"
-                        FontSize="16"
-                        HeightRequest="70"
-                        WidthRequest="150"
-                        HorizontalOptions="End"
-                        Grid.Row="3"/>
+                <ImageButton Source="finish_adventure_button.webp"
+                             Clicked="OnFinishAdventureClicked"
+                             BackgroundColor="Transparent"
+                             WidthRequest="130"
+                             HeightRequest="150"
+                             HorizontalOptions="End"
+                             Rotation="-9"
+                             Margin="0,0,30,0"
+                             Grid.Row="3" />
 
                 <!-- Tutorial Popup 2 Image -->
-                <Image Grid.Row="4"
-                       Source="tutorial_popup_2.png"
-                       HeightRequest="150"
-                       HorizontalOptions="Center" />
+                <HorizontalStackLayout Spacing="10"
+                                       Padding="10"
+                                       Grid.Row="4"
+                                       HorizontalOptions="Center">
+                    <Image Source="tutorial_3.png"
+                           HeightRequest="100" />
+                    <Image Source="tutorial_31.png"
+                           HeightRequest="100" />
+                    <Image Source="tutorial_4.png"
+                           HeightRequest="100" />
+                </HorizontalStackLayout>
             </Grid>
         </ContentView>
         

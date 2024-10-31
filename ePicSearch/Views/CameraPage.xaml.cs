@@ -53,7 +53,7 @@ public partial class CameraPage : ContentPage
 
         AddPhotoToAdventure(capturedPhoto);
 
-        TreasureCodeLabel.Text = $"Code: {capturedPhoto.Code}";
+        TreasureCodeLabel.Text = $"{capturedPhoto.Code}";
         TreasurePhotoModal.IsVisible = true;
         await TreasurePhotoModal.FadeTo(1, 250);
     }
@@ -79,7 +79,7 @@ public partial class CameraPage : ContentPage
             }
 
             AddPhotoToAdventure(capturedPhoto);
-            ClueCodeLabel.Text = $"Code: {capturedPhoto.Code}";
+            ClueCodeLabel.Text = $"{capturedPhoto.Code}";
             CluePhotoPromptModal.IsVisible = true;
             await CluePhotoPromptModal.FadeTo(1, 250);
         }
@@ -133,9 +133,6 @@ public partial class CameraPage : ContentPage
         _adventureManager.UpdateAdventure(_adventureData);
 
         await ShowAdventureCompletion();
-
-        // Navigate back to the main page or adventures list
-        await Navigation.PopToRootAsync();
     }
 
     private async Task ShowAdventureCompletion()
@@ -167,6 +164,11 @@ public partial class CameraPage : ContentPage
         await CompletionImage.ScaleTo(1, 80, Easing.BounceIn);     // Settle to normal scale
 
         await Task.Delay(800);
+
+        // Navigate back to the main page or adventures list
+        await Navigation.PopToRootAsync();
+
+        await Task.Delay(250);
         await CompletionImage.FadeTo(0, 250);
         CompletionImage.IsVisible = false; 
     }
@@ -194,7 +196,7 @@ public partial class CameraPage : ContentPage
         _currentLongPressProgress.IsVisible = true;
 
         // Start the progress animation and pass the sender
-        StartLongPressAnimation(_cts.Token, sender as Button);
+        StartLongPressAnimation(_cts.Token, sender as ImageButton);
     }
 
     private void OnButtonReleased(object sender, EventArgs e)
@@ -208,7 +210,7 @@ public partial class CameraPage : ContentPage
         }
     }
 
-    private async void StartLongPressAnimation(CancellationToken token, Button pressedButton)
+    private async void StartLongPressAnimation(CancellationToken token, ImageButton pressedButton)
     {
         if (_currentLongPressProgress == null)
             return;

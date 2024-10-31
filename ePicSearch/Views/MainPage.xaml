@@ -32,41 +32,44 @@
 
         <!-- My Adventures Button -->
         <ImageButton Source="play_adventure_button.webp"
-                Clicked="OnMyAdventuresClicked"
-                x:Name="MyAdventuresButton"
-                WidthRequest="200"
-                Aspect="AspectFit"
-                Grid.Row="1"
-                Grid.Column="1"
-                HorizontalOptions="Center"
-                VerticalOptions="Start"
+                     Clicked="OnMyAdventuresClicked"
+                     x:Name="MyAdventuresButton"
+                     WidthRequest="200"
+                     Aspect="AspectFit"
+                     Grid.Row="1"
+                     Grid.Column="1"
+                     HorizontalOptions="Center"
+                     VerticalOptions="Start"
+                     BackgroundColor="Transparent"
                      Margin="0,0,0,5"
-                Opacity="0"/>
+                     Opacity="0" />
 
         <!-- Create Adventure Button -->
         <ImageButton  Source="create_adventure_button.webp"
-                Clicked="OnCreateNewAdventureClicked"
-                x:Name="CreateAdventureButton"
-                WidthRequest="200"
-                Aspect="AspectFit"
-                Grid.Row="2"
-                Grid.Column="1"
-                HorizontalOptions="Center"
-                VerticalOptions="End"
-                Margin="0,5,0,0"
-                Opacity="0"/>
+                      Clicked="OnCreateNewAdventureClicked"
+                      x:Name="CreateAdventureButton"
+                      WidthRequest="200"
+                      Aspect="AspectFit"
+                      Grid.Row="2"
+                      Grid.Column="1"
+                      HorizontalOptions="Center"
+                      VerticalOptions="End"
+                      BackgroundColor="Transparent"
+                      Margin="0,5,0,0"
+                      Opacity="0" />
 
         <!-- Exit Button in Row 0, Column 0 -->
         <ImageButton  Source="quit_button.webp"
-                    Clicked="OnQuitClicked"
-                    x:Name="QuitButton"
-                    WidthRequest="60"
-                    HeightRequest="60"
-                    Grid.Row="4"
-                    Grid.Column="0"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    Opacity="0"/>
+                      Clicked="OnQuitClicked"
+                      x:Name="QuitButton"
+                      WidthRequest="60"
+                      HeightRequest="60"
+                      Grid.Row="4"
+                      Grid.Column="0"
+                      HorizontalOptions="Center"
+                      VerticalOptions="Center"
+                      BackgroundColor="Transparent"
+                      Opacity="0" />
 
         <!-- Settings Button in Row 0, Column 2 -->
         <ImageButton Source="settings_button.webp"
@@ -78,6 +81,7 @@
                     Grid.Column="2"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
+                    BackgroundColor="Transparent"
                     Opacity="0"/>
     </Grid>
 </ContentPage>

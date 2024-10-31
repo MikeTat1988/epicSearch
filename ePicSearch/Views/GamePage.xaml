@@ -1,7 +1,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ePicSearch.Views.GamePage">
-    <Grid BackgroundColor="Transparent">
+    <Grid BackgroundColor="Black">
         
         <ScrollView>
             <Grid>
@@ -16,7 +16,8 @@
                     <!-- Top Tile -->
                     <Image Source="scroll_top.webp"
                            Aspect="Fill"
-                           Grid.Row="0" />
+                           Grid.Row="0"
+                           Margin="0, 0, 0, -5" />
 
                     <!-- Middle Tile  -->
                     <CollectionView x:Name="BackgroundView"
@@ -35,7 +36,7 @@
                                 <Image Source="{Binding ImageSource}"
                                        Aspect="Fill"
                                        HeightRequest="240"
-                                       Margin="0, -5, 0, -5">
+                                       Margin="0, -5, 0, 0">
                                 </Image>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
@@ -52,17 +53,24 @@
                     <Grid BackgroundColor="Transparent"
                       Grid.RowSpan="3">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="70" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
                     <Label Text="{Binding AdventureName}"
-                           FontSize="24"
+                           FontSize="26"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"
-                           TextColor="Black"
+                           TextColor="White"
+                           FontFamily="LuckiestGuy"
                            Grid.Row="0"
-                           HeightRequest="26" />
+                           Margin="20">
+                        <Label.Shadow>
+                            <Shadow Brush="Black"
+                                    Offset="2,2"
+                                    Radius="5" />
+                        </Label.Shadow>
+                    </Label>
 
                     <CollectionView x:Name="PhotoCollectionView"
                                     ItemsSource="{Binding Photos}"
@@ -95,11 +103,11 @@
 
                                             <Image Source="check.webp"
                                                    Aspect="AspectFit"
-                                                   HeightRequest="50"
-                                                   WidthRequest="50"
+                                                   HeightRequest="70"
+                                                   WidthRequest="70"
                                                    HorizontalOptions="End"
                                                    VerticalOptions="End"
-                                                   Margin="5">
+                                                   Margin="10">
                                                 <Image.Triggers>
                                                     <DataTrigger TargetType="Image"
                                                                  Binding="{Binding IsLocked}"
@@ -155,12 +163,14 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </Grid>
+                
                 <ImageButton Source="back_button.png"
                              WidthRequest="50"
                              HeightRequest="50"
                              HorizontalOptions="Start"
                              VerticalOptions="Start"
                              Margin="10"
+                             BackgroundColor="Transparent"
                              Clicked="OnBackButtonClicked" />
             </Grid>
         </ScrollView>

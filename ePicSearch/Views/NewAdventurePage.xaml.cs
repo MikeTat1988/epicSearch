@@ -1,6 +1,4 @@
 using ePicSearch.Infrastructure.Services;
-using ePicSearch.Infrastructure.Entities.Interfaces;
-using ePicSearch.Entities;
 using ePicSearch.Infrastructure.Entities;
 using ePicSearch.Helpers;
 
@@ -47,8 +45,11 @@ namespace ePicSearch.Views
 
             if (string.IsNullOrEmpty(adventureName))
             {
-                ErrorMessage.Text = "Please enter a name for your adventure.";
+                ErrorMessage.Text = "Enter a title";
                 ErrorMessage.IsVisible = true;
+
+                await Task.Delay(2000);
+                ErrorMessage.IsVisible = false;
                 return null;
             }
 

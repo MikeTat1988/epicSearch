@@ -96,7 +96,7 @@ namespace ePicSearch.Views
             double bottomHeight = 271;
             double arrowheight = 50;
             double gridPadding = 0;
-            double middleTileHeight = 285;
+            double middleTileHeight = 283;
             double photoWithArrowAndPaddingHeight = middleTileHeight + gridPadding + arrowheight;
 
             double requiredHeightForPhotos = Photos.Count * photoWithArrowAndPaddingHeight;

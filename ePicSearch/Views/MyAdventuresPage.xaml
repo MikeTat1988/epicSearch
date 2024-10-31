@@ -4,14 +4,12 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="70" />
-            <!-- Fixed height for header -->
             <RowDefinition Height="*" />
-            <!-- Remaining space for content -->
-            <RowDefinition Height="70" />
+            <RowDefinition Height="90" />
         </Grid.RowDefinitions>
         
         <!-- Background Image -->
-        <Image Source="my_adventures_bg.webp"
+        <Image Source="create_adventure_bg.webp"
                Aspect="AspectFill"
                VerticalOptions="FillAndExpand"
                HorizontalOptions="FillAndExpand" 
@@ -40,67 +38,138 @@
             </Label.Shadow>
         </Label>
 
-        <StackLayout Padding="10"
-                     VerticalOptions="FillAndExpand"
-                     Grid.Row="1">
+        <!-- no adventures label-->
+        <Grid x:Name="NoAdventuresGrid"
+              IsVisible="False"
+              VerticalOptions="CenterAndExpand"
+              Grid.Row="1">
+            <Label x:Name="NoAdventuresLabel"
+                   Text="No adventures found"
+                   FontFamily="LuckiestGuy"
+                   FontSize="20"
+                   TextColor="Gray"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+        </Grid>
 
-            <!-- no adventures -->
-            <Grid x:Name="NoAdventuresGrid"
-                  IsVisible="False"
-                  VerticalOptions="CenterAndExpand">
-                <Label x:Name="NoAdventuresLabel"
-                       Text="No adventures found"
-                       FontSize="18"
-                       TextColor="Gray"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center" />
-            </Grid>
+        <!-- CollectionView  for Adventures -->
+        <CollectionView x:Name="AdventuresList"
+                        IsVisible="True"
+                        VerticalOptions="FillAndExpand"
+                        Grid.Row="1">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid HeightRequest="270">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="100" />
+                            <RowDefinition Height="130" />
+                            <RowDefinition Height="20" />
+                        </Grid.RowDefinitions>
 
-            <!-- CollectionView  for Adventures -->
-            <CollectionView x:Name="AdventuresList"
-                            IsVisible="True"
-                            Grid.Row="1">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame BackgroundColor="White"
-                               Padding="10"
-                               Margin="10"
-                               HasShadow="True">
-                            <StackLayout Orientation="Vertical"
-                                         Spacing="10"
-                                         HorizontalOptions="CenterAndExpand">
-                                <!-- Adventure title  -->
-                                <Label Text="{Binding .}"
+                        <Image Source="adventure_frame.webp"
+                               VerticalOptions="FillAndExpand"
+                               HorizontalOptions="Center"
+                               Grid.RowSpan="3"
+                               Margin="0,0,-20,0">
+                            <Image.Shadow>
+                                <Shadow Brush="Black"
+                                        Offset="5,5"
+                                        Radius="10" />
+                            </Image.Shadow>
+                        </Image>
+
+                        <!-- Adventure title  -->
+                        <Label Text="{Binding .}"
+                               VerticalTextAlignment="Center"
+                               FontFamily="LuckiestGuy"
+                               HorizontalTextAlignment="Center"
+                               FontSize="24"
+                               TextColor="White"
+                               Margin="0,0,0,-40"
+                               Grid.Row="0" >
+                            <Label.Shadow>
+                                <Shadow Brush="Black"
+                                        Offset="3,3"
+                                        Radius="10" />
+                            </Label.Shadow>
+                        </Label>
+
+                        <!-- Buttons  -->
+                        <Grid Grid.Row="1"
+                              ColumnDefinitions="0.3*,*,*,0.3*">
+                            
+                            <!--Play Button -->
+                            <Grid Grid.Column="1"
+                                  VerticalOptions="Center"
+                                  HorizontalOptions="Center">
+                                <ImageButton Source="play_button.webp"
+                                             BackgroundColor="Transparent"
+                                             WidthRequest="100"
+                                             Clicked="OnPlayAdventureClicked"
+                                             Rotation="3"
+                                             CommandParameter="{Binding .}">
+                                    <ImageButton.Shadow>
+                                        <Shadow Brush="Black"
+                                                Offset="5,5"
+                                                Radius="10" />
+                                    </ImageButton.Shadow>
+                                </ImageButton>
+                                <Label Text="Play"
+                                       Rotation="3"
+                                       VerticalOptions="End"
+                                       FontFamily="LuckiestGuy"
                                        HorizontalOptions="Center"
-                                       VerticalOptions="Center"
-                                       FontSize="18"
-                                       TextColor="Black" />
+                                       FontSize="16"
+                                       TextColor="Black"
+                                       Margin="0,0,0,12" />
+                            </Grid>
+                            
+                            <!--Delete Button -->
+                            <Grid Grid.Column="2"
+                                  VerticalOptions="Center"
+                                  HorizontalOptions="Center">
+                                <ImageButton Source="trash_image.webp"
+                                             Clicked="OnDeleteAdventureClicked"
+                                             BackgroundColor="Transparent"
+                                             WidthRequest="100"
+                                             CommandParameter="{Binding .}"
+                                             Rotation="-8">
+                                    <ImageButton.Shadow>
+                                        <Shadow Brush="Black"
+                                                Offset="5,5"
+                                                Radius="10" />
+                                    </ImageButton.Shadow>
+                                </ImageButton>
+                                <Label Text="     Delete"
+                                       HorizontalOptions="Center"
+                                       Rotation="-8"
+                                       FontFamily="LuckiestGuy"
+                                       VerticalOptions="End"
+                                       FontSize="15"
+                                       TextColor="Black"
+                                       Margin="0,0,0,13"/>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
-                                <!-- Buttons  -->
-                                <StackLayout Orientation="Horizontal"
-                                             Spacing="20"
-                                             HorizontalOptions="Center">
-                                    <Button Text="Play"
-                                            Clicked="OnPlayAdventureClicked"
-                                            CommandParameter="{Binding .}" />
-                                    <Button Text="Delete"
-                                            Clicked="OnDeleteAdventureClicked"
-                                            CommandParameter="{Binding .}" />
-                                </StackLayout>
-                            </StackLayout>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-
-        </StackLayout>
         <!-- "Delete All" button, only shown when adventures exist -->
-        <Button x:Name="DeleteAllButton"
-                Text="Delete All"
-                Clicked="OnDeleteAllAdventuresClicked"
-                HorizontalOptions="Center"
-                VerticalOptions="End"
-                IsVisible="True"
-                Grid.Row="2"/>
+        <ImageButton Source="delete_all_button.webp"
+                     x:Name="DeleteAllButton"
+                     Clicked="OnDeleteAllAdventuresClicked"
+                     HorizontalOptions="Center"
+                     VerticalOptions="End"
+                     IsVisible="True"
+                     Grid.Row="2" />
+        <Label Text="Delete            all"
+               HorizontalOptions="Center"
+               FontFamily="LuckiestGuy"
+               VerticalOptions="End"
+               FontSize="35"
+               TextColor="White"
+               Margin="0,0,35,20"
+               Grid.Row="2" />
     </Grid>
 </ContentPage>
