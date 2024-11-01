@@ -11,7 +11,7 @@
             
             <RowDefinition Height="*" />
             <!-- Low Button rows-->
-            <RowDefinition Height="120" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -69,6 +69,7 @@
                       HorizontalOptions="Center"
                       VerticalOptions="Center"
                       BackgroundColor="Transparent"
+                      Margin="0,0,0,30"
                       Opacity="0" />
 
         <!-- Settings Button in Row 0, Column 2 -->
@@ -82,6 +83,7 @@
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     BackgroundColor="Transparent"
+                    Margin="0,0,0,30"
                     Opacity="0"/>
     </Grid>
 </ContentPage>

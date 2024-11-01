@@ -1,25 +1,27 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ePicSearch.Views.GamePage">
+    
     <Grid BackgroundColor="Black">
-        
-        <ScrollView>
+    <ScrollView>
             <Grid>
-                <!-- BACKGROUND -->
+                <!-- MODULAR BACKGROUND  -->
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="276" />
+                        <RowDefinition Height="100" />
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="271" />
+                        <RowDefinition Height="100" />
                     </Grid.RowDefinitions>
 
                     <!-- Top Tile -->
-                    <Image Source="scroll_top.webp"
-                           Aspect="Fill"
-                           Grid.Row="0"
-                           Margin="0, 0, 0, -5" />
+                <Image Source="scroll_top_n.webp"
+                       Aspect="Fill"
+                       Grid.Row="0"
+                       HorizontalOptions="FillAndExpand"
+                       HeightRequest="100" />
+                <!-- Margin="0, 0, 0, -5"   -->
 
-                    <!-- Middle Tile  -->
+                <!-- Middle Tile  -->
                     <CollectionView x:Name="BackgroundView"
                                     ItemsSource="{Binding BackgroundScrolls}"
                                     HorizontalScrollBarVisibility="Never"
@@ -32,28 +34,31 @@
                         </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <!-- the background tile -->
+                                <!-- the Middle tile -->
                                 <Image Source="{Binding ImageSource}"
                                        Aspect="Fill"
-                                       HeightRequest="240"
-                                       Margin="0, -5, 0, 0">
+                                       HeightRequest="{Binding Height}"
+                                       HorizontalOptions="FillAndExpand"
+                                       Margin="0, -2, 0, 0"> 
                                 </Image>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
 
                     <!-- Bottom Tile -->
-                    <Image Source="scroll_bottom.png"
+                    <Image Source="scroll_bottom_n.png"
                            Aspect="Fill"
                            Grid.Row="2"
-                           Margin="0, -2, 0, 0" />
+                           HorizontalOptions="FillAndExpand"
+                           HeightRequest="100"
+                           Margin="0, -4, 0, 0" />
                 </Grid>
                 
                 <!-- FOREGROUND -->
-                    <Grid BackgroundColor="Transparent"
+                <Grid BackgroundColor="Transparent"
                       Grid.RowSpan="3">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="70" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
@@ -72,98 +77,101 @@
                         </Label.Shadow>
                     </Label>
 
-                    <CollectionView x:Name="PhotoCollectionView"
-                                    ItemsSource="{Binding Photos}"
-                                    HorizontalScrollBarVisibility="Never"
-                                    VerticalScrollBarVisibility="Always"
-                                    HorizontalOptions="FillAndExpand"
-                                    VerticalOptions="CenterAndExpand"
-                                    Grid.Row="1">
-                        <CollectionView.ItemsLayout>
-                            <!-- Set to Vertical List -->
-                            <LinearItemsLayout Orientation="Vertical" />
-                        </CollectionView.ItemsLayout>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <StackLayout>
-                                    <Grid Rotation="{Binding Rotation}"
-                                          HeightRequest="220">
-                                        <Grid HeightRequest="220"
-                                              WidthRequest="200">
-                                            <!-- Base Layer: Actual Photo -->
-                                            <Image Source="{Binding FilePath}"
+                    <Grid Grid.Row="1"
+                          Padding="0,50,0,50">
+                        <CollectionView x:Name="PhotoCollectionView"
+                                        ItemsSource="{Binding Photos}"
+                                        HorizontalScrollBarVisibility="Never"
+                                        VerticalScrollBarVisibility="Always"
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalOptions="Start"
+                                        Grid.Row="1">
+                            <CollectionView.ItemsLayout>
+                                <!-- Set to Vertical List -->
+                                <LinearItemsLayout Orientation="Vertical" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout>
+                                        <Grid Rotation="{Binding Rotation}"
+                                              HeightRequest="220">
+                                            <Grid HeightRequest="220"
+                                                  WidthRequest="200">
+                                                <!-- Base Layer: Actual Photo -->
+                                                <Image Source="{Binding FilePath}"
+                                                       Aspect="AspectFit"
+                                                       HeightRequest="200"
+                                                       WidthRequest="200">
+                                                    <Image.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding BindingContext.ShowPhotoCommand, Source={x:Reference PhotoCollectionView}}"
+                                                                              CommandParameter="{Binding .}" />
+                                                    </Image.GestureRecognizers>
+                                                </Image>
+
+                                                <Image Source="check.webp"
+                                                       Aspect="AspectFit"
+                                                       HeightRequest="70"
+                                                       WidthRequest="70"
+                                                       HorizontalOptions="End"
+                                                       VerticalOptions="End"
+                                                       Margin="10">
+                                                    <Image.Triggers>
+                                                        <DataTrigger TargetType="Image"
+                                                                     Binding="{Binding IsLocked}"
+                                                                     Value="False">
+                                                            <Setter Property="IsVisible"
+                                                                    Value="True" />
+                                                        </DataTrigger>
+                                                        <DataTrigger TargetType="Image"
+                                                                     Binding="{Binding IsLocked}"
+                                                                     Value="True">
+                                                            <Setter Property="IsVisible"
+                                                                    Value="False" />
+                                                        </DataTrigger>
+                                                    </Image.Triggers>
+                                                </Image>
+                                            </Grid>
+
+                                            <!-- Overlay Layer: Question Mark -->
+                                            <Image IsVisible="{Binding IsLocked}"
                                                    Aspect="AspectFit"
                                                    HeightRequest="200"
-                                                   WidthRequest="200">
-                                                <Image.GestureRecognizers>
-                                                    <TapGestureRecognizer Command="{Binding BindingContext.ShowPhotoCommand, Source={x:Reference PhotoCollectionView}}"
-                                                                          CommandParameter="{Binding .}" />
-                                                </Image.GestureRecognizers>
-                                            </Image>
-
-                                            <Image Source="check.webp"
-                                                   Aspect="AspectFit"
-                                                   HeightRequest="70"
-                                                   WidthRequest="70"
-                                                   HorizontalOptions="End"
-                                                   VerticalOptions="End"
-                                                   Margin="10">
+                                                   WidthRequest="250">
                                                 <Image.Triggers>
+                                                    <!-- Show treasure photo if IsTreasurePhoto is true -->
                                                     <DataTrigger TargetType="Image"
-                                                                 Binding="{Binding IsLocked}"
-                                                                 Value="False">
-                                                        <Setter Property="IsVisible"
-                                                                Value="True" />
-                                                    </DataTrigger>
-                                                    <DataTrigger TargetType="Image"
-                                                                 Binding="{Binding IsLocked}"
+                                                                 Binding="{Binding IsTreasurePhoto}"
                                                                  Value="True">
-                                                        <Setter Property="IsVisible"
-                                                                Value="False" />
+                                                        <Setter Property="Source"
+                                                                Value="treasure_photo.webp" />
+                                                    </DataTrigger>
+
+                                                    <!-- Show question mark if IsTreasurePhoto is false -->
+                                                    <DataTrigger TargetType="Image"
+                                                                 Binding="{Binding IsTreasurePhoto}"
+                                                                 Value="False">
+                                                        <Setter Property="Source"
+                                                                Value="question_mark_1.webp" />
                                                     </DataTrigger>
                                                 </Image.Triggers>
                                             </Image>
+
+
                                         </Grid>
+                                        <!-- Arrow between Photos -->
+                                        <Image Source="arrow_down.png"
+                                               HeightRequest="50"
+                                               WidthRequest="50"
+                                               HorizontalOptions="Center"
+                                               IsVisible="{Binding ShowArrow}" />
 
-                                        <!-- Overlay Layer: Question Mark -->
-                                        <Image IsVisible="{Binding IsLocked}"
-                                               Aspect="AspectFit"
-                                               HeightRequest="200"
-                                               WidthRequest="250">
-                                            <Image.Triggers>
-                                                <!-- Show treasure photo if IsTreasurePhoto is true -->
-                                                <DataTrigger TargetType="Image"
-                                                             Binding="{Binding IsTreasurePhoto}"
-                                                             Value="True">
-                                                    <Setter Property="Source"
-                                                            Value="treasure_photo.webp" />
-                                                </DataTrigger>
-
-                                                <!-- Show question mark if IsTreasurePhoto is false -->
-                                                <DataTrigger TargetType="Image"
-                                                             Binding="{Binding IsTreasurePhoto}"
-                                                             Value="False">
-                                                    <Setter Property="Source"
-                                                            Value="question_mark_1.webp" />
-                                                </DataTrigger>
-                                            </Image.Triggers>
-                                        </Image>
-
-
-                                    </Grid>
-                                    <!-- Arrow between Photos -->
-                                    <Image Source="arrow_down.png"
-                                           HeightRequest="50"
-                                           WidthRequest="50"
-                                           HorizontalOptions="Center" 
-                                           IsVisible="{Binding ShowArrow}"/>
-
-                                </StackLayout>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                                    </StackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Grid>
                 </Grid>
-                
+
                 <ImageButton Source="back_button.png"
                              WidthRequest="50"
                              HeightRequest="50"

@@ -43,7 +43,8 @@ namespace ePicSearch.Views
 
         private void GamePage_SizeChanged(object sender, EventArgs e)
         {
-            CalculateAndPopulateBackgroundScrolls();
+            double pageHeight = this.Height;
+            CalculateAndPopulateBackgroundScrolls(pageHeight);
         }
 
         private void LoadAdventurePhotos(string adventureName)
@@ -73,48 +74,36 @@ namespace ePicSearch.Views
 
         }
 
-        private void CalculateAndPopulateBackgroundScrolls()
+        private void CalculateAndPopulateBackgroundScrolls(double pageHeight)
         {
-            // Clear existing background scrolls
             BackgroundScrolls.Clear();
 
-            // Define fixed heights
-            int numberOfMiddleTilesRounded = CalculateTilesNumber();
+            double topHeight = 100;
+            double bottomHeight = 100;
+            double middleTileHeight = 270;
 
-            for (int i = 0; i < numberOfMiddleTilesRounded; i++)
+            // Minimum number of middle tiles based on the number of photos
+            int numberOfMiddleTiles = Photos.Count;
+
+            // Calculate the number of middle tiles required to fill the screen
+            double requiredMiddleTiles = (pageHeight - topHeight - bottomHeight) / middleTileHeight;
+            int numberOfMiddleTilesRequired = (int)Math.Ceiling(requiredMiddleTiles);
+
+            numberOfMiddleTiles = Math.Max(numberOfMiddleTiles, numberOfMiddleTilesRequired);
+
+            for (int i = 0; i < numberOfMiddleTiles; i++)
             {
-                BackgroundScrolls.Add(new ScrollMiddleInfo());
+                BackgroundScrolls.Add(new BackgroundTile
+                {
+                    ImageSource = "scroll_middle_n.webp",
+                    Height = 270 
+                });
             }
 
             _logger.LogInformation($"added {BackgroundScrolls.Count} background scroll tiles.");
+                
+            
             RefreshPhotoView();
-        }
-
-        private int CalculateTilesNumber()
-        {
-            double topHeight = 276;
-            double bottomHeight = 271;
-            double arrowheight = 50;
-            double gridPadding = 0;
-            double middleTileHeight = 283;
-            double photoWithArrowAndPaddingHeight = middleTileHeight + gridPadding + arrowheight;
-
-            double requiredHeightForPhotos = Photos.Count * photoWithArrowAndPaddingHeight;
-            double remainingHeight = requiredHeightForPhotos - topHeight - bottomHeight;
-            double tilesNeeded = remainingHeight / middleTileHeight;
-
-            // Calculate the number of background scroll tiles needed to fill the remaining space
-            int numberOfMiddleTiles = (int)Math.Ceiling(tilesNeeded);
-
-            // Ensure a minimum number of middle tiles 
-            var numberOfMiddleTilesRounded = Math.Max(numberOfMiddleTiles, 1);
-
-            _logger.LogInformation($"Total height is {requiredHeightForPhotos} and there are {Photos.Count} photos. \n" +
-                $"Calculated {tilesNeeded} background scroll tiles needed \n" +
-                $"Rounded to {numberOfMiddleTiles}" +
-                $"min max check - {numberOfMiddleTilesRounded}");
-
-            return numberOfMiddleTilesRounded;
         }
 
         private void ShowPhoto(PhotoInfo photoInfo)
@@ -227,6 +216,12 @@ namespace ePicSearch.Views
         public class ScrollMiddleInfo
         {
             public string ImageSource { get; set; } = "scroll_middle.webp";
+        }
+
+        public class BackgroundTile
+        {
+            public string ImageSource { get; set; }
+            public double Height { get; set; }
         }
     }
 }
