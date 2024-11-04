@@ -1,6 +1,7 @@
 ﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:blur="clr-namespace:ePicSearch.Behaviors"
+             xmlns:controls="clr-namespace:ePicSearch.Helpers"
              x:Class="ePicSearch.Views.MainPage">
     <Grid>
         <Grid.RowDefinitions>
@@ -29,82 +30,81 @@
                 <blur:BlurBehavior  Radius="0" x:Name="BlurEffect"/>
             </Image.Behaviors>
         </Image>
-
-        <ImageButton x:Name="TitleImage"
-                     Source="title.webp"
-                     Aspect="AspectFit"
-                     Opacity="0"
-                     Grid.Row="0"
-                     Grid.ColumnSpan="3" />
+        <controls:NoRippleImageButton x:Name="TitleImage"
+                                      Source="title.webp"
+                                      Aspect="AspectFit"
+                                      Opacity="0"
+                                      Grid.Row="0"
+                                      Grid.ColumnSpan="3" />
 
 
         <!-- My Adventures Button -->
-        <ImageButton Source="play_adventure_button.webp"
-                     Clicked="OnMyAdventuresClicked"
-                     x:Name="MyAdventuresButton"
-                     WidthRequest="200"
-                     Aspect="AspectFit"
-                     Grid.Row="1"
-                     Grid.Column="1"
-                     HorizontalOptions="Center"
-                     VerticalOptions="Start"
-                     BackgroundColor="Transparent"
-                     Margin="0,0,0,5"
-                     Opacity="0" />
+        <controls:NoRippleImageButton Source="play_adventure_button.webp"
+                                      Clicked="OnMyAdventuresClicked"
+                                      x:Name="MyAdventuresButton"
+                                      WidthRequest="200"
+                                      Aspect="AspectFit"
+                                      Grid.Row="1"
+                                      Grid.Column="1"
+                                      HorizontalOptions="Center"
+                                      VerticalOptions="Start"
+                                      BackgroundColor="Transparent"
+                                      Margin="0,0,0,5"
+                                      Opacity="0" />
 
         <!-- Create Adventure Button -->
-        <ImageButton  Source="create_adventure_button.webp"
-                      Clicked="OnCreateNewAdventureClicked"
-                      x:Name="CreateAdventureButton"
-                      WidthRequest="200"
-                      Aspect="AspectFit"
-                      Grid.Row="2"
-                      Grid.Column="1"
-                      HorizontalOptions="Center"
-                      VerticalOptions="End"
-                      BackgroundColor="Transparent"
-                      Margin="0,5,0,0"
-                      Opacity="0" />
+        <controls:NoRippleImageButton  Source="create_adventure_button.webp"
+                                       Clicked="OnCreateNewAdventureClicked"
+                                       x:Name="CreateAdventureButton"
+                                       WidthRequest="200"
+                                       Aspect="AspectFit"
+                                       Grid.Row="2"
+                                       Grid.Column="1"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="End"
+                                       BackgroundColor="Transparent"
+                                       Margin="0,5,0,0"
+                                       Opacity="0" />
 
-        <ImageButton  Source="tutorial_button.webp"
-                      Clicked="OnTutorialClicked"
-                      x:Name="TutorialButton"
-                      WidthRequest="200"
-                      Aspect="AspectFit"
-                      Grid.Row="3"
-                      Grid.Column="1"
-                      HorizontalOptions="Center"
-                      VerticalOptions="End"
-                      BackgroundColor="Transparent"
-                      Margin="0,5,0,0"
-                      Opacity="0" />
+        <controls:NoRippleImageButton  Source="tutorial_button.webp"
+                                       Clicked="OnTutorialClicked"
+                                       x:Name="TutorialButton"
+                                       WidthRequest="200"
+                                       Aspect="AspectFit"
+                                       Grid.Row="3"
+                                       Grid.Column="1"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="End"
+                                       BackgroundColor="Transparent"
+                                       Margin="0,5,0,0"
+                                       Opacity="0" />
 
         <!-- Exit Button in Row 0, Column 0 -->
-        <ImageButton  Source="quit_button.webp"
-                      Clicked="OnQuitClicked"
-                      x:Name="QuitButton"
-                      WidthRequest="60"
-                      HeightRequest="60"
-                      Grid.Row="4"
-                      Grid.Column="0"
-                      HorizontalOptions="Center"
-                      VerticalOptions="Center"
-                      BackgroundColor="Transparent"
-                      Margin="0,0,0,30"
-                      Opacity="0" />
+        <controls:NoRippleImageButton  Source="quit_button.webp"
+                                       Clicked="OnQuitClicked"
+                                       x:Name="QuitButton"
+                                       WidthRequest="60"
+                                       HeightRequest="60"
+                                       Grid.Row="4"
+                                       Grid.Column="0"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       BackgroundColor="Transparent"
+                                       Margin="0,0,0,30"
+                                       Opacity="0" />
 
         <!-- Settings Button in Row 0, Column 2 -->
-        <ImageButton Source="settings_button.webp"
-                    Clicked="OnSettingsClicked"
-                    x:Name="SettingsButton"
-                    WidthRequest="60"
-                    HeightRequest="60"
-                    Grid.Row="4"
-                    Grid.Column="2"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    BackgroundColor="Transparent"
-                    Margin="0,0,0,30"
-                    Opacity="0"/>
+        <controls:NoRippleImageButton Source="settings_button.webp"
+                                      Clicked="OnSettingsClicked"
+                                      x:Name="SettingsButton"
+                                      WidthRequest="60"
+                                      HeightRequest="60"
+                                      Grid.Row="4"
+                                      Grid.Column="2"
+                                      HorizontalOptions="Center"
+                                      VerticalOptions="Center"
+                                      BackgroundColor="Transparent"
+                                      Margin="0,0,0,30"
+                                      Opacity="0" />
     </Grid>
 </ContentPage>

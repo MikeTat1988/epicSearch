@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:controls="clr-namespace:ePicSearch.Helpers"
              x:Class="ePicSearch.Views.CameraPage"
              Title="CameraPage">
     <Grid>
@@ -97,13 +98,13 @@
                       VerticalOptions="Center"
                       Grid.Row="3">
 
-                    <ImageButton x:Name="TreasureNextClueButton"
-                                 BackgroundColor="Transparent"
-                                 Source="next_clue_button.webp"
-                                 WidthRequest="130"
-                                 HeightRequest="150"
-                                 VerticalOptions="Center"
-                                 Rotation="5" />
+                    <controls:NoRippleImageButton x:Name="TreasureNextClueButton"
+                                                  BackgroundColor="Transparent"
+                                                  Source="next_clue_button.webp"
+                                                  WidthRequest="130"
+                                                  HeightRequest="150"
+                                                  VerticalOptions="Center"
+                                                  Rotation="5" />
 
                     <!-- Progress Bar overlay  -->
                     <ProgressBar x:Name="TreasureLongPressProgress"
@@ -218,11 +219,11 @@
                       Margin="30,0,0,0"
                       HorizontalOptions="Start"
                       Rotation="8">
-                    <ImageButton  x:Name="ClueNextButton"
-                                  Source="next_clue_button.webp"
-                                  BackgroundColor="Transparent"
-                                  WidthRequest="130"
-                                  HeightRequest="150" />
+                    <controls:NoRippleImageButton  x:Name="ClueNextButton"
+                                                   Source="next_clue_button.webp"
+                                                   BackgroundColor="Transparent"
+                                                   WidthRequest="130"
+                                                   HeightRequest="150" />
                     <ProgressBar x:Name="ClueLongPressProgress"
                                  Progress="0"
                                  ProgressColor="Green"
@@ -232,15 +233,15 @@
                                  Opacity="0.6" />
                 </Grid>
 
-                <ImageButton Source="finish_adventure_button.webp"
-                             Clicked="OnFinishAdventureClicked"
-                             BackgroundColor="Transparent"
-                             WidthRequest="130"
-                             HeightRequest="150"
-                             HorizontalOptions="End"
-                             Rotation="-9"
-                             Margin="0,0,30,0"
-                             Grid.Row="3" />
+                <controls:NoRippleImageButton Source="finish_adventure_button.webp"
+                                              Clicked="OnFinishAdventureClicked"
+                                              BackgroundColor="Transparent"
+                                              WidthRequest="130"
+                                              HeightRequest="150"
+                                              HorizontalOptions="End"
+                                              Rotation="-9"
+                                              Margin="0,0,30,0"
+                                              Grid.Row="3" />
 
                 <!-- Tutorial Popup 2 Image -->
                 <HorizontalStackLayout Spacing="10"

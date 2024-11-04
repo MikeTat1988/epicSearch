@@ -5,6 +5,8 @@ using ePicSearch.Infrastructure.Entities.Interfaces;
 using ePicSearch.Services;
 using Serilog;
 using CommunityToolkit.Maui;
+using ePicSearch.Platforms.Android;
+using ePicSearch.Helpers;
 
 namespace ePicSearch
 {
@@ -29,6 +31,11 @@ namespace ePicSearch
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
+                .ConfigureMauiHandlers(handlers =>
+                {
+                    // Register the custom handler for ImageButton
+                    handlers.AddHandler<NoRippleImageButton, NoRippleImageButtonHandler>();
+                })
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

@@ -41,7 +41,7 @@ namespace ePicSearch.Views
             }
         }
 
-        private async Task ButtonsAppear(params ImageButton[] buttons)
+        private async Task ButtonsAppear(params NoRippleImageButton[] buttons)
         {
             var animationTasks = new List<Task>();
 

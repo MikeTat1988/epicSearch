@@ -1,5 +1,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ePicSearch.Helpers"
              x:Class="ePicSearch.Views.GamePage">
     
     <Grid BackgroundColor="Black">
@@ -172,14 +173,14 @@
                     </Grid>
                 </Grid>
 
-                <ImageButton Source="back_button.png"
-                             WidthRequest="50"
-                             HeightRequest="50"
-                             HorizontalOptions="Start"
-                             VerticalOptions="Start"
-                             Margin="10"
-                             BackgroundColor="Transparent"
-                             Clicked="OnBackButtonClicked" />
+                <controls:NoRippleImageButton Source="back_button.png"
+                                              WidthRequest="50"
+                                              HeightRequest="50"
+                                              HorizontalOptions="Start"
+                                              VerticalOptions="Start"
+                                              Margin="10"
+                                              BackgroundColor="Transparent"
+                                              Clicked="OnBackButtonClicked" />
             </Grid>
         </ScrollView>
         <!-- Full-Screen Photo Modal (Initially Hidden) -->

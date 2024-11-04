@@ -3,6 +3,7 @@ using Microsoft.Maui.Layouts;
 using Microsoft.Extensions.Logging;
 using ePicSearch.Labels;
 using Microsoft.Maui;
+using ePicSearch.Helpers;
 
 namespace ePicSearch.Views
 {
@@ -43,6 +44,8 @@ namespace ePicSearch.Views
 
         public async void OnNextButtonClicked(object sender, EventArgs e)
         {
+            await AnimationHelper.AnimatePress((View)sender);
+
             if (_currentPlayer != null && _currentPlayer.IsPlaying)
             {
                 _currentPlayer.Stop();
@@ -62,6 +65,8 @@ namespace ePicSearch.Views
 
         public async void OnExitButtonClicked(object sender, EventArgs e)
         {
+            await AnimationHelper.AnimatePress((View)sender);
+
             if (_currentPlayer != null && _currentPlayer.IsPlaying)
             {
                 _currentPlayer.Stop();

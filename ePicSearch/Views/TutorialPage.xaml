@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ePicSearch.Helpers"
              x:Class="ePicSearch.Views.TutorialPage"
              BackgroundColor="Black">
 
@@ -20,26 +21,26 @@
         <Grid Grid.Row="1"
               RowDefinitions="1.2*,Auto,*"
               ColumnDefinitions="*,Auto,*">
-            <ImageButton Source="next_clue_button.webp"
-                         x:Name="NextButton"
-                         HeightRequest="115"
-                         WidthRequest="100"
-                         Clicked="OnNextButtonClicked"
-                         CornerRadius="25"
-                         Grid.Row="1"
-                         Grid.Column="1"
-                         BackgroundColor="Transparent" />
+            <controls:NoRippleImageButton Source="next_clue_button.webp"
+                                          x:Name="NextButton"
+                                          HeightRequest="115"
+                                          WidthRequest="100"
+                                          Clicked="OnNextButtonClicked"
+                                          CornerRadius="25"
+                                          Grid.Row="1"
+                                          Grid.Column="1"
+                                          BackgroundColor="Transparent" />
 
-            <ImageButton Source="exit_button.webp"
-                         x:Name="ExitButton"
-                         HeightRequest="115"
-                         WidthRequest="100"
-                         Clicked="OnExitButtonClicked"
-                         CornerRadius="25"
-                         Grid.Row="1"
-                         Grid.Column="1"
-                         BackgroundColor="Transparent"
-                         IsVisible="False" />
+            <controls:NoRippleImageButton Source="exit_button.webp"
+                                          x:Name="ExitButton"
+                                          HeightRequest="115"
+                                          WidthRequest="100"
+                                          Clicked="OnExitButtonClicked"
+                                          CornerRadius="25"
+                                          Grid.Row="1"
+                                          Grid.Column="1"
+                                          BackgroundColor="Transparent"
+                                          IsVisible="False" />
         </Grid>
     </Grid>
 </ContentPage>

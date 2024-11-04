@@ -1,5 +1,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ePicSearch.Helpers"
              x:Class="ePicSearch.Views.MyAdventuresPage">
     <Grid>
         <Grid.RowDefinitions>
@@ -14,15 +15,15 @@
                VerticalOptions="FillAndExpand"
                HorizontalOptions="FillAndExpand" 
                Grid.RowSpan ="3"/>
-        
-        <ImageButton Source="back_button.png"
-                     WidthRequest="50"
-                     HeightRequest="50"
-                     HorizontalOptions="Start"
-                     VerticalOptions="Start"
-                     Margin="10"
-                     Grid.Row="0"
-                     Clicked="OnBackButtonClicked" />
+
+        <controls:NoRippleImageButton Source="back_button.png"
+                                      WidthRequest="50"
+                                      HeightRequest="50"
+                                      HorizontalOptions="Start"
+                                      VerticalOptions="Start"
+                                      Margin="10"
+                                      Grid.Row="0"
+                                      Clicked="OnBackButtonClicked" />
 
         <Label Text="Your Adventures"
                FontSize="30"
@@ -102,18 +103,18 @@
                             <Grid Grid.Column="1"
                                   VerticalOptions="Center"
                                   HorizontalOptions="Center">
-                                <ImageButton Source="play_button.webp"
+                                <controls:NoRippleImageButton Source="play_button.webp"
                                              BackgroundColor="Transparent"
                                              WidthRequest="100"
                                              Clicked="OnPlayAdventureClicked"
                                              Rotation="3"
                                              CommandParameter="{Binding .}">
-                                    <ImageButton.Shadow>
+                                    <controls:NoRippleImageButton.Shadow>
                                         <Shadow Brush="Black"
                                                 Offset="5,5"
                                                 Radius="10" />
-                                    </ImageButton.Shadow>
-                                </ImageButton>
+                                    </controls:NoRippleImageButton.Shadow>
+                                </controls:NoRippleImageButton>
                                 <Label Text="Play"
                                        Rotation="3"
                                        VerticalOptions="End"
@@ -128,18 +129,18 @@
                             <Grid Grid.Column="2"
                                   VerticalOptions="Center"
                                   HorizontalOptions="Center">
-                                <ImageButton Source="trash_image.webp"
+                                <controls:NoRippleImageButton Source="trash_image.webp"
                                              Clicked="OnDeleteAdventureClicked"
                                              BackgroundColor="Transparent"
                                              WidthRequest="100"
                                              CommandParameter="{Binding .}"
                                              Rotation="-8">
-                                    <ImageButton.Shadow>
+                                    <controls:NoRippleImageButton.Shadow>
                                         <Shadow Brush="Black"
                                                 Offset="5,5"
                                                 Radius="10" />
-                                    </ImageButton.Shadow>
-                                </ImageButton>
+                                    </controls:NoRippleImageButton.Shadow>
+                                </controls:NoRippleImageButton>
                                 <Label Text="     Delete"
                                        HorizontalOptions="Center"
                                        Rotation="-8"
@@ -161,12 +162,12 @@
                VerticalOptions="Center"
                Grid.Row="2"
                IsVisible="True" />
-        <ImageButton Source="delete_all_button.webp"
-                     x:Name="DeleteAllButton"
-                     Clicked="OnDeleteAllAdventuresClicked"
-                     HorizontalOptions="Center"
-                     VerticalOptions="End"
-                     IsVisible="True"
-                     Grid.Row="2" />
+        <controls:NoRippleImageButton Source="delete_all_button.webp"
+                                      x:Name="DeleteAllButton"
+                                      Clicked="OnDeleteAllAdventuresClicked"
+                                      HorizontalOptions="Center"
+                                      VerticalOptions="End"
+                                      IsVisible="True"
+                                      Grid.Row="2" />
     </Grid>
 </ContentPage>

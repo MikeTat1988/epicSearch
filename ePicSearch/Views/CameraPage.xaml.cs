@@ -1,4 +1,5 @@
 using ePicSearch.Entities;
+using ePicSearch.Helpers;
 using ePicSearch.Infrastructure.Entities;
 using ePicSearch.Infrastructure.Services;
 namespace ePicSearch.Views;
@@ -196,7 +197,7 @@ public partial class CameraPage : ContentPage
         _currentLongPressProgress.IsVisible = true;
 
         // Start the progress animation and pass the sender
-        StartLongPressAnimation(_cts.Token, sender as ImageButton);
+        StartLongPressAnimation(_cts.Token, sender as NoRippleImageButton);
     }
 
     private void OnButtonReleased(object sender, EventArgs e)
@@ -210,7 +211,7 @@ public partial class CameraPage : ContentPage
         }
     }
 
-    private async void StartLongPressAnimation(CancellationToken token, ImageButton pressedButton)
+    private async void StartLongPressAnimation(CancellationToken token, NoRippleImageButton pressedButton)
     {
         if (_currentLongPressProgress == null)
             return;

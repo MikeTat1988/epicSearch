@@ -1,20 +1,21 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ePicSearch.Helpers"
              x:Class="ePicSearch.Views.SettingsPage">
     <Grid>
         <Image Source="settings_background.webp"
                Aspect="AspectFill"
                VerticalOptions="FillAndExpand"
                HorizontalOptions="Center" />
-        
-        <ImageButton Source="back_button.png"
-                     WidthRequest="50"
-                     HeightRequest="50"
-                     HorizontalOptions="Start"
-                     VerticalOptions="Start"
-                     Margin="10"
-                     Clicked="OnBackButtonClicked" />
-        
+
+        <controls:NoRippleImageButton Source="back_button.png"
+                                      WidthRequest="50"
+                                      HeightRequest="50"
+                                      HorizontalOptions="Start"
+                                      VerticalOptions="Start"
+                                      Margin="10"
+                                      Clicked="OnBackButtonClicked" />
+
         <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="20">
                 <!--Label Text="Settings Page" /-->
             <Button Text="Clean Logs" Clicked="OnCleanLogsClicked" />

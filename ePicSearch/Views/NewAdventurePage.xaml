@@ -1,5 +1,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ePicSearch.Helpers"
              x:Class="ePicSearch.Views.NewAdventurePage">
 
     <Grid>
@@ -16,16 +17,16 @@
                Grid.RowSpan="3"/>
 
         <!-- Back Button in Top Row -->
-        <ImageButton Source="back_button.png"
-                     BackgroundColor="Transparent"
-                     WidthRequest="50"
-                     HeightRequest="50"
-                     HorizontalOptions="Start"
-                     VerticalOptions="Start"
-                     Margin="5"
-                     Clicked="OnBackButtonClicked"
-                     Grid.Row="0" />
-        
+        <controls:NoRippleImageButton Source="back_button.png"
+                                      BackgroundColor="Transparent"
+                                      WidthRequest="50"
+                                      HeightRequest="50"
+                                      HorizontalOptions="Start"
+                                      VerticalOptions="Start"
+                                      Margin="5"
+                                      Clicked="OnBackButtonClicked"
+                                      Grid.Row="0" />
+
         <StackLayout Grid.Row="1"
                      VerticalOptions="Center">
             <Label Text="Create"
@@ -102,14 +103,14 @@
                     <ColumnDefinition Width="0.2*" />
                 </Grid.ColumnDefinitions>
 
-                <ImageButton Source="start_creating.webp"
-                             BackgroundColor="Transparent"
-                             WidthRequest="200"
-                             HorizontalOptions="Center"
-                             VerticalOptions="End"
-                             Margin="0,0,0,0"
-                             Grid.Column="1"
-                             Clicked="OnStartCreatingClicked" />
+                <controls:NoRippleImageButton Source="start_creating.webp"
+                                              BackgroundColor="Transparent"
+                                              WidthRequest="200"
+                                              HorizontalOptions="Center"
+                                              VerticalOptions="End"
+                                              Margin="0,0,0,0"
+                                              Grid.Column="1"
+                                              Clicked="OnStartCreatingClicked" />
             </Grid>
 
         </Grid>
