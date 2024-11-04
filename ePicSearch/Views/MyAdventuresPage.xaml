@@ -5,7 +5,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="70" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="90" />
+            <RowDefinition Height="100" />
         </Grid.RowDefinitions>
         
         <!-- Background Image -->
@@ -156,6 +156,11 @@
         </CollectionView>
 
         <!-- "Delete All" button, only shown when adventures exist -->
+        <Image Source="stone.webp"
+               x:Name="StoneBG"
+               VerticalOptions="Center"
+               Grid.Row="2"
+               IsVisible="True" />
         <ImageButton Source="delete_all_button.webp"
                      x:Name="DeleteAllButton"
                      Clicked="OnDeleteAllAdventuresClicked"
@@ -163,13 +168,5 @@
                      VerticalOptions="End"
                      IsVisible="True"
                      Grid.Row="2" />
-        <Label Text="Delete            all"
-               HorizontalOptions="Center"
-               FontFamily="LuckiestGuy"
-               VerticalOptions="End"
-               FontSize="35"
-               TextColor="White"
-               Margin="0,0,35,20"
-               Grid.Row="2" />
     </Grid>
 </ContentPage>

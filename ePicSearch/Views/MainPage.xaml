@@ -4,7 +4,7 @@
              x:Class="ePicSearch.Views.MainPage">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="150" />
+            <RowDefinition Height="*" />
             <!-- Button rows-->
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
@@ -29,6 +29,14 @@
                 <blur:BlurBehavior  Radius="0" x:Name="BlurEffect"/>
             </Image.Behaviors>
         </Image>
+
+        <ImageButton x:Name="TitleImage"
+                     Source="title.webp"
+                     Aspect="AspectFit"
+                     Opacity="0"
+                     Grid.Row="0"
+                     Grid.ColumnSpan="3" />
+
 
         <!-- My Adventures Button -->
         <ImageButton Source="play_adventure_button.webp"

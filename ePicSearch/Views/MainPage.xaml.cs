@@ -32,8 +32,8 @@ namespace ePicSearch.Views
 
                 var blurBehavior = BackgroundImage.Behaviors.OfType<BlurBehavior>().FirstOrDefault();
                 var blurTask = blurBehavior?.AnimateBlurEffect(10, 100);
-                var fadeTask = BackgroundImage.FadeTo(0.7, 2000, Easing.CubicInOut);
-                var buttonsAppearTask = ButtonsAppear(MyAdventuresButton, CreateAdventureButton, SettingsButton, QuitButton, TutorialButton);
+                var fadeTask = BackgroundImage.FadeTo(0.6, 2000, Easing.CubicInOut);
+                var buttonsAppearTask = ButtonsAppear(MyAdventuresButton, CreateAdventureButton, SettingsButton, QuitButton, TutorialButton, TitleImage);
 
                 await Task.WhenAll(zoomTask, blurTask!, fadeTask, buttonsAppearTask);
 

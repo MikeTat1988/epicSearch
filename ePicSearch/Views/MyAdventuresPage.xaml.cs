@@ -1,7 +1,6 @@
 using ePicSearch.Helpers;
 using ePicSearch.Infrastructure.Services;
 using Microsoft.Extensions.Logging;
-using Xamarin.Google.ErrorProne.Annotations;
 
 namespace ePicSearch.Views
 {
@@ -32,12 +31,14 @@ namespace ePicSearch.Views
                 AdventuresList.ItemsSource = adventures;
                 AdventuresList.IsVisible = true;
                 DeleteAllButton.IsVisible = true;
+                StoneBG.IsVisible = true;
                 NoAdventuresGrid.IsVisible = false;
             }
             else
             {
                 AdventuresList.IsVisible = false;
                 DeleteAllButton.IsVisible = false;
+                StoneBG.IsVisible = false;
                 NoAdventuresGrid.IsVisible = true;
             }
             _logger.LogInformation($"Done loading adventures");

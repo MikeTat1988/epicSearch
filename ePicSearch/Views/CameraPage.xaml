@@ -71,7 +71,7 @@
 
                 <Label x:Name="TreasureCodeLabel"
                        Rotation="-10"
-                       FontSize="30"
+                       FontSize="50"
                        WidthRequest="200"
                        Style="{StaticResource CommonLabelStyle}"
                        Grid.Row="1" />
@@ -192,7 +192,7 @@
 
                 <Label x:Name="ClueCodeLabel"
                        Rotation="3"
-                       FontSize="30"
+                       FontSize="50"
                        WidthRequest="200"
                        Style="{StaticResource CommonLabelStyle}"
                        Grid.Row="1" />
