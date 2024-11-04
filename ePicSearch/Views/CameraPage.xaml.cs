@@ -226,7 +226,7 @@ public partial class CameraPage : ContentPage
             {
                 if (pressedButton == TreasureNextClueButton)
                 {
-                    OnFirstClueClicked(pressedButton, EventArgs.Empty); //TODO: await maybe?
+                    OnFirstClueClicked(pressedButton, EventArgs.Empty);
                 }
                 else if (pressedButton == ClueNextButton)
                 {

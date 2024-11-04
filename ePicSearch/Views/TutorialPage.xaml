@@ -16,30 +16,30 @@
                         BackgroundColor="Transparent" />
 
         <!-- Control Area (Lower 1/3) -->
-        <StackLayout Grid.Row="1"
-                     Orientation="Horizontal"
-                     HorizontalOptions="Center"
-                     VerticalOptions="Center"
-                     Spacing="20">
-            
-            <Button x:Name="NextButton"
-                    Text="Next"
-                    WidthRequest="100"
-                    HeightRequest="50"
-                    Clicked="OnNextButtonClicked"
-                    CornerRadius="25"
-                    BackgroundColor="#007AFF"
-                    TextColor="White" />
 
-            <Button x:Name="ExitButton"
-                    Text="Exit"
-                    WidthRequest="100"
-                    HeightRequest="50"
-                    Clicked="OnExitButtonClicked"
-                    CornerRadius="25"
-                    BackgroundColor="#FF3B30"
-                    TextColor="White"
-                    IsVisible="False" />
-        </StackLayout>
+        <Grid Grid.Row="1"
+              RowDefinitions="1.2*,Auto,*"
+              ColumnDefinitions="*,Auto,*">
+            <ImageButton Source="next_clue_button.webp"
+                         x:Name="NextButton"
+                         HeightRequest="115"
+                         WidthRequest="100"
+                         Clicked="OnNextButtonClicked"
+                         CornerRadius="25"
+                         Grid.Row="1"
+                         Grid.Column="1"
+                         BackgroundColor="Transparent" />
+
+            <ImageButton Source="exit_button.webp"
+                         x:Name="ExitButton"
+                         HeightRequest="115"
+                         WidthRequest="100"
+                         Clicked="OnExitButtonClicked"
+                         CornerRadius="25"
+                         Grid.Row="1"
+                         Grid.Column="1"
+                         BackgroundColor="Transparent"
+                         IsVisible="False" />
+        </Grid>
     </Grid>
 </ContentPage>

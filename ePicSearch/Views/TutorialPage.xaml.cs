@@ -1,6 +1,7 @@
 using Plugin.Maui.Audio;
 using Microsoft.Maui.Layouts;
 using Microsoft.Extensions.Logging;
+using ePicSearch.Labels;
 using Microsoft.Maui;
 
 namespace ePicSearch.Views
@@ -8,12 +9,14 @@ namespace ePicSearch.Views
     public partial class TutorialPage : ContentPage
     {
         public readonly List<TutorialStep> _tutorialSteps;
+
         private int _currentStepIndex = -1; 
         private readonly IAudioManager _audioManager;
         private readonly Random _random = new Random();
+        private IAudioPlayer _currentPlayer = null;
         private readonly ILogger<MainPage> _logger;
-        private double _screenWidth;
-        private double _screenHeight;
+        private readonly double _screenWidth;
+        private readonly double _screenHeight;
 
         public TutorialPage(ILogger<MainPage> logger)
         {
@@ -40,6 +43,13 @@ namespace ePicSearch.Views
 
         public async void OnNextButtonClicked(object sender, EventArgs e)
         {
+            if (_currentPlayer != null && _currentPlayer.IsPlaying)
+            {
+                _currentPlayer.Stop();
+                _currentPlayer.Dispose();
+                _currentPlayer = null;
+            }
+
             if (_currentStepIndex < _tutorialSteps.Count - 1)
             {
                 await AnimateNextStep();
@@ -52,6 +62,13 @@ namespace ePicSearch.Views
 
         public async void OnExitButtonClicked(object sender, EventArgs e)
         {
+            if (_currentPlayer != null && _currentPlayer.IsPlaying)
+            {
+                _currentPlayer.Stop();
+                _currentPlayer.Dispose();
+                _currentPlayer = null;
+            }
+
             _logger.LogInformation("Exit button clicked. Navigating back to Main Page.");
             await Navigation.PopAsync(); 
         }
@@ -142,25 +159,38 @@ namespace ePicSearch.Views
                 FontSize = 24,
                 FontFamily = "LuckiestGuy",
                 HorizontalOptions = LayoutOptions.Center,
+                HorizontalTextAlignment = TextAlignment.Center,
+                LineBreakMode = LineBreakMode.WordWrap,
+                WidthRequest = _screenWidth * 0.8,
                 Opacity = 0
             };
         }
 
         private async Task PlaySound(string audioFileName)
         {
+            if (_currentPlayer != null && _currentPlayer.IsPlaying)
+            {
+                _currentPlayer.Stop();
+                _currentPlayer.Dispose();
+                _currentPlayer = null;
+            }
+
             try
             {
                 var audioFile = await FileSystem.OpenAppPackageFileAsync(audioFileName);
-                using var player = _audioManager.CreatePlayer(audioFile);
-                player.Loop = false;
-                player.Play();
+                _currentPlayer = _audioManager.CreatePlayer(audioFile);
+                _currentPlayer.Loop = false;
+                _currentPlayer.Play();
                 _logger.LogInformation($"Playing audio: {audioFileName}");
 
                 // Wait for the audio to finish playing
-                while (player.IsPlaying)
+                while (_currentPlayer.IsPlaying)
                 {
                     await Task.Delay(100);
                 }
+
+                _currentPlayer.Dispose();
+                _currentPlayer = null;
             }
             catch (Exception ex)
             {
@@ -196,31 +226,6 @@ namespace ePicSearch.Views
                 Rotation = 0,
                 Opacity = 0
             };
-        }
-
-
-        public static class TutorialTexts
-        {
-            public const string Step1 = "Welcome to Step 1!";
-            public const string Step2 = "This is Step 2.";
-            public const string Step3 = "You're now at Step 3.";
-            public const string Step4 = "Step 4 is here.";
-            public const string Step5 = "Almost there! Step 5.";
-            public const string Step6 = "Final Step 6. Well done!";
-
-            public static string GetTextForStep(int stepIndex)
-            {
-                return stepIndex switch
-                {
-                    0 => Step1,
-                    1 => Step2,
-                    2 => Step3,
-                    3 => Step4,
-                    4 => Step5,
-                    5 => Step6,
-                    _ => string.Empty,
-                };
-            }
         }
     }
 }
