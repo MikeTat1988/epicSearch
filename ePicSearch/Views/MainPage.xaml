@@ -58,6 +58,19 @@
                       Margin="0,5,0,0"
                       Opacity="0" />
 
+        <ImageButton  Source="inside_settings_button.webp"
+                      Clicked="OnTutorialClicked"
+                      x:Name="TutorialButton"
+                      WidthRequest="200"
+                      Aspect="AspectFit"
+                      Grid.Row="3"
+                      Grid.Column="1"
+                      HorizontalOptions="Center"
+                      VerticalOptions="End"
+                      BackgroundColor="Transparent"
+                      Margin="0,5,0,0"
+                      Opacity="0" />
+
         <!-- Exit Button in Row 0, Column 0 -->
         <ImageButton  Source="quit_button.webp"
                       Clicked="OnQuitClicked"

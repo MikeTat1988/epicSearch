@@ -33,8 +33,7 @@ namespace ePicSearch.Views
                 var blurBehavior = BackgroundImage.Behaviors.OfType<BlurBehavior>().FirstOrDefault();
                 var blurTask = blurBehavior?.AnimateBlurEffect(10, 100);
                 var fadeTask = BackgroundImage.FadeTo(0.7, 2000, Easing.CubicInOut);
-                var buttonsAppearTask = ButtonsAppear(MyAdventuresButton, CreateAdventureButton, SettingsButton, QuitButton);
-
+                var buttonsAppearTask = ButtonsAppear(MyAdventuresButton, CreateAdventureButton, SettingsButton, QuitButton, TutorialButton);
 
                 await Task.WhenAll(zoomTask, blurTask!, fadeTask, buttonsAppearTask);
 
@@ -71,6 +70,13 @@ namespace ePicSearch.Views
             await AnimationHelper.AnimatePress((View)sender);
 
             await Navigation.PushAsync(new MyAdventuresPage(_photoManager, _logger));
+        }
+        
+        private async void OnTutorialClicked(object sender, EventArgs e)
+        {
+            await AnimationHelper.AnimatePress((View)sender);
+
+            await Navigation.PushAsync(new TutorialPage(_logger));
         }
 
         private async void OnCreateNewAdventureClicked(object sender, EventArgs e)
