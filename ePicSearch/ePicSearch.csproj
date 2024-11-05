@@ -98,6 +98,9 @@
 		<MauiXaml Update="Views\GamePage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\ResumeAdventurePromptModal.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\TutorialPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>

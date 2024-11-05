@@ -149,6 +149,11 @@ namespace ePicSearch.Infrastructure.Services
             }
         }
 
+        public AdventureData? GetIncompleteAdventure()
+        {
+            return _dataStorageService.GetAllAdventures().FirstOrDefault(a => !a.IsComplete);
+        }
+
         private int GetNextSerialNumber(string adventureName)
         {
             var photos = _dataStorageService.GetPhotosForAdventure(adventureName);

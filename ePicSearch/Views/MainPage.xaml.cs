@@ -7,14 +7,14 @@ namespace ePicSearch.Views
 {
     public partial class MainPage : ContentPage
     {
-        private readonly AdventureManager _photoManager;
+        private readonly AdventureManager _adventureManager;
         private readonly ILogger<MainPage> _logger;
         private bool _isBlurred = false;
 
-        public MainPage(AdventureManager photoManager, ILogger<MainPage> logger)
+        public MainPage(AdventureManager adventureMAnager, ILogger<MainPage> logger)
         {
             InitializeComponent();
-            _photoManager = photoManager;
+            _adventureManager = adventureMAnager;
             _logger = logger;
 
             Appearing += MainPage_Appearing;
@@ -39,6 +39,8 @@ namespace ePicSearch.Views
 
                 _isBlurred = true;
             }
+
+            await CheckForIncompleteAdventure();
         }
 
         private async Task ButtonsAppear(params NoRippleImageButton[] buttons)
@@ -69,7 +71,7 @@ namespace ePicSearch.Views
         {
             await AnimationHelper.AnimatePress((View)sender);
 
-            await Navigation.PushAsync(new MyAdventuresPage(_photoManager, _logger));
+            await Navigation.PushAsync(new MyAdventuresPage(_adventureManager, _logger));
         }
         
         private async void OnTutorialClicked(object sender, EventArgs e)
@@ -83,7 +85,7 @@ namespace ePicSearch.Views
         {
             await AnimationHelper.AnimatePress((View)sender);
 
-            await Navigation.PushAsync(new NewAdventurePage(_photoManager));
+            await Navigation.PushAsync(new NewAdventurePage(_adventureManager));
         }
 
         private async void OnQuitClicked(object sender, EventArgs e)
@@ -91,6 +93,33 @@ namespace ePicSearch.Views
             await AnimationHelper.AnimatePress((View)sender);
 
             Application.Current?.Quit();
+        }
+
+        private async Task CheckForIncompleteAdventure()
+        {
+            var incompleteAdventure = _adventureManager.GetIncompleteAdventure();
+
+            if (incompleteAdventure != null)
+            {
+                _logger.LogInformation("Incomplete adventure found: " + incompleteAdventure.AdventureName);
+                ResumePromptModal.Initialize(incompleteAdventure, _adventureManager);
+
+                ResumePromptModal.ModalClosed += ResumePromptModal_ModalClosed;
+
+                ResumeAdventureModal.IsVisible = true;
+            }
+            else
+            {
+                _logger.LogInformation("No incomplete adventure found");
+            }
+        }
+
+        private void ResumePromptModal_ModalClosed(object sender, EventArgs e)
+        {
+            // Unsubscribe from the event
+            ResumePromptModal.ModalClosed -= ResumePromptModal_ModalClosed;
+
+            ResumeAdventureModal.IsVisible = false;
         }
     }
 }

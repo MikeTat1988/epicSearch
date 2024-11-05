@@ -130,6 +130,8 @@ public partial class CameraPage : ContentPage
 
     internal async void OnFinishAdventureClicked(object sender, EventArgs e)
     {
+        await AnimationHelper.AnimatePress((View)sender);
+
         await CluePhotoPromptModal.FadeTo(0, 250);
         CluePhotoPromptModal.IsVisible = false;
 
