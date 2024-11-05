@@ -135,6 +135,20 @@ namespace ePicSearch.Infrastructure.Services
             }
         }
 
+        public async Task RemoveInvalidAdventuresAsync()
+        {
+            var adventures = _dataStorageService.GetAllAdventures();
+
+            foreach (var adventure in adventures)
+            {
+                if (adventure.PhotoCount < 2)
+                {
+                    _logger.LogInformation($"Removing incomplete adventure: {adventure.AdventureName} with {adventure.PhotoCount} photos.");
+                    await DeleteAdventureAsync(adventure.AdventureName);
+                }
+            }
+        }
+
         private int GetNextSerialNumber(string adventureName)
         {
             var photos = _dataStorageService.GetPhotosForAdventure(adventureName);

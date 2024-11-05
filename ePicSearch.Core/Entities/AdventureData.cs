@@ -8,6 +8,16 @@
         public string? LastPhotoCaptured { get; set; }
         public string? LastPhotoCode { get; set; }
 
+        public AdventureData() { }
+        public AdventureData(AdventureData other)
+        {
+            AdventureName = other.AdventureName;
+            IsComplete = other.IsComplete;
+            PhotoCount = other.PhotoCount;
+            LastPhotoCaptured = other.LastPhotoCaptured;
+            LastPhotoCode = other.LastPhotoCode;
+        }
+
         public override string ToString()
         {
             return $"AdventureData [AdventureName: {AdventureName}, IsComplete: {IsComplete}, " +

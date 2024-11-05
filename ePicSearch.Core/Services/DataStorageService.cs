@@ -171,5 +171,13 @@ namespace ePicSearch.Infrastructure.Services
                 }
             }
         }
+
+        public List<AdventureData> GetAllAdventures()
+        {
+            lock (_cacheLock)
+            {
+                return new List<AdventureData>(_adventureCache); 
+            }
+        }
     }
 }

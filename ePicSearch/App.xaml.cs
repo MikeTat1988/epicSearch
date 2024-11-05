@@ -4,18 +4,20 @@ namespace ePicSearch
 {
     public partial class App : Application
     {
-        private readonly DataStorageService _dataStorageService;
-        public App(AppShell appShell, DataStorageService dataStorageService)
+        private readonly AdventureManager _adventureManager;
+        public App(AppShell appShell, AdventureManager adventureManager)
         {
             InitializeComponent();
             MainPage = appShell;
-            _dataStorageService = dataStorageService;
+            _adventureManager = adventureManager;
+
+            Task.Run(async () => await _adventureManager.RemoveInvalidAdventuresAsync());
         }
 
         // Sync cache when the app goes to sleep (background or closing)
         protected override void OnSleep()
         {
-            _dataStorageService.SyncCacheToFile();
+            _adventureManager.SyncCache();
             base.OnSleep();
         }
     }

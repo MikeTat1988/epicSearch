@@ -5,7 +5,7 @@ VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ePicSearch", "ePicSearch\ePicSearch.csproj", "{F6A117BF-F6D2-48FA-A082-98F4BB74BBBE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ePicSearch.Tests", "ePicSearchTests\ePicSearch.Tests.csproj", "{3AE1E887-2E96-4E7E-A59B-20C25116E275}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ePicSearch.InfraTests", "ePicSearchTests\ePicSearch.InfraTests.csproj", "{3AE1E887-2E96-4E7E-A59B-20C25116E275}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ePicSearch.Infrastructure", "ePicSearch.Core\ePicSearch.Infrastructure.csproj", "{4D8715E7-A6EF-4218-8426-3AA4C71E7130}"
 EndProject

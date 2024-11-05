@@ -6,7 +6,7 @@ namespace ePicSearch.Views;
 
 public partial class CameraPage : ContentPage
 {
-    private AdventureData _adventureData;
+    private AdventureData _localAdventureData;
     private readonly AdventureManager _adventureManager;
     private CancellationTokenSource _cts;
     private ProgressBar? _currentLongPressProgress;
@@ -15,7 +15,7 @@ public partial class CameraPage : ContentPage
     {
         InitializeComponent();
 
-        _adventureData = adventureData;
+        _localAdventureData = new AdventureData(adventureData);
         _adventureManager = adventureManager;
 
         TreasureNextClueButton.Pressed += OnButtonPressed;
@@ -24,7 +24,7 @@ public partial class CameraPage : ContentPage
         ClueNextButton.Released += OnButtonReleased;
 
         // Determine the starting point based on photo count
-        if (_adventureData.PhotoCount == 0)
+        if (_localAdventureData.PhotoCount == 0)
         {
             StartTreasurePhotoCapture();
         }
@@ -44,7 +44,7 @@ public partial class CameraPage : ContentPage
             return;
         }
 
-        var capturedPhoto = await _adventureManager.CapturePhoto(new AppFileResult(photo), _adventureData.AdventureName);
+        var capturedPhoto = await _adventureManager.CapturePhoto(new AppFileResult(photo), _localAdventureData.AdventureName);
 
         if (capturedPhoto == null)
         {
@@ -52,7 +52,7 @@ public partial class CameraPage : ContentPage
             return;
         }
 
-        AddPhotoToAdventure(capturedPhoto);
+        AddPhotoToLocalAdventure(capturedPhoto);
 
         TreasureCodeLabel.Text = $"{capturedPhoto.Code}";
         TreasurePhotoModal.IsVisible = true;
@@ -71,7 +71,7 @@ public partial class CameraPage : ContentPage
                 return;
             }
 
-            var capturedPhoto = await _adventureManager.CapturePhoto(new AppFileResult(photo), _adventureData.AdventureName);
+            var capturedPhoto = await _adventureManager.CapturePhoto(new AppFileResult(photo), _localAdventureData.AdventureName);
 
             if (capturedPhoto == null)
             {
@@ -79,10 +79,12 @@ public partial class CameraPage : ContentPage
                 return;
             }
 
-            AddPhotoToAdventure(capturedPhoto);
+            AddPhotoToLocalAdventure(capturedPhoto);
             ClueCodeLabel.Text = $"{capturedPhoto.Code}";
             CluePhotoPromptModal.IsVisible = true;
             await CluePhotoPromptModal.FadeTo(1, 250);
+
+            SyncIfValid();
         }
         catch (Exception ex)
         {
@@ -90,12 +92,11 @@ public partial class CameraPage : ContentPage
         }
     }
 
-    private void AddPhotoToAdventure(PhotoInfo capturedPhoto)
+    private void AddPhotoToLocalAdventure(PhotoInfo capturedPhoto)
     {
-        _adventureData.LastPhotoCaptured = capturedPhoto.FilePath;
-        _adventureData.LastPhotoCode = capturedPhoto.Code;
-        _adventureData.PhotoCount++;
-        _adventureManager.UpdateAdventure(_adventureData);
+        _localAdventureData.LastPhotoCaptured = capturedPhoto.FilePath;
+        _localAdventureData.LastPhotoCode = capturedPhoto.Code;
+        _localAdventureData.PhotoCount++;
     }
 
     private async void OnFirstClueClicked(object sender, EventArgs e)
@@ -119,19 +120,27 @@ public partial class CameraPage : ContentPage
         await StartCluePhotoLoop(); 
     }
 
-    private async void OnFinishAdventureClicked(object sender, EventArgs e)
+    internal void SyncIfValid()
+    {
+        if (_localAdventureData.PhotoCount >= 2)
+        {
+            _adventureManager.UpdateAdventure(_localAdventureData);
+        }
+    }
+
+    internal async void OnFinishAdventureClicked(object sender, EventArgs e)
     {
         await CluePhotoPromptModal.FadeTo(0, 250);
         CluePhotoPromptModal.IsVisible = false;
 
-        _adventureData.IsComplete = true;
+        _localAdventureData.IsComplete = true;
 
-        var allPhotos = _adventureManager.GetPhotosForAdventure(_adventureData.AdventureName);
+        var allPhotos = _adventureManager.GetPhotosForAdventure(_localAdventureData.AdventureName);
         var lastPhoto = allPhotos[allPhotos.Count() - 1];
         lastPhoto.IsLocked = false;
         _adventureManager.UpdatePhotoState(lastPhoto);
 
-        _adventureManager.UpdateAdventure(_adventureData);
+        _adventureManager.UpdateAdventure(_localAdventureData);
 
         await ShowAdventureCompletion();
     }

@@ -129,9 +129,9 @@ namespace ePicSearch.Tests
         public void GetAllAdventureNames_ShouldReturnUniqueAdventureNames()
         {
             // Arrange
-            _dataStorageService.AddPhoto(new PhotoInfo { AdventureName = "adventure1" });
-            _dataStorageService.AddPhoto(new PhotoInfo { AdventureName = "adventure2" });
-            _dataStorageService.AddPhoto(new PhotoInfo { AdventureName = "adventure1" });
+            _dataStorageService.AddAdventure(new AdventureData { AdventureName = "adventure1"});
+            _dataStorageService.AddAdventure(new AdventureData { AdventureName = "adventure2"});
+            _dataStorageService.AddAdventure(new AdventureData { AdventureName = "adventure1"});
 
             // Act
             var adventures = _dataStorageService.GetAllAdventureNames();
