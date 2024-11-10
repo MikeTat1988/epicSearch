@@ -99,15 +99,29 @@
                                               HeightRequest="220">
                                             <Grid HeightRequest="220"
                                                   WidthRequest="200">
+                                                <Grid.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding BindingContext.ShowPhotoCommand, Source={x:Reference PhotoCollectionView}}"
+                                                                          CommandParameter="{Binding .}" />
+                                                </Grid.GestureRecognizers>
                                                 <!-- Base Layer: Actual Photo -->
                                                 <Image Source="{Binding FilePath}"
                                                        Aspect="AspectFit"
                                                        HeightRequest="200"
                                                        WidthRequest="200">
-                                                    <Image.GestureRecognizers>
-                                                        <TapGestureRecognizer Command="{Binding BindingContext.ShowPhotoCommand, Source={x:Reference PhotoCollectionView}}"
-                                                                              CommandParameter="{Binding .}" />
-                                                    </Image.GestureRecognizers>
+                                                    <Image.Triggers>
+                                                        <DataTrigger TargetType="Image"
+                                                                     Binding="{Binding IsLocked}"
+                                                                     Value="True">
+                                                            <Setter Property="IsVisible"
+                                                                    Value="False" />
+                                                        </DataTrigger>
+                                                        <DataTrigger TargetType="Image"
+                                                                     Binding="{Binding IsLocked}"
+                                                                     Value="False">
+                                                            <Setter Property="IsVisible"
+                                                                    Value="True" />
+                                                        </DataTrigger>
+                                                    </Image.Triggers>
                                                 </Image>
 
                                                 <Image Source="check.webp"
