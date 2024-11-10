@@ -9,7 +9,6 @@ namespace ePicSearch.Views
 	public partial class GamePage : ContentPage
 	{
 		public ICommand ShowPhotoCommand { get; }
-        public ICommand UnlockPhotoCommand { get; }
         public ICommand CloseModalCommand { get; }
         public ObservableCollection<PhotoInfo> Photos { get; private set; }
         public ObservableCollection<object> BackgroundScrolls { get; private set; }
@@ -29,8 +28,9 @@ namespace ePicSearch.Views
             BackgroundScrolls = new ObservableCollection<object>();
 
             ShowPhotoCommand = new Command<PhotoInfo>(ShowPhoto);
-			UnlockPhotoCommand = new Command<string>(UnlockPhoto);
             CloseModalCommand = new Command(CloseModal);
+
+            CodeEntryControlInstance.CodeEntered += OnCodeEntered;
 
             _photoManager = photoManager;
             _selectedPhoto = null;
@@ -106,6 +106,57 @@ namespace ePicSearch.Views
             RefreshPhotoView();
         }
 
+        private async void OnCodeEntered(object sender, string code)
+        {
+            _logger.LogInformation($"A code {code} was entered to unlock a photo");
+
+            if (_selectedPhoto == null)
+            {
+                _logger.LogWarning("No photo was selected");
+                return;
+            }
+
+            if (code.Length != 4 || !code.All(char.IsDigit))
+            {
+                await DisplayAlert("Invalid Code", "Please enter a 4-digit code.", "OK");
+                return;
+            }
+
+            if (_selectedPhoto.Code == code)
+            {
+                _selectedPhoto.IsLocked = false;
+
+                // Update the UI
+                FullScreenPhoto.Source = _selectedPhoto.FilePath;
+                CodeEntryOverlay.IsVisible = false;
+                CodeEntryBG.IsVisible = false;
+
+                RefreshPhotoView();
+
+                if (_photoManager.UpdatePhotoState(_selectedPhoto))
+                {
+                    _photoManager.SyncCache();
+                    _logger.LogInformation($"The photo with code {code} was successfully unlocked");
+                    await DisplayAlert("Correct", "You have unlocked the photo!", "OK");
+                }
+                else
+                {
+                    _logger.LogError($"Failed to update {_selectedPhoto} in memory");
+                    await DisplayAlert("Save Error", "Failed to save the changes. Please try again.", "OK");
+
+                    // Revert the change in the UI to keep things consistent
+                    _selectedPhoto.IsLocked = true;
+                    RefreshPhotoView();
+                }
+            }
+            else
+            {
+                _logger.LogInformation($"The code for {_selectedPhoto} was incorrect");
+                await DisplayAlert("Incorrect", "The code you entered is incorrect.", "OK");
+            }
+        }
+
+
         private void ShowPhoto(PhotoInfo photoInfo)
         {
             _logger.LogInformation($"A photo {photoInfo} was pressed");
@@ -118,66 +169,17 @@ namespace ePicSearch.Views
                 // Show the locked overlay image
                 FullScreenPhoto.Source = "question_mark_1.webp";
                 CodeEntryOverlay.IsVisible = true;
+                CodeEntryBG.IsVisible = true;
             }
             else
             {
                 FullScreenPhoto.Source = photoInfo.FilePath;
                 CodeEntryOverlay.IsVisible = false;
+                CodeEntryBG.IsVisible = false;
             }
 
             // Display the modal
             PhotoModal.IsVisible = true;
-        }
-
-        private async void UnlockPhoto(string code)
-		{
-            _logger.LogInformation($"A code {code} was proposed to unlock a photo");
-
-            if (_selectedPhoto == null)
-            {
-                _logger.LogWarning("No photos were selected");
-                return;
-            }
-
-            // Ensure the code is 4 digits and numeric
-            if (code.Length != 4 || !code.All(char.IsDigit))
-            {
-                await ShowOopsPopup();
-                return;
-            }
-
-            if (_selectedPhoto.Code == code)
-            {
-                _selectedPhoto.IsLocked = false;
-
-                //updating the xaml modal view
-                FullScreenPhoto.Source = _selectedPhoto.FilePath;
-                CodeEntryOverlay.IsVisible = false;
-
-                RefreshPhotoView();
-
-                if (_photoManager.UpdatePhotoState(_selectedPhoto))
-                {
-                    _photoManager.SyncCache();
-                    _logger.LogInformation($"The photo with {code} was successfully updated in memory");
-                }
-                else
-                {
-                    _logger.LogError($"{_selectedPhoto} failed to be updated in memory");
-
-                    await DisplayAlert("Save Error", "Failed to save the changes. Please try again.", "OK");
-
-                    // Revert the change in the UI to keep things consistent
-                    _selectedPhoto.IsLocked = true;
-                    RefreshPhotoView();
-                } 
-            }
-            else
-            {
-                _logger.LogInformation($"Thecode for {_selectedPhoto} was wrong");
-                await DisplayAlert("Incorrect Code", "The code you entered is incorrect.", "OK");
-
-            }
         }
 
         private async Task ShowOopsPopup()

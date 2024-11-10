@@ -20,6 +20,9 @@
     <MauiXaml Update="Views\GamePage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="Views\CodeEntryControl.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Views\ResumeAdventurePromptModal.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

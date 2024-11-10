@@ -1,6 +1,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:controls="clr-namespace:ePicSearch.Helpers"
+             xmlns:helpers="clr-namespace:ePicSearch.Helpers"
+             xmlns:controls="clr-namespace:ePicSearch.Views"
              x:Class="ePicSearch.Views.GamePage">
     
     <Grid BackgroundColor="Black">
@@ -173,7 +174,7 @@
                     </Grid>
                 </Grid>
 
-                <controls:NoRippleImageButton Source="back_button.png"
+                <helpers:NoRippleImageButton Source="back_button.png"
                                               WidthRequest="50"
                                               HeightRequest="50"
                                               HorizontalOptions="Start"
@@ -183,6 +184,7 @@
                                               Clicked="OnBackButtonClicked" />
             </Grid>
         </ScrollView>
+        
         <!-- Full-Screen Photo Modal (Initially Hidden) -->
         <ContentView x:Name="PhotoModal"
                      IsVisible="False"
@@ -198,37 +200,47 @@
 
             <Grid VerticalOptions="Center"
                   HorizontalOptions="Center">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
 
-                <Grid.GestureRecognizers>
-                    <TapGestureRecognizer />
-                </Grid.GestureRecognizers>
-                <!-- Full-Screen Photo or Question Mark -->
-                <Image x:Name="FullScreenPhoto"
-                       Aspect="AspectFit"
-                       HorizontalOptions="FillAndExpand"
-                       VerticalOptions="Center" />
+                <Grid x:Name="ModalContentContainer"
+                      VerticalOptions="Center"
+                      HorizontalOptions="Center">
 
-                <!-- Code Entry Overlay when Locked -->
-                <StackLayout x:Name="CodeEntryOverlay"
-                             IsVisible="False"
-                             BackgroundColor="#FFFFFFDD"
-                             Padding="20"
-                             VerticalOptions="End">
-                    <Entry x:Name="FullScreenCodeEntry"
-                           Placeholder="Enter unlock code"
-                           Keyboard="Numeric"
-                           MaxLength="4"
-                           WidthRequest="200" />
-                    <Button Text="Unlock"
-                            Command="{Binding UnlockPhotoCommand}"
-                            CommandParameter="{Binding Text, Source={x:Reference FullScreenCodeEntry}}" />
-                    
-                </StackLayout>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer />
+                    </Grid.GestureRecognizers>
+
+                    <!-- Full-Screen Photo or Question Mark -->
+                    <Image x:Name="FullScreenPhoto"
+                           Aspect="AspectFit"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Grid.Row="0" />
+
+                    <Image Source="code_paper.webp"
+                           x:Name ="CodeEntryBG"
+                           IsVisible="False"
+                           Aspect="AspectFit"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Grid.Row="1" />
+
+                    <!-- Code Entry Overlay when Locked -->
+                    <ContentView x:Name="CodeEntryOverlay"
+                                 IsVisible="False"
+                                 BackgroundColor="Transparent"
+                                 VerticalOptions="Center"
+                                 HorizontalOptions="Center"
+                                 Grid.Row="1">
+                        <controls:CodeEntryControl x:Name="CodeEntryControlInstance" />
+                    </ContentView>
+                </Grid>
+                
                 <ContentView x:Name="OopsPopup"
                              IsVisible="False"
                              BackgroundColor="#00000088"

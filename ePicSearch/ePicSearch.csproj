@@ -77,6 +77,9 @@
 	  <Compile Update="Views\GamePage.xaml.cs">
 	    <DependentUpon>GamePage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\CodeEntryControl.xaml.cs">
+	    <DependentUpon>CodeEntryControl.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\TutorialPage.xaml.cs">
 	    <DependentUpon>TutorialPage.xaml</DependentUpon>
 	  </Compile>
@@ -96,6 +99,9 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\GamePage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\CodeEntryControl.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\ResumeAdventurePromptModal.xaml">

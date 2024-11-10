@@ -1,0 +1,111 @@
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ePicSearch.Views.CodeEntryControl"
+             xmlns:helpers="clr-namespace:ePicSearch.Helpers"
+             x:Name="CodeEntry">
+
+    <Grid VerticalOptions="Center"
+          HorizontalOptions="Center"
+          RowSpacing="2"
+          ColumnSpacing="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <!-- Up buttons -->
+            <RowDefinition Height="Auto" />
+            <!-- Digits with backgrounds -->
+            <RowDefinition Height="Auto" />
+            <!-- Down buttons -->
+            <RowDefinition Height="Auto" />
+            <!-- Enter button -->
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Up arrow ImageButtons -->
+        <CollectionView ItemsSource="{Binding Digits}"
+                        Grid.Row="0"
+                        Grid.ColumnSpan="4"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        SelectionMode="None">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal"
+                                   ItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <helpers:NoRippleImageButton Source="up.webp"
+                                                 Command="{Binding BindingContext.IncreaseDigitCommand, Source={x:Reference CodeEntry}}"
+                                                 CommandParameter="{Binding Index}"
+                                                 WidthRequest="50"
+                                                 HeightRequest="40" />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Digit Images with background -->
+        <CollectionView ItemsSource="{Binding Digits}"
+                        Grid.Row="1"
+                        Grid.ColumnSpan="4"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        SelectionMode="None">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal"
+                                   ItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid WidthRequest="50"
+                          HeightRequest="50">
+                        <!-- Background Image -->
+                        <Image Source="number.webp"
+                               Aspect="AspectFill" />
+
+                        <!-- Digit Label -->
+                        <Label Text="{Binding Value}"
+                               FontSize="Large"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               TextColor="Black" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Down arrow ImageButtons -->
+        <CollectionView ItemsSource="{Binding Digits}"
+                        Grid.Row="2"
+                        Grid.ColumnSpan="4"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        SelectionMode="None">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal"
+                                   ItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <helpers:NoRippleImageButton Source="down.webp"
+                                                 Command="{Binding BindingContext.DecreaseDigitCommand, Source={x:Reference CodeEntry}}"
+                                                 CommandParameter="{Binding Index}"
+                                                 WidthRequest="50"
+                                                 HeightRequest="40" />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Enter button -->
+        <Button Grid.Row="3"
+                Grid.ColumnSpan="4"
+                Text="Enter"
+                Command="{Binding EnterCommand}"
+                HorizontalOptions="Center"
+                VerticalOptions="End"
+                Margin="0,4,0,0" />
+    </Grid>
+</ContentView>
