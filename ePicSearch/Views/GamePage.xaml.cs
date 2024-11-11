@@ -3,6 +3,7 @@ using ePicSearch.Infrastructure.Entities;
 using ePicSearch.Infrastructure.Services;
 using ePicSearch.Services;
 using Microsoft.Extensions.Logging;
+using Microsoft.Maui.Layouts;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -141,19 +142,19 @@ namespace ePicSearch.Views
 
                 if (_photoManager.UpdatePhotoState(_selectedPhoto))
                 {
-                    _photoManager.SyncCache();
 
                     if (_selectedPhoto.IsTreasurePhoto)
                     {
-                        await _audioPlayerService.PlaySoundAsync(SoundLabels.AdventureCompleted);
+                        _audioPlayerService.PlaySoundAsync(SoundLabels.AdventureCompleted);
                     }
                     else
                     {
-                        await _audioPlayerService.PlaySoundAsync(SoundLabels.PhotoUnlocked);
+                        _audioPlayerService.PlaySoundAsync(SoundLabels.PhotoUnlocked);
                     }
+                    await AnimateStarsExplosion();
 
+                    _photoManager.SyncCache();
                     _logger.LogInformation($"The photo with code {code} was successfully unlocked");
-                    await DisplayAlert("Correct", "You have unlocked the photo!", "OK");
                 }
                 else
                 {
@@ -172,6 +173,33 @@ namespace ePicSearch.Views
             }
         }
 
+        private async Task AnimateStarsExplosion()
+        {
+            CompletionImage.IsVisible = true;
+            CompletionImage.Scale = 0.5;
+            CompletionImage.Opacity = 100;
+            CompletionImage.AnchorX = 0.5;
+            CompletionImage.AnchorY = 0.5;
+
+            int totalDuration = 1500;
+
+            // Animate the image to scale up and rotate
+            var scaleTask = CompletionImage.ScaleTo(2.0, (uint)totalDuration, Easing.CubicOut);
+            var rotationTask = CompletionImage.RotateTo(360, (uint)totalDuration, Easing.Linear);
+
+            int fadeOutDelay = (int)(totalDuration * 0.75);
+            uint fadeOutDuration = (uint)(totalDuration * 0.25);
+
+            var fadeOutTask = Task.Run(async () =>
+            {
+                await Task.Delay(fadeOutDelay);
+                await CompletionImage.FadeTo(0, fadeOutDuration, Easing.CubicIn);
+            });
+
+            await Task.WhenAll(scaleTask, rotationTask, fadeOutTask);
+
+            CompletionImage.IsVisible = false;
+        }
 
         private void ShowPhoto(PhotoInfo photoInfo)
         {
@@ -196,18 +224,6 @@ namespace ePicSearch.Views
 
             // Display the modal
             PhotoModal.IsVisible = true;
-        }
-
-        private async Task ShowOopsPopup()
-        {
-            OopsPopup.IsVisible = true;
-
-            await OopsPopup.FadeTo(1, 250);
-
-            await Task.Delay(1000);
-
-            await OopsPopup.FadeTo(0, 250);
-            OopsPopup.IsVisible = false;
         }
 
         private async void OnBackButtonClicked(object sender, EventArgs e)

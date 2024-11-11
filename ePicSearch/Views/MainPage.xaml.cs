@@ -132,9 +132,8 @@ namespace ePicSearch.Views
 
         private async void ClickButton(object sender)
         {
-            await Task.WhenAll(
-            AnimationHelper.AnimatePress((View)sender),
-            _audioPlayerService.PlaySoundAsync(SoundLabels.ButtonPress));
+            _audioPlayerService.PlaySoundAsync(SoundLabels.ButtonPress);
+            await AnimationHelper.AnimatePress((View)sender);
         }
     }
 }

@@ -166,27 +166,33 @@ public partial class CameraPage : ContentPage
         };
         (Content as Grid)?.Children.Add(flashOverlay);
 
+
         await Task.WhenAll(
-            _audioPlayerService.PlaySoundAsync(SoundLabels.AdventureCompleted),
-            CompletionImage.FadeTo(1, 100),                       // Quick fade-in
-            CompletionImage.ScaleTo(1.5, 150, Easing.CubicOut),    // Strong pop to 1.5 scale
+            CompletionImage.FadeTo(1, 100),
+            CompletionImage.ScaleTo(1.5, 150, Easing.CubicOut),
             flashOverlay.FadeTo(0.8, 50),
             flashOverlay.FadeTo(0, 100)
         );
         (Content as Grid)?.Children.Remove(flashOverlay);
 
-        await CompletionImage.ScaleTo(0.9, 100, Easing.CubicIn);   // Slight shrink back
-        await CompletionImage.ScaleTo(1.1, 80, Easing.BounceOut);  // Small bounce up
-        await CompletionImage.ScaleTo(1, 80, Easing.BounceIn);     // Settle to normal scale
+        _audioPlayerService.PlaySoundAsync(SoundLabels.AdventureCompleted);
 
-        await Task.Delay(200);
+        await CompletionImage.ScaleTo(0.9, 100, Easing.CubicIn);
+        await CompletionImage.ScaleTo(1.1, 80, Easing.BounceOut);
+        await CompletionImage.ScaleTo(1, 80, Easing.BounceIn);
 
-        // Navigate back to the main page or adventures list
-        await Navigation.PopToRootAsync();
+        CompletionTitle.IsVisible = true;
+        await CompletionTitle.ScaleTo(1.5, 80, Easing.Linear);
+        await CompletionTitle.ScaleTo(1.0, 80, Easing.Linear);
 
-        await Task.Delay(250);
+        await Task.Delay(400);
+
         await CompletionImage.FadeTo(0, 250);
-        CompletionImage.IsVisible = false; 
+        await CompletionTitle.FadeTo(0, 250);
+        CompletionImage.IsVisible = false;
+        CompletionTitle.IsVisible = false;
+
+        await Navigation.PopToRootAsync();
     }
 
 

@@ -8,7 +8,7 @@ namespace ePicSearch.Services
     public class AudioPlayerService
     {
         private readonly IAudioManager _audioManager;
-        private IAudioPlayer _currentPlayer = null;
+        private readonly object _playerLock = new object();
         private readonly ILogger<AudioPlayerService> _logger;
 
         public AudioPlayerService(ILogger<AudioPlayerService> logger)
@@ -21,27 +21,23 @@ namespace ePicSearch.Services
         {
             try
             {
-                if (_currentPlayer != null && _currentPlayer.IsPlaying)
-                {
-                    _currentPlayer.Stop();
-                    _currentPlayer.Dispose();
-                    _currentPlayer = null;
-                }
+                IAudioPlayer player = null;
 
                 var audioFile = await FileSystem.OpenAppPackageFileAsync(audioFileName);
-                _currentPlayer = _audioManager.CreatePlayer(audioFile);
-                _currentPlayer.Loop = false;
-                _currentPlayer.Play();
+                player = _audioManager.CreatePlayer(audioFile);
+                player.Loop = false;
+
+                // Subscribe to the PlaybackEnded event for cleanup
+                player.PlaybackEnded += (sender, args) =>
+                {
+                    player.Dispose();
+                    _logger.LogInformation($"Audio playback ended and resources disposed for {audioFileName}.");
+                };
+
+                // Start playing the audio
+                player.Play();
                 _logger.LogInformation($"Playing audio: {audioFileName}");
 
-                // Wait for audio to finish
-                while (_currentPlayer.IsPlaying)
-                {
-                    await Task.Delay(100);
-                }
-
-                _currentPlayer.Dispose();
-                _currentPlayer = null;
             }
             catch (Exception ex)
             {

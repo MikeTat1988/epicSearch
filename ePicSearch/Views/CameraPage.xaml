@@ -259,11 +259,26 @@
         </ContentView>
         
         <!-- final Photo -->
-        <Image x:Name="CompletionImage"
-               Source="adventure_created.webp"
-               Opacity="0"
-               IsVisible="False"
-               HorizontalOptions="Center"
-               VerticalOptions="Center" />
+        <StackLayout x:Name="CompletionStack"
+                     HorizontalOptions="Center"
+                     VerticalOptions="Center"
+                     Spacing="10">
+            <Image x:Name="CompletionImage"
+                   Source="adventure_created.webp"
+                   Opacity="0"
+                   IsVisible="False"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+
+            <Label x:Name="CompletionTitle"
+                   Text="Adventure Created!"
+                   FontFamily="LuckiestGuy"
+                   FontSize="30"
+                   TextColor="White"
+                   Opacity="1"
+                   IsVisible="False"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+        </StackLayout>
     </Grid>
 </ContentPage>

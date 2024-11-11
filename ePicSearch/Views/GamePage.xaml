@@ -216,8 +216,8 @@
                   HorizontalOptions="Center">
 
                 <Grid x:Name="ModalContentContainer"
-                      VerticalOptions="Center"
-                      HorizontalOptions="Center">
+                      VerticalOptions="FillAndExpand"
+                      HorizontalOptions="FillAndExpand">
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -237,7 +237,7 @@
                            Grid.Row="0" />
 
                     <Image Source="code_paper.webp"
-                           x:Name ="CodeEntryBG"
+                           x:Name="CodeEntryBG"
                            IsVisible="False"
                            Aspect="AspectFit"
                            HorizontalOptions="Center"
@@ -254,18 +254,15 @@
                         <controls:CodeEntryControl x:Name="CodeEntryControlInstance" />
                     </ContentView>
                 </Grid>
-                
-                <ContentView x:Name="OopsPopup"
-                             IsVisible="False"
-                             BackgroundColor="#00000088"
-                             VerticalOptions="Center"
-                             HorizontalOptions="Center"
-                             Opacity="0">
-                    <Image Source="oops_character.webp"
-                           WidthRequest="200"
-                           HeightRequest="200" />
-                </ContentView>
             </Grid>
         </ContentView>
+
+        <Image x:Name="CompletionImage"
+               Source="star.webp"
+               Opacity="0"
+               IsVisible="False"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"/>
+
     </Grid>
 </ContentPage>
