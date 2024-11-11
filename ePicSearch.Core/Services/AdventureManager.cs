@@ -159,5 +159,16 @@ namespace ePicSearch.Infrastructure.Services
             var photos = _dataStorageService.GetPhotosForAdventure(adventureName);
             return photos.Select(p => p.SerialNumber).DefaultIfEmpty(0).Max() + 1;
         }
+
+        public bool GetCrashFlag()
+        {
+            return _dataStorageService.GetCrashFlag();
+        }
+
+        public void SetCrashFlag(bool value)
+        {
+            _dataStorageService.SetCrashFlag(value);
+            _dataStorageService.SyncCacheToFile();
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace ePicSearch.Views
     {
         private readonly AdventureManager _adventureManager;
         private readonly ILogger<MainPage> _logger;
+        private readonly CrashLogHelper _crashLogHelper;
         private bool _isBlurred = false;
 
         public MainPage(AdventureManager adventureMAnager, ILogger<MainPage> logger)
@@ -16,6 +17,7 @@ namespace ePicSearch.Views
             InitializeComponent();
             _adventureManager = adventureMAnager;
             _logger = logger;
+            _crashLogHelper = new CrashLogHelper(_adventureManager);
 
             Appearing += MainPage_Appearing;
             _logger.LogInformation("MainPage initialized.");
@@ -23,6 +25,8 @@ namespace ePicSearch.Views
 
         private async void MainPage_Appearing(object? sender, EventArgs e)
         {
+            await _crashLogHelper.HandleAppCrashAsync();
+
             if (!_isBlurred)
             {
                 // Display the background for 1 second

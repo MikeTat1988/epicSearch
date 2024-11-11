@@ -14,6 +14,7 @@ namespace ePicSearch.Infrastructure.Services
 
         private List<PhotoInfo> _photoCache;
         private List<AdventureData> _adventureCache;
+        private Settings _appSettings;      
         private bool _isCacheDirty = false;
 
         public DataStorageService(IFileSystemService fileSystemService, ILogger<DataStorageService> logger)
@@ -37,6 +38,8 @@ namespace ePicSearch.Infrastructure.Services
                     _logger.LogWarning($"JSON file not found. Initializing with empty data store.");
                     _photoCache = new List<PhotoInfo>();
                     _adventureCache = new List<AdventureData>();
+                    _appSettings = new Settings();
+                    return;
                 }
 
                 try
@@ -46,14 +49,16 @@ namespace ePicSearch.Infrastructure.Services
 
                     _photoCache = dataStore.Photos ?? new List<PhotoInfo>();
                     _adventureCache = dataStore.Adventures ?? new List<AdventureData>();
+                    _appSettings = dataStore.AppSettings ?? new Settings();
 
-                    _logger.LogInformation($"Loaded {_photoCache.Count} photos and {_adventureCache.Count} adventures from JSON.");
+                    _logger.LogInformation($"Loaded {_photoCache.Count} photos and {_adventureCache.Count} adventures, and settings from JSON.");
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error loading data from JSON.");
                     _photoCache = new List<PhotoInfo>();
                     _adventureCache = new List<AdventureData>();
+                    _appSettings = new Settings();
                 }
             }
         }
@@ -157,7 +162,8 @@ namespace ePicSearch.Infrastructure.Services
                     var data = new DataStore
                     {
                         Photos = _photoCache,
-                        Adventures = _adventureCache
+                        Adventures = _adventureCache,
+                        AppSettings = _appSettings
                     };
 
                     var json = JsonConvert.SerializeObject(data, Formatting.Indented);
@@ -169,6 +175,40 @@ namespace ePicSearch.Infrastructure.Services
                 {
                     _logger.LogError(ex, "Error syncing cache to JSON.");
                 }
+            }
+        }
+
+        public Settings GetSettings()
+        {
+            lock (_cacheLock)
+            {
+                return _appSettings;
+            }
+        }
+
+        public void UpdateSettings(Settings updatedSettings)
+        {
+            lock (_cacheLock)
+            {
+                _appSettings = updatedSettings;
+                _isCacheDirty = true;
+            }
+        }
+
+        public bool GetCrashFlag()
+        {
+            lock (_cacheLock)
+            {
+                return _appSettings.CrashFlag;
+            }
+        }
+
+        public void SetCrashFlag(bool value)
+        {
+            lock (_cacheLock)
+            {
+                _appSettings.CrashFlag = value;
+                _isCacheDirty = true;
             }
         }
 
