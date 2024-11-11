@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using ePicSearch.Labels;
 using Microsoft.Maui;
 using ePicSearch.Helpers;
+using ePicSearch.Services;
 
 namespace ePicSearch.Views
 {
@@ -11,19 +12,19 @@ namespace ePicSearch.Views
     {
         public readonly List<TutorialStep> _tutorialSteps;
 
-        private int _currentStepIndex = -1; 
-        private readonly IAudioManager _audioManager;
+        private int _currentStepIndex = -1;
+        private readonly AudioPlayerService _audioPlayerService;
+
         private readonly Random _random = new Random();
-        private IAudioPlayer _currentPlayer = null;
         private readonly ILogger<MainPage> _logger;
         private readonly double _screenWidth;
         private readonly double _screenHeight;
 
-        public TutorialPage(ILogger<MainPage> logger)
+        public TutorialPage(ILogger<MainPage> logger, AudioPlayerService audioPlayerService)
         {
             InitializeComponent();
 
-            _audioManager = AudioManager.Current;
+            _audioPlayerService = audioPlayerService;
             _logger = logger;
 
             _tutorialSteps = InitializeTutorialSteps();
@@ -46,13 +47,6 @@ namespace ePicSearch.Views
         {
             await AnimationHelper.AnimatePress((View)sender);
 
-            if (_currentPlayer != null && _currentPlayer.IsPlaying)
-            {
-                _currentPlayer.Stop();
-                _currentPlayer.Dispose();
-                _currentPlayer = null;
-            }
-
             if (_currentStepIndex < _tutorialSteps.Count - 1)
             {
                 await AnimateNextStep();
@@ -66,13 +60,6 @@ namespace ePicSearch.Views
         public async void OnExitButtonClicked(object sender, EventArgs e)
         {
             await AnimationHelper.AnimatePress((View)sender);
-
-            if (_currentPlayer != null && _currentPlayer.IsPlaying)
-            {
-                _currentPlayer.Stop();
-                _currentPlayer.Dispose();
-                _currentPlayer = null;
-            }
 
             _logger.LogInformation("Exit button clicked. Navigating back to Main Page.");
             await Navigation.PopAsync(); 
@@ -155,6 +142,11 @@ namespace ePicSearch.Views
             }
         }
 
+        private async Task PlaySound(string audioFileName)
+        {
+            await _audioPlayerService.PlaySoundAsync(audioFileName);
+        }
+
         private Label CreateAnimatedLabel(int stepIndex)
         {
             return new Label
@@ -169,39 +161,6 @@ namespace ePicSearch.Views
                 WidthRequest = _screenWidth * 0.8,
                 Opacity = 0
             };
-        }
-
-        private async Task PlaySound(string audioFileName)
-        {
-            if (_currentPlayer != null && _currentPlayer.IsPlaying)
-            {
-                _currentPlayer.Stop();
-                _currentPlayer.Dispose();
-                _currentPlayer = null;
-            }
-
-            try
-            {
-                var audioFile = await FileSystem.OpenAppPackageFileAsync(audioFileName);
-                _currentPlayer = _audioManager.CreatePlayer(audioFile);
-                _currentPlayer.Loop = false;
-                _currentPlayer.Play();
-                _logger.LogInformation($"Playing audio: {audioFileName}");
-
-                // Wait for the audio to finish playing
-                while (_currentPlayer.IsPlaying)
-                {
-                    await Task.Delay(100);
-                }
-
-                _currentPlayer.Dispose();
-                _currentPlayer = null;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error playing audio '{audioFileName}': {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"Error playing audio '{audioFileName}': {ex.Message}");
-            }
         }
 
         private void HandleEndOfTutorial()

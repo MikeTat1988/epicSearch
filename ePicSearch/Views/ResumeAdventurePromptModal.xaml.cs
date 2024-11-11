@@ -1,6 +1,7 @@
 using ePicSearch.Helpers;
 using ePicSearch.Infrastructure.Entities;
 using ePicSearch.Infrastructure.Services;
+using ePicSearch.Services;
 using System.Threading;
 
 namespace ePicSearch.Views
@@ -11,6 +12,7 @@ namespace ePicSearch.Views
 
         private AdventureData _adventureData;
         private AdventureManager _adventureManager;
+        private AudioPlayerService _audioPlayerService;
         private CancellationTokenSource _cts;
 
         public ResumeAdventurePromptModal()
@@ -18,10 +20,11 @@ namespace ePicSearch.Views
             InitializeComponent();
         }
 
-        public void Initialize(AdventureData adventureData, AdventureManager adventureManager)
+        public void Initialize(AdventureData adventureData, AdventureManager adventureManager, AudioPlayerService audioPlayerService)
         {
             _adventureData = adventureData;
             _adventureManager = adventureManager;
+            _audioPlayerService = audioPlayerService;
             AdventureInfoLabel.Text = $"Photos Taken: {adventureData.PhotoCount}, Last Code: {adventureData.LastPhotoCode}";
         }
 
@@ -33,7 +36,7 @@ namespace ePicSearch.Views
 
             // Close the modal and navigate to CameraPage to continue adventure
             this.IsVisible = false;
-            await Application.Current.MainPage.Navigation.PushAsync(new CameraPage(_adventureData, _adventureManager));
+            await Application.Current.MainPage.Navigation.PushAsync(new CameraPage(_adventureData, _adventureManager, _audioPlayerService));
         }
 
         private async void OnExitButtonPressed(object sender, EventArgs e)

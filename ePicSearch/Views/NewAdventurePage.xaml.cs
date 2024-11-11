@@ -1,22 +1,26 @@
 using ePicSearch.Infrastructure.Services;
 using ePicSearch.Infrastructure.Entities;
 using ePicSearch.Helpers;
+using ePicSearch.Services;
+using ePicSearch.Entities;
 
 namespace ePicSearch.Views
 {
     public partial class NewAdventurePage : ContentPage
     {
         private readonly AdventureManager _adventureManager;
+        private readonly AudioPlayerService _audioPlayerService;
 
-        public NewAdventurePage(AdventureManager adventureManager)
+        public NewAdventurePage(AdventureManager adventureManager, AudioPlayerService audioPlayerService)
         {
             InitializeComponent();
             _adventureManager = adventureManager;
+            this._audioPlayerService = audioPlayerService;
         }
 
         private async void OnStartCreatingClicked(object sender, EventArgs e)
         {
-            await AnimationHelper.AnimatePress((View)sender);
+            ClickButton(sender);
 
             var adventureName = await GetValidAdventureNameAsync();
 
@@ -36,7 +40,7 @@ namespace ePicSearch.Views
 
             _adventureManager.AddAdventure(adventureData);
 
-            await Navigation.PushAsync(new CameraPage(adventureData, _adventureManager));
+            await Navigation.PushAsync(new CameraPage(adventureData, _adventureManager, _audioPlayerService));
         }
 
         private async Task<string?> GetValidAdventureNameAsync()
@@ -66,12 +70,19 @@ namespace ePicSearch.Views
 
         private async void OnBackButtonClicked(object sender, EventArgs e)
         {
-            await AnimationHelper.AnimatePress((View)sender);
+            ClickButton(sender);
 
             if (Navigation.NavigationStack.Count > 1)
             {
                 await Navigation.PopAsync();
             }
+        }
+
+        private async void ClickButton(object sender)
+        {
+            await Task.WhenAll(
+            AnimationHelper.AnimatePress((View)sender),
+            _audioPlayerService.PlaySoundAsync(SoundLabels.ButtonPress));
         }
     }
 }

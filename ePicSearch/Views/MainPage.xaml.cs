@@ -2,22 +2,26 @@
 using ePicSearch.Infrastructure.Services;
 using Microsoft.Extensions.Logging;
 using ePicSearch.Helpers;
+using ePicSearch.Services;
+using ePicSearch.Entities;
 
 namespace ePicSearch.Views
 {
     public partial class MainPage : ContentPage
     {
         private readonly AdventureManager _adventureManager;
+        private readonly AudioPlayerService _audioPlayerService;
         private readonly ILogger<MainPage> _logger;
         private readonly CrashLogHelper _crashLogHelper;
         private bool _isBlurred = false;
 
-        public MainPage(AdventureManager adventureMAnager, ILogger<MainPage> logger)
+        public MainPage(AdventureManager adventureMAnager, ILogger<MainPage> logger, AudioPlayerService audioPlayerService)
         {
             InitializeComponent();
             _adventureManager = adventureMAnager;
             _logger = logger;
             _crashLogHelper = new CrashLogHelper(_adventureManager);
+            _audioPlayerService = audioPlayerService;
 
             Appearing += MainPage_Appearing;
             _logger.LogInformation("MainPage initialized.");
@@ -66,35 +70,35 @@ namespace ePicSearch.Views
 
         private async void OnSettingsClicked(object sender, EventArgs e)
         {
-            await AnimationHelper.AnimatePress((View)sender);
+            ClickButton(sender);
 
             await Navigation.PushAsync(new SettingsPage());
         }
 
         private async void OnMyAdventuresClicked(object sender, EventArgs e)
         {
-            await AnimationHelper.AnimatePress((View)sender);
+            ClickButton(sender);
 
-            await Navigation.PushAsync(new MyAdventuresPage(_adventureManager, _logger));
+            await Navigation.PushAsync(new MyAdventuresPage(_adventureManager, _logger, _audioPlayerService));
         }
         
         private async void OnTutorialClicked(object sender, EventArgs e)
         {
-            await AnimationHelper.AnimatePress((View)sender);
+            ClickButton(sender);
 
-            await Navigation.PushAsync(new TutorialPage(_logger));
+            await Navigation.PushAsync(new TutorialPage(_logger, _audioPlayerService));
         }
 
         private async void OnCreateNewAdventureClicked(object sender, EventArgs e)
         {
-            await AnimationHelper.AnimatePress((View)sender);
+            ClickButton(sender);
 
-            await Navigation.PushAsync(new NewAdventurePage(_adventureManager));
+            await Navigation.PushAsync(new NewAdventurePage(_adventureManager, _audioPlayerService));
         }
 
         private async void OnQuitClicked(object sender, EventArgs e)
         {
-            await AnimationHelper.AnimatePress((View)sender);
+            ClickButton(sender);
 
             Application.Current?.Quit();
         }
@@ -106,7 +110,7 @@ namespace ePicSearch.Views
             if (incompleteAdventure != null)
             {
                 _logger.LogInformation("Incomplete adventure found: " + incompleteAdventure.AdventureName);
-                ResumePromptModal.Initialize(incompleteAdventure, _adventureManager);
+                ResumePromptModal.Initialize(incompleteAdventure, _adventureManager, _audioPlayerService);
 
                 ResumePromptModal.ModalClosed += ResumePromptModal_ModalClosed;
 
@@ -124,6 +128,13 @@ namespace ePicSearch.Views
             ResumePromptModal.ModalClosed -= ResumePromptModal_ModalClosed;
 
             ResumeAdventureModal.IsVisible = false;
+        }
+
+        private async void ClickButton(object sender)
+        {
+            await Task.WhenAll(
+            AnimationHelper.AnimatePress((View)sender),
+            _audioPlayerService.PlaySoundAsync(SoundLabels.ButtonPress));
         }
     }
 }

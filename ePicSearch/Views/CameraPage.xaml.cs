@@ -2,21 +2,24 @@ using ePicSearch.Entities;
 using ePicSearch.Helpers;
 using ePicSearch.Infrastructure.Entities;
 using ePicSearch.Infrastructure.Services;
+using ePicSearch.Services;
 namespace ePicSearch.Views;
 
 public partial class CameraPage : ContentPage
 {
     private AdventureData _localAdventureData;
     private readonly AdventureManager _adventureManager;
+    private readonly AudioPlayerService _audioPlayerService;
     private CancellationTokenSource _cts;
     private ProgressBar? _currentLongPressProgress;
 
-    public CameraPage(AdventureData adventureData, AdventureManager adventureManager)
+    public CameraPage(AdventureData adventureData, AdventureManager adventureManager, AudioPlayerService audioPlayerService)
     {
         InitializeComponent();
 
         _localAdventureData = new AdventureData(adventureData);
         _adventureManager = adventureManager;
+        _audioPlayerService = audioPlayerService;
 
         TreasureNextClueButton.Pressed += OnButtonPressed;
         TreasureNextClueButton.Released += OnButtonReleased;
@@ -164,6 +167,7 @@ public partial class CameraPage : ContentPage
         (Content as Grid)?.Children.Add(flashOverlay);
 
         await Task.WhenAll(
+            _audioPlayerService.PlaySoundAsync(SoundLabels.AdventureCompleted),
             CompletionImage.FadeTo(1, 100),                       // Quick fade-in
             CompletionImage.ScaleTo(1.5, 150, Easing.CubicOut),    // Strong pop to 1.5 scale
             flashOverlay.FadeTo(0.8, 50),
@@ -175,7 +179,7 @@ public partial class CameraPage : ContentPage
         await CompletionImage.ScaleTo(1.1, 80, Easing.BounceOut);  // Small bounce up
         await CompletionImage.ScaleTo(1, 80, Easing.BounceIn);     // Settle to normal scale
 
-        await Task.Delay(800);
+        await Task.Delay(200);
 
         // Navigate back to the main page or adventures list
         await Navigation.PopToRootAsync();

@@ -52,6 +52,7 @@ namespace ePicSearch
                 .AddSingleton<CodeGenerator>()
                 .AddSingleton<AdventureManager>()
                 .AddSingleton<MainPage>()
+                .AddSingleton<AudioPlayerService>()
                 .AddSingleton<AppShell>();
 
             builder.Logging.AddSerilog();

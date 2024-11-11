@@ -1,5 +1,7 @@
+using ePicSearch.Entities;
 using ePicSearch.Helpers;
 using ePicSearch.Infrastructure.Services;
+using ePicSearch.Services;
 using Microsoft.Extensions.Logging;
 
 namespace ePicSearch.Views
@@ -9,17 +11,17 @@ namespace ePicSearch.Views
         private readonly AdventureManager _adventureManager;
         private readonly ILogger<MainPage> _logger;
 
-        // Use Dependency Injection to provide PhotoManager instance
-        public MyAdventuresPage(AdventureManager photoManager, ILogger<MainPage> logger)
+        private readonly AudioPlayerService _audioPlayerService;
+
+        public MyAdventuresPage(AdventureManager photoManager, ILogger<MainPage> logger, AudioPlayerService audioPlayerService)
         {
             InitializeComponent();
             _adventureManager = photoManager;
             _logger = logger;
-
+            _audioPlayerService = audioPlayerService;
             LoadAdventures();
         }
 
-        // Load adventures from JSON to display in the UI
         private void LoadAdventures()
         {
             _logger.LogInformation($"Attempting to load all adventures");
@@ -50,11 +52,11 @@ namespace ePicSearch.Views
             {
                 var parentContainer = button.Parent as VisualElement;
 
-                await AnimationHelper.AnimatePress((View)parentContainer);
+                ClickButton(parentContainer);
 
                 _logger.LogInformation($"Attempting to play adventure {adventureName}");
 
-                await Navigation.PushAsync(new GamePage(adventureName, _logger, _adventureManager));
+                await Navigation.PushAsync(new GamePage(adventureName, _logger, _adventureManager, _audioPlayerService));
             }
         }
 
@@ -65,7 +67,7 @@ namespace ePicSearch.Views
             {
                 var parentContainer = button.Parent as VisualElement;
 
-                await AnimationHelper.AnimatePress((View)parentContainer);
+                ClickButton(parentContainer);
 
                 bool confirm = await DisplayAlert($"Confirm delete {adventureName}", null, "Yes", "No");
                 if (confirm)
@@ -146,12 +148,19 @@ namespace ePicSearch.Views
 
         private async void OnBackButtonClicked(object sender, EventArgs e)
         {
-            await AnimationHelper.AnimatePress((View)sender);
+            ClickButton((View)sender);
 
             if (Navigation.NavigationStack.Count > 1)
             {
                 await Navigation.PopAsync();
             }
+        }
+
+        private async void ClickButton(object sender)
+        {
+            await Task.WhenAll(
+            AnimationHelper.AnimatePress((View)sender),
+            _audioPlayerService.PlaySoundAsync(SoundLabels.ButtonPress));
         }
     }
 }

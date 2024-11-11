@@ -1,5 +1,7 @@
+using ePicSearch.Entities;
 using ePicSearch.Infrastructure.Entities;
 using ePicSearch.Infrastructure.Services;
+using ePicSearch.Services;
 using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -14,11 +16,13 @@ namespace ePicSearch.Views
         public ObservableCollection<object> BackgroundScrolls { get; private set; }
         public string AdventureName { get; private set; }
 
+        private readonly AudioPlayerService _audioPlayerService;
+
         private readonly ILogger<MainPage> _logger;
         private readonly AdventureManager _photoManager;
         private PhotoInfo? _selectedPhoto;
 
-        public GamePage(string adventureName, ILogger<MainPage> logger, AdventureManager photoManager)
+        public GamePage(string adventureName, ILogger<MainPage> logger, AdventureManager photoManager, AudioPlayerService audioPlayerService)
 		{
 			InitializeComponent();
 
@@ -26,6 +30,8 @@ namespace ePicSearch.Views
             AdventureName = adventureName;
 			Photos = new ObservableCollection<PhotoInfo>();
             BackgroundScrolls = new ObservableCollection<object>();
+
+            _audioPlayerService = audioPlayerService;
 
             ShowPhotoCommand = new Command<PhotoInfo>(ShowPhoto);
             CloseModalCommand = new Command(CloseModal);
@@ -74,7 +80,7 @@ namespace ePicSearch.Views
 
         }
 
-        private void CalculateAndPopulateBackgroundScrolls(double pageHeight)
+        private async void CalculateAndPopulateBackgroundScrolls(double pageHeight)
         {
             BackgroundScrolls.Clear();
 
@@ -101,8 +107,8 @@ namespace ePicSearch.Views
             }
 
             _logger.LogInformation($"added {BackgroundScrolls.Count} background scroll tiles.");
-                
-            
+
+            await _audioPlayerService.PlaySoundAsync(SoundLabels.ScrolSound);
             RefreshPhotoView();
         }
 
@@ -136,6 +142,16 @@ namespace ePicSearch.Views
                 if (_photoManager.UpdatePhotoState(_selectedPhoto))
                 {
                     _photoManager.SyncCache();
+
+                    if (_selectedPhoto.IsTreasurePhoto)
+                    {
+                        await _audioPlayerService.PlaySoundAsync(SoundLabels.AdventureCompleted);
+                    }
+                    else
+                    {
+                        await _audioPlayerService.PlaySoundAsync(SoundLabels.PhotoUnlocked);
+                    }
+
                     _logger.LogInformation($"The photo with code {code} was successfully unlocked");
                     await DisplayAlert("Correct", "You have unlocked the photo!", "OK");
                 }
