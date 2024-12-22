@@ -1,0 +1,15 @@
+# Ignore Visual Studio temporary files, build results, and
+# user-specific files
+.vs/
+bin/
+obj/
+ePicSearch/Logs/
+Project_Structure.docx
+generate_project_doc.exe
+generate_project_doc.py
+Logs/*.txt
+
+
+# Ignore Xamarin specific files
+.DS_Store
+*.userprefs
