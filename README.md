@@ -91,6 +91,7 @@
 
 2. Open the project in Visual Studio.
 3. Build and run the app on an Android device or emulator.
+4. You can extract the last log file from the emulated device by running the Logs/PullLogs.exe
 
 ## Future Improvements
 
