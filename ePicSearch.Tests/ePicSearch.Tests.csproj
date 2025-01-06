@@ -16,7 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\ePicSearch.Core\ePicSearch.Infrastructure.csproj" />
+		<ProjectReference Include="..\ePicSearch.Common\ePicSearch.Common.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
