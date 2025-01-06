@@ -11,17 +11,19 @@ namespace ePicSearch.Views
     {
         private readonly AdventureManager _adventureManager;
         private readonly AudioPlayerService _audioPlayerService;
+        private readonly AdventureNameGenerator _nameGenerator;
         private readonly ILogger<MainPage> _logger;
         private readonly CrashLogHelper _crashLogHelper;
         private bool _isBlurred = false;
 
-        public MainPage(AdventureManager adventureMAnager, ILogger<MainPage> logger, AudioPlayerService audioPlayerService)
+        public MainPage(AdventureManager adventureMAnager, ILogger<MainPage> logger, AudioPlayerService audioPlayerService, AdventureNameGenerator nameGenerator)
         {
             InitializeComponent();
             _adventureManager = adventureMAnager;
             _logger = logger;
             _crashLogHelper = new CrashLogHelper(_adventureManager);
             _audioPlayerService = audioPlayerService;
+            _nameGenerator = nameGenerator;
 
             Appearing += MainPage_Appearing;
             _logger.LogInformation("MainPage initialized.");
@@ -93,7 +95,7 @@ namespace ePicSearch.Views
         {
             ClickButton(sender);
 
-            await Navigation.PushAsync(new NewAdventurePage(_adventureManager, _audioPlayerService));
+            await Navigation.PushAsync(new NewAdventurePage(_adventureManager, _audioPlayerService, _nameGenerator));
         }
 
         private async void OnQuitClicked(object sender, EventArgs e)

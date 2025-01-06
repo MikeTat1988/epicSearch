@@ -9,13 +9,17 @@ namespace ePicSearch.Views
     public partial class NewAdventurePage : ContentPage
     {
         private readonly AdventureManager _adventureManager;
+        private readonly AdventureNameGenerator _nameGenerator;
         private readonly AudioPlayerService _audioPlayerService;
 
-        public NewAdventurePage(AdventureManager adventureManager, AudioPlayerService audioPlayerService)
+        public NewAdventurePage(AdventureManager adventureManager, AudioPlayerService audioPlayerService, AdventureNameGenerator nameGenerator)
         {
             InitializeComponent();
             _adventureManager = adventureManager;
-            this._audioPlayerService = audioPlayerService;
+            _nameGenerator = nameGenerator;
+            _audioPlayerService = audioPlayerService;
+
+            AdventureNameEntry.Text = _nameGenerator.GenerateUniqueName();
         }
 
         private async void OnStartCreatingClicked(object sender, EventArgs e)

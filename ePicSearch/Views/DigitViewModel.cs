@@ -18,7 +18,7 @@ namespace ePicSearch.Views
             }
         }
 
-        public int Index { get; set; }  // Identifies the digit's position
+        public int Index { get; set; } 
 
         public event PropertyChangedEventHandler PropertyChanged;
 
