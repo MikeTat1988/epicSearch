@@ -12,6 +12,8 @@ namespace ePicSearch
 {
     public static class MauiProgram
     {
+        public static MauiApp AppInstance { get; private set; }
+
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
@@ -31,6 +33,7 @@ namespace ePicSearch
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
+                .UseMauiCommunityToolkitMediaElement()
                 .ConfigureMauiHandlers(handlers =>
                 {
                     // Register the custom handler for ImageButton
@@ -62,7 +65,9 @@ namespace ePicSearch
             builder.Logging.AddDebug();
 #endif
 
-            return builder.Build();
+            var app = builder.Build();
+            AppInstance = app;
+            return app;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ePicSearch.Infrastructure.Services;
+using ePicSearch.Views;
 
 namespace ePicSearch
 {
@@ -12,7 +13,15 @@ namespace ePicSearch
             InitializeComponent();
             
             _adventureManager = adventureManager;
-            MainPage = appShell;
+
+            if (_adventureManager.PlayStartupVideo)
+            {
+                MainPage = new StartupVideoPage();
+            }
+            else
+            {
+                MainPage = appShell;
+            }
 
             Task.Run(async () => await _adventureManager.RemoveInvalidAdventuresAsync());
 

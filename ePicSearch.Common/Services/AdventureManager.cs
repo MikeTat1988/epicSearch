@@ -184,5 +184,19 @@ namespace ePicSearch.Infrastructure.Services
                 _dataStorageService.UpdateSettings(currentSettings);
             }
         }
+
+        public bool PlayStartupVideo
+        {
+            get
+            {
+                return _dataStorageService.GetSettings().PlayStartupVideo;
+            }
+            set
+            {
+                var currentSettings = _dataStorageService.GetSettings();
+                currentSettings.PlayStartupVideo = value;
+                _dataStorageService.UpdateSettings(currentSettings);
+            }
+        }
     }
 }
