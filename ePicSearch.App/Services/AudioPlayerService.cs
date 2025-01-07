@@ -1,24 +1,27 @@
-﻿using Plugin.Maui.Audio;
+﻿using ePicSearch.Infrastructure.Services;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
+using Plugin.Maui.Audio;
 
 namespace ePicSearch.Services
 {
     public class AudioPlayerService
     {
         private readonly IAudioManager _audioManager;
-        private readonly object _playerLock = new object();
         private readonly ILogger<AudioPlayerService> _logger;
+        private readonly AdventureManager _adventureManager;
 
-        public AudioPlayerService(ILogger<AudioPlayerService> logger)
+        public AudioPlayerService(ILogger<AudioPlayerService> logger, AdventureManager adventureManager)
         {
             _audioManager = AudioManager.Current;
             _logger = logger;
+            _adventureManager = adventureManager;
         }
 
         public async Task PlaySoundAsync(string audioFileName)
         {
+            if (_adventureManager.IsMuted)
+                return;
+
             try
             {
                 IAudioPlayer player = null;

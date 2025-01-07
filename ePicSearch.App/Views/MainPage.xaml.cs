@@ -74,7 +74,7 @@ namespace ePicSearch.Views
         {
             ClickButton(sender);
 
-            await Navigation.PushAsync(new SettingsPage());
+            await Navigation.PushAsync(new SettingsPage(_adventureManager));
         }
 
         private async void OnMyAdventuresClicked(object sender, EventArgs e)
@@ -134,7 +134,7 @@ namespace ePicSearch.Views
 
         private async void ClickButton(object sender)
         {
-            _audioPlayerService.PlaySoundAsync(SoundLabels.ButtonPress);
+            await _audioPlayerService.PlaySoundAsync(SoundLabels.ButtonPress);
             await AnimationHelper.AnimatePress((View)sender);
         }
     }

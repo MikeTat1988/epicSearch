@@ -170,5 +170,19 @@ namespace ePicSearch.Infrastructure.Services
             _dataStorageService.SetCrashFlag(value);
             _dataStorageService.SyncCacheToFile();
         }
+
+        public bool IsMuted
+        {
+            get
+            {
+                return _dataStorageService.GetSettings().IsMuted;
+            }
+            set
+            {
+                var currentSettings = _dataStorageService.GetSettings();
+                currentSettings.IsMuted = value;
+                _dataStorageService.UpdateSettings(currentSettings);
+            }
+        }
     }
 }

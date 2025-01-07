@@ -5,6 +5,8 @@
         public bool EnableNotifications { get; set; } = true;
         public int MaxPhotoCount { get; set; } = 100;
 
+        public bool IsMuted { get; set; } = false;
+
         public bool CrashFlag { get; set; } = false;
     }
 }

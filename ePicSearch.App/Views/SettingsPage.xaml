@@ -16,9 +16,41 @@
                                       Margin="10"
                                       Clicked="OnBackButtonClicked" />
 
-        <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="20">
-                <!--Label Text="Settings Page" /-->
-            <Button Text="Clean Logs" Clicked="OnCleanLogsClicked" />
-       </StackLayout>
+        <ContentView HorizontalOptions="Center"
+                     VerticalOptions="Center"
+                     WidthRequest="350">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Image Source="message_frame.webp"
+                       Aspect="AspectFit" 
+                       Grid.RowSpan="2"/>
+
+                <Grid Grid.Row="0" Margin="0,10,0,0">
+                    <controls:NoRippleImageButton Source="mute_button.webp"
+                                                 WidthRequest="250"
+                                                 HeightRequest="80"
+                                                 Clicked="OnMuteButtonClicked"
+                                                 BackgroundColor="Transparent" />
+
+                    <Switch x:Name="MuteSwitch"
+                            VerticalOptions="Center"
+                            HorizontalOptions="End"
+                            Margin="0,0,90,0"
+                            Toggled="OnMuteToggled" />
+                </Grid>
+
+                <controls:NoRippleImageButton Grid.Row="1"
+                                             Source="clear_logs_button.webp"
+                                             WidthRequest="250"
+                                             HeightRequest="80"
+                                             Clicked="OnCleanLogsClicked"
+                                             BackgroundColor="Transparent"
+                                             Margin="0,-60,0,0" />
+            </Grid>
+        </ContentView>
     </Grid>
 </ContentPage>
