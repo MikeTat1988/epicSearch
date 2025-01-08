@@ -29,6 +29,13 @@
 		<AndroidUseAapt2>true</AndroidUseAapt2>
 		<GenerateTestArtifacts>True</GenerateTestArtifacts>
 
+
+		<AndroidKeyStore>True</AndroidKeyStore>
+		<AndroidSigningKeyAlias>upload</AndroidSigningKeyAlias>
+		<AndroidSigningKeyPass>govwof-2mognu</AndroidSigningKeyPass>
+		<AndroidSigningStorePass>govwof-2mognu</AndroidSigningStorePass>
+		<AndroidSigningKeyStore>C:\Users\micha\epicSearch\ePicSearch.App\epicsearch-upload.keystore</AndroidSigningKeyStore>
+
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
