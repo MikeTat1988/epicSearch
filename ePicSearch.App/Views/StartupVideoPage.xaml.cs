@@ -18,6 +18,8 @@ namespace ePicSearch.Views
 
         private void OnSkipButtonClicked(object sender, EventArgs e)
         {
+            StartupVideo.Stop();
+
             NavigateToShell();
         }
 
