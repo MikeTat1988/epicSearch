@@ -4,7 +4,7 @@
     {
         public bool EnableNotifications { get; set; } = true;
 
-        public bool PlayStartupVideo { get; set; } = false;
+        public bool PlayStartupVideo { get; set; } = true;
 
         public int MaxPhotoCount { get; set; } = 100;
 

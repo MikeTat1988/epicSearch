@@ -8,6 +8,7 @@ Project_Structure.docx
 generate_project_doc.exe
 generate_project_doc.py
 Logs/*.txt
+*.keystore
 
 
 # Ignore Xamarin specific files
