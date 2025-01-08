@@ -29,12 +29,6 @@
 		<AndroidUseAapt2>true</AndroidUseAapt2>
 		<GenerateTestArtifacts>True</GenerateTestArtifacts>
 
-
-		<AndroidKeyStore>True</AndroidKeyStore>
-		<AndroidSigningKeyAlias>epicsearchKey</AndroidSigningKeyAlias>
-		<AndroidSigningKeyPass>govwof-2mognu</AndroidSigningKeyPass>
-		<AndroidSigningStorePass>govwof-2mognu</AndroidSigningStorePass>
-		<AndroidSigningKeyStore>C:\Users\micha\OneDrive\Documents\epicsearch.keystore</AndroidSigningKeyStore>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
