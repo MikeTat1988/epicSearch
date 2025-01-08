@@ -21,15 +21,18 @@
                      WidthRequest="350">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="30" />
                 </Grid.RowDefinitions>
 
                 <Image Source="message_frame.webp"
                        Aspect="AspectFit" 
-                       Grid.RowSpan="2"/>
+                       Grid.RowSpan="5"/>
 
-                <Grid Grid.Row="0" Margin="0,10,0,0">
+                <Grid Grid.Row="1" >
                     <controls:NoRippleImageButton Source="mute_button.webp"
                                                  WidthRequest="250"
                                                  HeightRequest="80"
@@ -43,13 +46,25 @@
                             Toggled="OnMuteToggled" />
                 </Grid>
 
-                <controls:NoRippleImageButton Grid.Row="1"
+                <Grid Grid.Row="2">
+                    <controls:NoRippleImageButton Source="start_video_button.webp"
+                                                  WidthRequest="250"
+                                                  HeightRequest="80"
+                                                  Clicked="OnShowStartupButtonClicked"
+                                                  BackgroundColor="Transparent" />
+                    <Switch x:Name="ShowStartupSwitch"
+                            VerticalOptions="Center"
+                            HorizontalOptions="End"
+                            Margin="0,0,90,0"
+                            Toggled="OnShowStartupToggled" />
+                </Grid>
+
+                <controls:NoRippleImageButton Grid.Row="3"
                                              Source="clear_logs_button.webp"
                                              WidthRequest="250"
                                              HeightRequest="80"
                                              Clicked="OnCleanLogsClicked"
-                                             BackgroundColor="Transparent"
-                                             Margin="0,-60,0,0" />
+                                             BackgroundColor="Transparent"/>
             </Grid>
         </ContentView>
     </Grid>

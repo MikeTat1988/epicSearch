@@ -5,7 +5,7 @@ from datetime import datetime
 def pull_logs():
     try:
         # Define the destination folder and log file path on the PC
-        destination_folder = r"C:\Users\micha\MikeRep\ePicSearch\Logs"
+        destination_folder = r"C:\Users\micha\ePicSearch\Logs"
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         destination_file = os.path.join(destination_folder, f"logs_{timestamp}.txt")
 
@@ -14,7 +14,7 @@ def pull_logs():
             os.makedirs(destination_folder)
 
         # ADB command to read the logs.txt content
-        adb_command = ["adb", "exec-out", "run-as", "com.companyname.epicsearch", "cat", "files/logs.txt"]
+        adb_command = ["adb", "exec-out", "run-as", "com.epicsearch.app", "cat", "files/logs.txt"]
 
         # Execute the ADB command and save the output to the destination file
         with open(destination_file, "w") as f:
