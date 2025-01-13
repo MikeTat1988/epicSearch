@@ -8,11 +8,13 @@
 		<RootNamespace>ePicSearch</RootNamespace>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-
+		
+			<!--
 		<AndroidEnableProguard>true</AndroidEnableProguard>
 		<AndroidLinkTool>r8</AndroidLinkTool>
 		<AndroidIncludeDebugSymbols>true</AndroidIncludeDebugSymbols>
-
+		 -->
+		
 		<!-- Display name -->
 		<ApplicationTitle>ePicSearch</ApplicationTitle>
 
@@ -115,6 +117,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<MauiXaml Update="Helpers\TutorialPopup.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\CameraPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
