@@ -9,6 +9,10 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 
+		<AndroidEnableProguard>true</AndroidEnableProguard>
+		<AndroidLinkTool>r8</AndroidLinkTool>
+		<AndroidIncludeDebugSymbols>true</AndroidIncludeDebugSymbols>
+
 		<!-- Display name -->
 		<ApplicationTitle>ePicSearch</ApplicationTitle>
 
@@ -36,6 +40,10 @@
 		<AndroidSigningStorePass>govwof-2mognu</AndroidSigningStorePass>
 		<AndroidSigningKeyStore>C:\Users\micha\epicSearch\ePicSearch.App\epicsearch-upload.keystore</AndroidSigningKeyStore>
 
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<AndroidPackageDebugSymbols>true</AndroidPackageDebugSymbols>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
