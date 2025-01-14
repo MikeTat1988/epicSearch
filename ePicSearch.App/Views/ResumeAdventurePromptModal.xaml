@@ -77,6 +77,27 @@
                              HeightRequest="60"
                              Grid.Column="3"
                              Opacity="0.6" />
+
+                <Frame x:Name="LongPressMessage"
+                       CornerRadius="15"
+                       HasShadow="true"
+                       IsVisible="False"
+                       BackgroundColor="White"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Start"
+                       Padding="10"
+                       Grid.Column="3"
+                       Margin="0,-60,0,0">
+
+                    <Label x:Name="LongPressMessageLabel"
+                           Text=""
+                           FontFamily="LuckiestGuy"
+                           FontSize="15"
+                           TextColor="Black"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center"
+                           LineBreakMode="WordWrap" />  
+                </Frame>
             </Grid>
         </Grid>
     </Grid>

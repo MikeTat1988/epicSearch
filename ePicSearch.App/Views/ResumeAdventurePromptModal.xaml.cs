@@ -1,6 +1,7 @@
 using ePicSearch.Helpers;
 using ePicSearch.Infrastructure.Entities;
 using ePicSearch.Infrastructure.Services;
+using ePicSearch.Labels;
 using ePicSearch.Services;
 using System.Threading;
 
@@ -18,6 +19,8 @@ namespace ePicSearch.Views
         public ResumeAdventurePromptModal()
         {
             InitializeComponent();
+
+            LongPressMessageLabel.Text = EnglishMessages.LongPressMessage;
         }
 
         public void Initialize(AdventureData adventureData, AdventureManager adventureManager, AudioPlayerService audioPlayerService)
@@ -44,6 +47,7 @@ namespace ePicSearch.Views
             _cts = new CancellationTokenSource();
             ExitLongPressProgress.IsVisible = true;
             ExitLongPressProgress.Progress = 0;
+
             StartLongPressAnimation(_cts.Token);
         }
 
@@ -53,14 +57,16 @@ namespace ePicSearch.Views
             _cts?.Cancel();
             ExitLongPressProgress.IsVisible = false;
             ExitLongPressProgress.Progress = 0;
+
+            ShowLongPressMessage();
         }
 
         private async void StartLongPressAnimation(CancellationToken token)
         {
             try
             {
-                var progressTask = ExitLongPressProgress.ProgressTo(1, 1500, Easing.CubicInOut);
-                await Task.WhenAny(Task.Delay(1500, token), progressTask);
+                var progressTask = ExitLongPressProgress.ProgressTo(1, 1000, Easing.CubicInOut);
+                await Task.WhenAny(Task.Delay(1000, token), progressTask);
 
                 if (!token.IsCancellationRequested)
                 {
@@ -77,6 +83,13 @@ namespace ePicSearch.Views
             {
                 ExitLongPressProgress.IsVisible = false;
             }
+        }
+
+        private async void ShowLongPressMessage()
+        {
+            LongPressMessage.IsVisible = true;
+            await Task.Delay(500); // Show for half a second
+            LongPressMessage.IsVisible = false;
         }
     }
 }

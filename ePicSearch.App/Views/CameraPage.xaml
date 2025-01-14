@@ -108,7 +108,7 @@
                 <Grid HorizontalOptions="Center"
                       VerticalOptions="Center"
                       Grid.Row="3">
-
+                    
                     <controls:NoRippleImageButton x:Name="TreasureNextClueButton"
                                                   BackgroundColor="Transparent"
                                                   Source="next_clue_button.webp"
@@ -127,6 +127,25 @@
                                  HeightRequest="150"
                                  HorizontalOptions="FillAndExpand"
                                  Opacity="0.8" />
+
+                    <Frame x:Name="LongPressMessage"
+                           CornerRadius="15"
+                           HasShadow="true"
+                           IsVisible="False"
+                           BackgroundColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Start"
+                           Padding="10"
+                           Margin="0,-50,0,0">
+                        
+                        <Label x:Name="LongPressMessageLabel"
+                               Text=""
+                               FontFamily="LuckiestGuy"
+                               FontSize="20"
+                               TextColor="Black"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                    </Frame>
                 </Grid>
                 <HorizontalStackLayout Spacing="10"
                                        Padding="10"
@@ -242,6 +261,26 @@
                                  ScaleY="36"
                                  HeightRequest="50"
                                  Opacity="0.6" />
+
+                    <Frame x:Name="ClueLongPressMessage"
+                           CornerRadius="15"
+                           HasShadow="true"
+                           IsVisible="False"
+                           BackgroundColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Start"
+                           Padding="10"
+                           Margin="0,-80,0,0">
+                        
+                        <Label x:Name="ClueLongPressMessageLabel"
+                               Text=""
+                               FontFamily="LuckiestGuy"
+                               FontSize="20"
+                               TextColor="Black"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                    </Frame>
+
                 </Grid>
 
                 <controls:NoRippleImageButton Source="finish_adventure_button.webp"

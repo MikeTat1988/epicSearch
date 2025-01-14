@@ -47,10 +47,12 @@
             <Label x:Name="NoAdventuresLabel"
                    Text="No adventures found"
                    FontFamily="LuckiestGuy"
-                   FontSize="20"
-                   TextColor="Gray"
+                   FontSize="40"
+                   TextColor="White"
+                   Opacity="0.8"
                    HorizontalOptions="Center"
-                   VerticalOptions="Center" />
+                   VerticalOptions="Center"
+                   LineBreakMode="WordWrap" />
         </Grid>
 
         <!-- CollectionView  for Adventures -->

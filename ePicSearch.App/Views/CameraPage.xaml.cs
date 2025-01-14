@@ -28,6 +28,9 @@ public partial class CameraPage : ContentPage
         ClueNextButton.Pressed += OnButtonPressed;
         ClueNextButton.Released += OnButtonReleased;
 
+        LongPressMessageLabel.Text = EnglishMessages.LongPressMessage;
+        ClueLongPressMessageLabel.Text = EnglishMessages.LongPressMessage;
+
         // Determine the starting point based on photo count
         if (_localAdventureData.PhotoCount == 0)
         {
@@ -64,7 +67,7 @@ public partial class CameraPage : ContentPage
 
         if (_adventureManager.ShowTutorials)
         {
-            var messages = TutorialMessages.CameraPageTreasureMessages;
+            var messages = EnglishMessages.CameraPageTreasureTutorialMessages;
             await PopupManager.ShowMessages(this, messages);
         }
 
@@ -101,7 +104,7 @@ public partial class CameraPage : ContentPage
             {
                 if (_adventureManager.ShowTutorials)
                 {
-                    var messages = TutorialMessages.CameraPageClueMessages;
+                    var messages = EnglishMessages.CameraPageClueTutorialMessages;
                     await PopupManager.ShowMessages(this, messages);
                 }
                 _hasShownTutorials = true;
@@ -249,7 +252,23 @@ public partial class CameraPage : ContentPage
         {
             _currentLongPressProgress.IsVisible = false;
             _currentLongPressProgress.Progress = 0;
+
+            if (_currentLongPressProgress.Progress < 1)
+            {
+                ShowLongPressMessage();
+            }
         }
+    }
+
+    private async void ShowLongPressMessage()
+    {
+        LongPressMessage.IsVisible = true;
+        ClueLongPressMessage.IsVisible = true;
+
+        await Task.Delay(500); 
+        
+        LongPressMessage.IsVisible = false;
+        ClueLongPressMessage.IsVisible = false;
     }
 
     private async void StartLongPressAnimation(CancellationToken token, NoRippleImageButton pressedButton)
@@ -259,10 +278,10 @@ public partial class CameraPage : ContentPage
 
         try
         {
-            var progressTask = _currentLongPressProgress.ProgressTo(1, 1500, Easing.CubicInOut);
+            var progressTask = _currentLongPressProgress.ProgressTo(1, 1000, Easing.CubicInOut);
 
             // Wait for the full duration or until canceled
-            await Task.WhenAny(Task.Delay(1500, token), progressTask);
+            await Task.WhenAny(Task.Delay(1000, token), progressTask);
 
             if (!token.IsCancellationRequested)
             {

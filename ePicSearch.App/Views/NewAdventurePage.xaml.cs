@@ -29,7 +29,7 @@ namespace ePicSearch.Views
         {
             if (_adventureManager.ShowTutorials)
             {
-                var messages = TutorialMessages.NewAdventurePageMessages;
+                var messages = EnglishMessages.NewAdventurePageTutorialMessages;
                 await PopupManager.ShowMessages(this, messages);
             }
         }
