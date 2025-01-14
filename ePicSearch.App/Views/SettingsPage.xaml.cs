@@ -1,4 +1,5 @@
 using ePicSearch.Infrastructure.Services;
+using ePicSearch.Labels;
 
 namespace ePicSearch.Views
 {
@@ -12,6 +13,11 @@ namespace ePicSearch.Views
             _adventureManager = adventureManager;
             MuteSwitch.IsToggled = _adventureManager.IsMuted;
             ShowStartupSwitch.IsToggled = _adventureManager.PlayStartupVideo;
+
+            MuteLabel.Text = EnglishLabels.MuteLabel;
+            StartVideoLabel.Text = EnglishLabels.StartVideoLabel;
+            TutorialLabel.Text = EnglishLabels.TutorialLabel;
+            ClearLogsLabel.Text = EnglishLabels.ClearLogsLabel;
         }
 
         private void OnCleanLogsClicked(object sender, EventArgs e)
@@ -21,17 +27,12 @@ namespace ePicSearch.Views
             try
             {
                 File.WriteAllText(logFilePath, string.Empty);
-                DisplayAlert("Success", "Log file has been cleared.", "OK");
+                DisplayAlert("", "Log file has been cleared.", "OK");
             }
             catch (Exception ex)
             {
-                DisplayAlert("Error", $"Failed to clear log: {ex.Message}", "OK");
+                DisplayAlert("", $"Failed to clear log: {ex.Message}", "OK");
             }
-        }
-
-        private void OnMuteButtonClicked(object sender, EventArgs e)
-        {
-            MuteSwitch.IsToggled = MuteSwitch.IsToggled;
         }
 
         private void OnMuteToggled(object sender, ToggledEventArgs e)
@@ -40,14 +41,14 @@ namespace ePicSearch.Views
             _adventureManager.IsMuted = e.Value;
         }
 
-        private void OnShowStartupButtonClicked(object sender, EventArgs e)
-        {
-            ShowStartupSwitch.IsToggled = ShowStartupSwitch.IsToggled;
-        }
-
         private void OnShowStartupToggled(object sender, ToggledEventArgs e)
         {
             _adventureManager.PlayStartupVideo = e.Value;
+        } 
+        
+        private void OnTutorialToggled(object sender, ToggledEventArgs e)
+        {
+            _adventureManager.ShowTutorials = e.Value;
         }
 
         protected override void OnDisappearing()

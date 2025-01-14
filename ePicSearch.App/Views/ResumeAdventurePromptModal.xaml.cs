@@ -20,7 +20,7 @@ namespace ePicSearch.Views
         {
             InitializeComponent();
 
-            LongPressMessageLabel.Text = EnglishMessages.LongPressMessage;
+            LongPressMessageLabel.Text = EnglishLabels.LongPressMessage;
         }
 
         public void Initialize(AdventureData adventureData, AdventureManager adventureManager, AudioPlayerService audioPlayerService)

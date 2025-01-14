@@ -19,52 +19,109 @@
         <ContentView HorizontalOptions="Center"
                      VerticalOptions="Center"
                      WidthRequest="350">
-            <Grid>
+            <Grid ColumnSpacing="10">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="30" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="210" />
+                    <ColumnDefinition Width="80" />
+                </Grid.ColumnDefinitions>
 
                 <Image Source="message_frame.webp"
                        Aspect="AspectFit" 
-                       Grid.RowSpan="5"/>
+                       Grid.RowSpan="4"
+                       Grid.ColumnSpan="2"/>
 
-                <Grid Grid.Row="1" >
-                    <controls:NoRippleImageButton Source="mute_button.webp"
-                                                 WidthRequest="250"
-                                                 HeightRequest="80"
-                                                 Clicked="OnMuteButtonClicked"
-                                                 BackgroundColor="Transparent" />
-
+                <!-- Row 1: Mute -->
+                <Grid Grid.Row="0"
+                      Grid.Column="0"
+                      VerticalOptions="Center"
+                      HorizontalOptions="Start">
+                    <Image Source="settings_button_bg.webp"
+                           Aspect="AspectFill" />
+                    <Label Text=""
+                           x:Name="MuteLabel"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" />
+                </Grid>
+                <Grid Grid.Row="0"
+                      Grid.Column="1"
+                      VerticalOptions="Center"
+                      HorizontalOptions="Center">
+                    <Image Source="switch_bg.webp"
+                           Aspect="AspectFill" />
                     <Switch x:Name="MuteSwitch"
                             VerticalOptions="Center"
-                            HorizontalOptions="End"
-                            Margin="0,0,90,0"
+                            HorizontalOptions="Center"
                             Toggled="OnMuteToggled" />
                 </Grid>
 
-                <Grid Grid.Row="2">
-                    <controls:NoRippleImageButton Source="start_video_button.webp"
-                                                  WidthRequest="250"
-                                                  HeightRequest="80"
-                                                  Clicked="OnShowStartupButtonClicked"
-                                                  BackgroundColor="Transparent" />
+                <!-- Row 2: Show Startup -->
+                <Grid Grid.Row="1"
+                      Grid.Column="0"
+                      VerticalOptions="Center"
+                      HorizontalOptions="Start">
+                    <Image Source="settings_button_bg.webp"
+                           Aspect="AspectFill" />
+                    <Label Text=""
+                           x:Name="StartVideoLabel"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" />
+                </Grid>
+                <Grid Grid.Row="1"
+                      Grid.Column="1"
+                      VerticalOptions="Center"
+                      HorizontalOptions="Center">
+                    <Image Source="switch_bg.webp"
+                           Aspect="AspectFill" />
                     <Switch x:Name="ShowStartupSwitch"
                             VerticalOptions="Center"
-                            HorizontalOptions="End"
-                            Margin="0,0,90,0"
+                            HorizontalOptions="Center"
                             Toggled="OnShowStartupToggled" />
                 </Grid>
 
-                <controls:NoRippleImageButton Grid.Row="3"
-                                             Source="clear_logs_button.webp"
-                                             WidthRequest="250"
-                                             HeightRequest="80"
-                                             Clicked="OnCleanLogsClicked"
-                                             BackgroundColor="Transparent"/>
+                <!-- Row 3: Tutorial -->
+                <Grid Grid.Row="2"
+                      Grid.Column="0"
+                      VerticalOptions="Center"
+                      HorizontalOptions="Start">
+                    <Image Source="settings_button_bg.webp"
+                           Aspect="AspectFill" />
+                    <Label Text=""
+                           x:Name="TutorialLabel"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" />
+                </Grid>
+                <Grid Grid.Row="2"
+                      Grid.Column="1"
+                      VerticalOptions="Center"
+                      HorizontalOptions="Center">
+                    <Image Source="switch_bg.webp"
+                           Aspect="AspectFill" />
+                    <Switch x:Name="TutorialSwitch"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            Toggled="OnTutorialToggled" />
+                </Grid>
+
+                <!-- Row 4: Clear Logs -->
+                <Grid Grid.Row="3"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="2"
+                      VerticalOptions="Center"
+                      HorizontalOptions="Center">
+                    <Image Source="settings_button_bg.webp"
+                           Aspect="AspectFill" />
+                    <Label Text=""
+                           x:Name="ClearLogsLabel"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" />
+                    <controls:NoRippleImageButton Clicked="OnCleanLogsClicked" />
+                </Grid>
             </Grid>
         </ContentView>
     </Grid>

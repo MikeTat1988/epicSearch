@@ -28,8 +28,8 @@ public partial class CameraPage : ContentPage
         ClueNextButton.Pressed += OnButtonPressed;
         ClueNextButton.Released += OnButtonReleased;
 
-        LongPressMessageLabel.Text = EnglishMessages.LongPressMessage;
-        ClueLongPressMessageLabel.Text = EnglishMessages.LongPressMessage;
+        LongPressMessageLabel.Text = EnglishLabels.LongPressMessage;
+        ClueLongPressMessageLabel.Text = EnglishLabels.LongPressMessage;
 
         // Determine the starting point based on photo count
         if (_localAdventureData.PhotoCount == 0)
@@ -67,7 +67,7 @@ public partial class CameraPage : ContentPage
 
         if (_adventureManager.ShowTutorials)
         {
-            var messages = EnglishMessages.CameraPageTreasureTutorialMessages;
+            var messages = EnglishLabels.CameraPageTreasureTutorialMessages;
             await PopupManager.ShowMessages(this, messages);
         }
 
@@ -104,7 +104,7 @@ public partial class CameraPage : ContentPage
             {
                 if (_adventureManager.ShowTutorials)
                 {
-                    var messages = EnglishMessages.CameraPageClueTutorialMessages;
+                    var messages = EnglishLabels.CameraPageClueTutorialMessages;
                     await PopupManager.ShowMessages(this, messages);
                 }
                 _hasShownTutorials = true;
