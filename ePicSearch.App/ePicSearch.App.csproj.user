@@ -11,6 +11,9 @@
     <PackageOptionalProjectsInIdeBuilds>False</PackageOptionalProjectsInIdeBuilds>
   </PropertyGroup>
   <ItemGroup>
+    <MauiXaml Update="Views\MessagePopup.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Views\StartupVideoPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

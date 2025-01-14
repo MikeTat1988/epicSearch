@@ -234,6 +234,7 @@
                 </Grid>
 
                 <controls:NoRippleImageButton Source="finish_adventure_button.webp"
+                                              x:Name="FinishAdventureButton"
                                               Clicked="OnFinishAdventureClicked"
                                               BackgroundColor="Transparent"
                                               WidthRequest="130"

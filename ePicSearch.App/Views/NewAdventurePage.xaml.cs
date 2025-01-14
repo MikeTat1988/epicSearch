@@ -3,6 +3,7 @@ using ePicSearch.Infrastructure.Entities;
 using ePicSearch.Helpers;
 using ePicSearch.Services;
 using ePicSearch.Entities;
+using ePicSearch.Labels;
 
 namespace ePicSearch.Views
 {
@@ -20,6 +21,17 @@ namespace ePicSearch.Views
             _audioPlayerService = audioPlayerService;
 
             AdventureNameEntry.Text = _nameGenerator.GenerateUniqueName();
+
+            ShowTutorialIfEnabled();
+        }
+
+        private async void ShowTutorialIfEnabled()
+        {
+            if (_adventureManager.ShowTutorials)
+            {
+                var messages = TutorialMessages.NewAdventurePageMessages;
+                await PopupManager.ShowMessages(this, messages);
+            }
         }
 
         private async void OnStartCreatingClicked(object sender, EventArgs e)

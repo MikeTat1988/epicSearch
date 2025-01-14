@@ -104,6 +104,7 @@
                 </Grid.ColumnDefinitions>
 
                 <controls:NoRippleImageButton Source="start_creating.webp"
+                                              x:Name="StartCreatingButton"
                                               BackgroundColor="Transparent"
                                               WidthRequest="200"
                                               HorizontalOptions="Center"

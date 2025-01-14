@@ -3,6 +3,7 @@
     public class Settings
     {
         public bool EnableNotifications { get; set; } = true;
+        public bool ShowTutorials { get; set; } = true;
 
         public bool PlayStartupVideo { get; set; } = true;
 

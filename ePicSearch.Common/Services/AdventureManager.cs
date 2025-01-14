@@ -198,5 +198,20 @@ namespace ePicSearch.Infrastructure.Services
                 _dataStorageService.UpdateSettings(currentSettings);
             }
         }
+
+        //TODO: Move to settings manager
+        public bool ShowTutorials
+        {
+            get
+            {
+                return _dataStorageService.GetSettings().ShowTutorials;
+            }
+            set
+            {
+                var currentSettings = _dataStorageService.GetSettings();
+                currentSettings.ShowTutorials = value;
+                _dataStorageService.UpdateSettings(currentSettings);
+            }
+        }
     }
 }
