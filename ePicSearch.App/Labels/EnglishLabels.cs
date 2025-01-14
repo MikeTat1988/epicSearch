@@ -21,6 +21,8 @@ public static class EnglishLabels
         { "FinishAdventureButton", "Press to finilize the adventure" }
     };
 
+    public static readonly string LongPressMessage = "Long press!";
+
     public static readonly string MuteLabel = "Mute";
     public static readonly string StartVideoLabel = "Start Video";
     public static readonly string TutorialLabel = "Tutorial";

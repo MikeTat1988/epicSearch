@@ -17,43 +17,51 @@
                                       Clicked="OnBackButtonClicked" />
 
         <ContentView HorizontalOptions="Center"
-                     VerticalOptions="Center"
-                     WidthRequest="350">
-            <Grid ColumnSpacing="10">
+                     VerticalOptions="Center">
+            <Grid ColumnSpacing="5"
+                  RowSpacing="5"
+                  WidthRequest="350">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="50" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="210" />
-                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="40" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="30" />
                 </Grid.ColumnDefinitions>
 
                 <Image Source="message_frame.webp"
                        Aspect="AspectFit" 
-                       Grid.RowSpan="4"
-                       Grid.ColumnSpan="2"/>
+                       Grid.RowSpan="6"
+                       Grid.ColumnSpan="4"/>
 
                 <!-- Row 1: Mute -->
-                <Grid Grid.Row="0"
-                      Grid.Column="0"
+                <Grid Grid.Row="1"
+                      Grid.Column="1"
                       VerticalOptions="Center"
                       HorizontalOptions="Start">
                     <Image Source="settings_button_bg.webp"
-                           Aspect="AspectFill" />
+                           HeightRequest="60" />
                     <Label Text=""
+                           FontSize="20"
+                           FontFamily="LuckiestGuy"
+                           TextColor="Black"
                            x:Name="MuteLabel"
                            VerticalOptions="Center"
                            HorizontalOptions="Center" />
                 </Grid>
-                <Grid Grid.Row="0"
-                      Grid.Column="1"
+                <Grid Grid.Row="1"
+                      Grid.Column="2"
                       VerticalOptions="Center"
                       HorizontalOptions="Center">
                     <Image Source="switch_bg.webp"
-                           Aspect="AspectFill" />
+                           HeightRequest="60"/>
                     <Switch x:Name="MuteSwitch"
                             VerticalOptions="Center"
                             HorizontalOptions="Center"
@@ -61,23 +69,26 @@
                 </Grid>
 
                 <!-- Row 2: Show Startup -->
-                <Grid Grid.Row="1"
-                      Grid.Column="0"
+                <Grid Grid.Row="2"
+                      Grid.Column="1"
                       VerticalOptions="Center"
                       HorizontalOptions="Start">
                     <Image Source="settings_button_bg.webp"
-                           Aspect="AspectFill" />
+                           HeightRequest="60" />
                     <Label Text=""
+                           FontSize="20"
+                           FontFamily="LuckiestGuy"
+                           TextColor="Black"
                            x:Name="StartVideoLabel"
                            VerticalOptions="Center"
                            HorizontalOptions="Center" />
                 </Grid>
-                <Grid Grid.Row="1"
-                      Grid.Column="1"
+                <Grid Grid.Row="2"
+                      Grid.Column="2"
                       VerticalOptions="Center"
                       HorizontalOptions="Center">
                     <Image Source="switch_bg.webp"
-                           Aspect="AspectFill" />
+                           HeightRequest="60" />
                     <Switch x:Name="ShowStartupSwitch"
                             VerticalOptions="Center"
                             HorizontalOptions="Center"
@@ -85,23 +96,26 @@
                 </Grid>
 
                 <!-- Row 3: Tutorial -->
-                <Grid Grid.Row="2"
-                      Grid.Column="0"
+                <Grid Grid.Row="3"
+                      Grid.Column="1"
                       VerticalOptions="Center"
                       HorizontalOptions="Start">
                     <Image Source="settings_button_bg.webp"
-                           Aspect="AspectFill" />
+                           HeightRequest="60" />
                     <Label Text=""
+                           FontSize="20"
+                           FontFamily="LuckiestGuy"
+                           TextColor="Black"
                            x:Name="TutorialLabel"
                            VerticalOptions="Center"
                            HorizontalOptions="Center" />
                 </Grid>
-                <Grid Grid.Row="2"
-                      Grid.Column="1"
+                <Grid Grid.Row="3"
+                      Grid.Column="2"
                       VerticalOptions="Center"
                       HorizontalOptions="Center">
                     <Image Source="switch_bg.webp"
-                           Aspect="AspectFill" />
+                           HeightRequest="60" />
                     <Switch x:Name="TutorialSwitch"
                             VerticalOptions="Center"
                             HorizontalOptions="Center"
@@ -109,14 +123,17 @@
                 </Grid>
 
                 <!-- Row 4: Clear Logs -->
-                <Grid Grid.Row="3"
-                      Grid.Column="0"
+                <Grid Grid.Row="4"
+                      Grid.Column="1"
                       Grid.ColumnSpan="2"
                       VerticalOptions="Center"
                       HorizontalOptions="Center">
                     <Image Source="settings_button_bg.webp"
-                           Aspect="AspectFill" />
+                           HeightRequest="60" />
                     <Label Text=""
+                           FontSize="20"
+                           FontFamily="LuckiestGuy"
+                           TextColor="Black"
                            x:Name="ClearLogsLabel"
                            VerticalOptions="Center"
                            HorizontalOptions="Center" />
