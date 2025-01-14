@@ -2,6 +2,7 @@ using ePicSearch.Entities;
 using ePicSearch.Helpers;
 using ePicSearch.Infrastructure.Entities;
 using ePicSearch.Infrastructure.Services;
+using ePicSearch.Labels;
 using ePicSearch.Services;
 namespace ePicSearch.Views;
 
@@ -12,6 +13,7 @@ public partial class CameraPage : ContentPage
     private readonly AudioPlayerService _audioPlayerService;
     private CancellationTokenSource _cts;
     private ProgressBar? _currentLongPressProgress;
+    private bool _hasShownTutorials = false;
 
     public CameraPage(AdventureData adventureData, AdventureManager adventureManager, AudioPlayerService audioPlayerService)
     {
@@ -59,6 +61,13 @@ public partial class CameraPage : ContentPage
 
         TreasureCodeLabel.Text = $"{capturedPhoto.Code}";
         TreasurePhotoModal.IsVisible = true;
+
+        if (_adventureManager.ShowTutorials)
+        {
+            var messages = TutorialMessages.CameraPageTreasureMessages;
+            await PopupManager.ShowMessages(this, messages);
+        }
+
         await TreasurePhotoModal.FadeTo(1, 250);
     }
 
@@ -82,10 +91,21 @@ public partial class CameraPage : ContentPage
                 return;
             }
 
-            AddPhotoToLocalAdventure(capturedPhoto);
+            AddPhotoToLocalAdventure(capturedPhoto);  
+
             ClueCodeLabel.Text = $"{capturedPhoto.Code}";
             CluePhotoPromptModal.IsVisible = true;
             await CluePhotoPromptModal.FadeTo(1, 250);
+
+            if (!_hasShownTutorials)
+            {
+                if (_adventureManager.ShowTutorials)
+                {
+                    var messages = TutorialMessages.CameraPageClueMessages;
+                    await PopupManager.ShowMessages(this, messages);
+                }
+                _hasShownTutorials = true;
+            }
 
             SyncIfValid();
         }

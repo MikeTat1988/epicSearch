@@ -7,7 +7,12 @@
         
         <!-- Transparent empty rectangle for spacing -->
         <BoxView HeightRequest="120"
-                     BackgroundColor="Transparent" />
+                 BackgroundColor="Transparent">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnDismissClicked" />
+            </BoxView.GestureRecognizers>
+        </BoxView>
+        
         <Image Source="tutorial_arrow.png"
                HeightRequest="30" />
 

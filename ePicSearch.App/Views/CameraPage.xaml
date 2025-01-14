@@ -10,7 +10,18 @@
                Aspect="AspectFill"
                VerticalOptions="FillAndExpand"
                HorizontalOptions="Center" />
-        
+        <Label x:Name="CameraMessageLabel"
+               Text=""
+               FontSize="18"
+               FontFamily="LuckiestGuy"
+               TextColor="White"
+               BackgroundColor="#AA000000"
+               Padding="10"
+               HorizontalOptions="Center"
+               VerticalOptions="Start"
+               IsVisible="False"
+               Margin="10" />
+
         <!-- Treasure Photo Modal -->
         <ContentView x:Name="TreasurePhotoModal"
                      IsVisible="False"
