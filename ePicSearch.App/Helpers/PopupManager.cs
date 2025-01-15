@@ -21,9 +21,19 @@ public static class PopupManager
         }
     }
 
-    public static async Task ShowNoArrowMessage(ContentPage page, string message, View? anchor = null)
+    public static async Task ShowNoArrowMessage(ContentPage page, string message, View? anchor = null, double? fontSize = null, Color? fontColor = null)
     {
         var popup = new MessagePopup(message);
+
+        if (fontSize != null)
+        {
+            popup.MessageLabelProperty.FontSize = fontSize.Value;
+        }
+
+        if (fontColor != null)
+        {
+            popup.MessageLabelProperty.TextColor = fontColor;
+        }
 
         if (anchor != null)
         {
@@ -31,6 +41,20 @@ public static class PopupManager
         }
 
         await page.ShowPopupAsync(popup);
+    }
+
+    public static async Task<bool> ShowConfirmationPopup(ContentPage page, string message, View? anchor = null)
+    {
+        var popup = new ConfirmationPopup(message);
+
+        if (anchor != null)
+        {
+            popup.Anchor = anchor;
+        }
+
+        var result = await page.ShowPopupAsync(popup);
+
+        return result as string == "Yes";
     }
 }
         

@@ -1,3 +1,6 @@
+using ePicSearch.Entities;
+using ePicSearch.Helpers;
+using ePicSearch.Services;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -50,6 +53,11 @@ namespace ePicSearch.Views
         {
             string code = string.Join("", Digits.Select(d => d.Value));
             CodeEntered?.Invoke(this, code);
+        }
+
+        public async void PressButton(object sender, EventArgs e)
+        {
+            await AnimationHelper.AnimatePress((View)sender);
         }
     }
 }

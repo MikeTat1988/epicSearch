@@ -1,3 +1,4 @@
+using ePicSearch.Helpers;
 using ePicSearch.Infrastructure.Services;
 using ePicSearch.Labels;
 
@@ -21,18 +22,18 @@ namespace ePicSearch.Views
             ClearLogsLabel.Text = EnglishLabels.ClearLogsLabel;
         }
 
-        private void OnCleanLogsClicked(object sender, EventArgs e)
+        private async void OnCleanLogsClicked(object sender, EventArgs e)
         {
             var logFilePath = Path.Combine(FileSystem.Current.AppDataDirectory, "logs.txt");
 
             try
             {
                 File.WriteAllText(logFilePath, string.Empty);
-                DisplayAlert("", "Log file has been cleared.", "OK");
+                await PopupManager.ShowNoArrowMessage(this, "Log file has been cleared!");
             }
             catch (Exception ex)
             {
-                DisplayAlert("", $"Failed to clear log: {ex.Message}", "OK");
+                await PopupManager.ShowNoArrowMessage(this, "Failed to clear log");
             }
         }
 

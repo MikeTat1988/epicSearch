@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Views;
 using ePicSearch.Entities;
 using ePicSearch.Helpers;
 using ePicSearch.Infrastructure.Services;
@@ -69,7 +70,7 @@ namespace ePicSearch.Views
 
                 ClickButton(parentContainer);
 
-                bool confirm = await DisplayAlert($"Confirm delete {adventureName}", null, "Yes", "No");
+                var confirm = await PopupManager.ShowConfirmationPopup(this, $"Confirm delete {adventureName}");
                 if (confirm)
                 {
                     try
@@ -105,7 +106,7 @@ namespace ePicSearch.Views
         {
             await AnimationHelper.AnimatePress((View)sender);
 
-            bool confirm = await DisplayAlert("Confirm Delete All", "Are you sure you want to delete all adventures?", "Yes", "No");
+            var confirm = await PopupManager.ShowConfirmationPopup(this,"Are you sure you want to delete all adventures?");
             if (confirm)
             {
                 try
@@ -128,12 +129,12 @@ namespace ePicSearch.Views
                     if (allDeleted)
                     {
                         _logger.LogInformation("All adventures successfully deleted.");
-                        await DisplayAlert("Success", "All adventures have been deleted.", "OK");
+                        await PopupManager.ShowNoArrowMessage(this, "All adventures have been deleted");
                     }
                     else
                     {
                         _logger.LogWarning("Some adventures could not be deleted.");
-                        await DisplayAlert("Warning", "Some adventures could not be deleted properly.", "OK");
+                        await PopupManager.ShowNoArrowMessage(this, "Some adventures could not be deleted properly");
                     }
 
                     LoadAdventures();  // Refresh the UI
@@ -141,7 +142,6 @@ namespace ePicSearch.Views
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error deleting all adventures.");
-                    await DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
                 }
             }
         }

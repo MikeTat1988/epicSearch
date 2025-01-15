@@ -1,4 +1,6 @@
+using CommunityToolkit.Maui.Views;
 using ePicSearch.Entities;
+using ePicSearch.Helpers;
 using ePicSearch.Infrastructure.Entities;
 using ePicSearch.Infrastructure.Services;
 using ePicSearch.Services;
@@ -76,7 +78,6 @@ namespace ePicSearch.Views
             else
             {
                 _logger.LogWarning($"No photos were found for adventure: {adventureName}");
-                DisplayAlert("No Photos", "No photos found for this adventure.", "OK");
             }
 
         }
@@ -159,7 +160,7 @@ namespace ePicSearch.Views
                 else
                 {
                     _logger.LogError($"Failed to update {_selectedPhoto} in memory");
-                    await DisplayAlert("Save Error", "Failed to save the changes. Please try again.", "OK");
+                    await PopupManager.ShowNoArrowMessage(this, "Failed to save the changes. Please try again");
 
                     // Revert the change in the UI to keep things consistent
                     _selectedPhoto.IsLocked = true;
@@ -169,7 +170,7 @@ namespace ePicSearch.Views
             else
             {
                 _logger.LogInformation($"The code for {_selectedPhoto} was incorrect");
-                await DisplayAlert("Incorrect", "The code you entered is incorrect.", "OK");
+                await PopupManager.ShowNoArrowMessage(this, "X", null, 60, Colors.Red);
             }
         }
 

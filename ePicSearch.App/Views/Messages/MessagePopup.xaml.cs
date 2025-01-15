@@ -9,4 +9,6 @@ public partial class MessagePopup : Popup
         InitializeComponent();
         MessageLabel.Text = message;
     }
+
+    public Label MessageLabelProperty => this.FindByName<Label>("MessageLabel");
 }

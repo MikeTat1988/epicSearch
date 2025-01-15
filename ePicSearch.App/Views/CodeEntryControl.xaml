@@ -41,6 +41,7 @@
                 <DataTemplate>
                     <helpers:NoRippleImageButton Source="up.webp"
                                                  Command="{Binding BindingContext.IncreaseDigitCommand, Source={x:Reference CodeEntry}}"
+                                                 Clicked="PressButton"
                                                  CommandParameter="{Binding Index}"
                                                  WidthRequest="50"
                                                  HeightRequest="40" />
@@ -94,6 +95,7 @@
                     <helpers:NoRippleImageButton Source="down.webp"
                                                  Command="{Binding BindingContext.DecreaseDigitCommand, Source={x:Reference CodeEntry}}"
                                                  CommandParameter="{Binding Index}"
+                                                 Clicked="PressButton"
                                                  WidthRequest="50"
                                                  HeightRequest="40" />
                 </DataTemplate>
@@ -101,12 +103,14 @@
         </CollectionView>
 
         <!-- Enter button -->
-        <Button Grid.Row="3"
-                Grid.ColumnSpan="4"
-                Text="Enter"
-                Command="{Binding EnterCommand}"
-                HorizontalOptions="Center"
-                VerticalOptions="End"
-                Margin="0,4,0,0" />
+        <helpers:NoRippleImageButton Grid.Row="3"
+                                     Grid.ColumnSpan="4"
+                                     Source="enter_button.webp"
+                                     Command="{Binding EnterCommand}"
+                                     Clicked="PressButton"
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="End"
+                                     HeightRequest="50"
+                                     Margin="0,4,0,0" />
     </Grid>
 </ContentView>
