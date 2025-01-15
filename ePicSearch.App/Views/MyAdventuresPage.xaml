@@ -1,6 +1,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:ePicSearch.Helpers"
+             FlowDirection="LeftToRight"
              x:Class="ePicSearch.Views.MyAdventuresPage">
     <Grid>
         <Grid.RowDefinitions>
@@ -26,6 +27,7 @@
                                       Clicked="OnBackButtonClicked" />
 
         <Label Text="Your Adventures"
+               Margin="0,10,0,0"
                FontSize="30"
                HorizontalOptions="Center"
                VerticalOptions="Center"
