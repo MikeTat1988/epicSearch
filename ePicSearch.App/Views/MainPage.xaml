@@ -100,25 +100,6 @@
                                           Margin="0,0,0,30"
                                           Opacity="0" />
         </Grid>
-        
-        <!-- Resume Adventure Modal Overlay -->
-        <ContentView x:Name="ResumeAdventureModal"
-                     IsVisible="False"
-                     BackgroundColor="Transparent"
-                     VerticalOptions="FillAndExpand"
-                     HorizontalOptions="FillAndExpand"
-                     IsEnabled="True"
-                     InputTransparent="False">
 
-            <ContentView.GestureRecognizers>
-                <TapGestureRecognizer />
-            </ContentView.GestureRecognizers>
-
-            <!-- Center modal content -->
-            <Grid VerticalOptions="FillAndExpand"
-                  HorizontalOptions="FillAndExpand">
-                <views:ResumeAdventurePromptModal x:Name="ResumePromptModal" />
-            </Grid>
-        </ContentView>
     </Grid>
 </ContentPage>

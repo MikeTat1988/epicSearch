@@ -108,6 +108,9 @@
 	  <Compile Update="Views\CodeEntryControl.xaml.cs">
 	    <DependentUpon>CodeEntryControl.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\ResumeAdventurePromptPage.xaml.cs">
+	    <DependentUpon>ResumeAdventurePromptPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\SplashCreen.xaml.cs">
 	    <DependentUpon>SplashCreen.xaml</DependentUpon>
 	  </Compile>
@@ -135,7 +138,7 @@
 		<MauiXaml Update="Views\CodeEntryControl.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\ResumeAdventurePromptModal.xaml">
+		<MauiXaml Update="Views\ResumeAdventurePromptPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\StartupVideoPage.xaml">

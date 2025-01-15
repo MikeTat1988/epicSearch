@@ -88,7 +88,7 @@ namespace ePicSearch.Views
         {
             ClickButton(sender);
 
-            await Navigation.PushAsync(new NewAdventurePage(_adventureManager, _audioPlayerService, _nameGenerator));
+            await Navigation.PushAsync(new NewAdventurePage(_adventureManager, _audioPlayerService, _nameGenerator, _logger));
         }
 
         private async void OnQuitClicked(object sender, EventArgs e)
@@ -105,11 +105,11 @@ namespace ePicSearch.Views
             if (incompleteAdventure != null)
             {
                 _logger.LogInformation("Incomplete adventure found: " + incompleteAdventure.AdventureName);
-                ResumePromptModal.Initialize(incompleteAdventure, _adventureManager, _audioPlayerService);
 
-                ResumePromptModal.ModalClosed += ResumePromptModal_ModalClosed;
+                var resumePage = new ResumeAdventurePromptPage(_logger);
+                resumePage.Initialize(incompleteAdventure, _adventureManager, _audioPlayerService);
 
-                ResumeAdventureModal.IsVisible = true;
+                await Navigation.PushModalAsync(resumePage);
             }
             else
             {
@@ -117,13 +117,6 @@ namespace ePicSearch.Views
             }
         }
 
-        private void ResumePromptModal_ModalClosed(object sender, EventArgs e)
-        {
-            // Unsubscribe from the event
-            ResumePromptModal.ModalClosed -= ResumePromptModal_ModalClosed;
-
-            ResumeAdventureModal.IsVisible = false;
-        }
 
         private async void ClickButton(object sender)
         {

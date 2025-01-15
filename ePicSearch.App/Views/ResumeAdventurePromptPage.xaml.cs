@@ -3,11 +3,12 @@ using ePicSearch.Infrastructure.Entities;
 using ePicSearch.Infrastructure.Services;
 using ePicSearch.Labels;
 using ePicSearch.Services;
+using Microsoft.Extensions.Logging;
 using System.Threading;
 
 namespace ePicSearch.Views
 {
-    public partial class ResumeAdventurePromptModal : ContentView
+    public partial class ResumeAdventurePromptPage : ContentPage
     {
         public event EventHandler ModalClosed;
 
@@ -15,10 +16,20 @@ namespace ePicSearch.Views
         private AdventureManager _adventureManager;
         private AudioPlayerService _audioPlayerService;
         private CancellationTokenSource _cts;
+        private readonly ILogger<MainPage> _logger;
 
-        public ResumeAdventurePromptModal()
+        public ResumeAdventurePromptPage()
         {
             InitializeComponent();
+
+            LongPressMessageLabel.Text = EnglishLabels.LongPressMessage;
+        }
+
+        public ResumeAdventurePromptPage(ILogger<MainPage> logger)
+        {
+            InitializeComponent();
+
+            _logger = logger;           
 
             LongPressMessageLabel.Text = EnglishLabels.LongPressMessage;
         }
@@ -37,9 +48,12 @@ namespace ePicSearch.Views
 
             ModalClosed?.Invoke(this, EventArgs.Empty);
 
-            // Close the modal and navigate to CameraPage to continue adventure
-            this.IsVisible = false;
-            await Application.Current.MainPage.Navigation.PushAsync(new CameraPage(_adventureData, _adventureManager, _audioPlayerService));
+            // Pop *this* page from the modal stack
+            await Application.Current.MainPage.Navigation.PopModalAsync(false);
+
+            // Then push your CameraPage
+            await Application.Current.MainPage.Navigation
+                       .PushAsync(new CameraPage(_adventureData, _adventureManager, _audioPlayerService, _logger), false);
         }
 
         private async void OnExitButtonPressed(object sender, EventArgs e)

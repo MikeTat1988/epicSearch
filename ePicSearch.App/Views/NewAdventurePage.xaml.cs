@@ -4,6 +4,7 @@ using ePicSearch.Helpers;
 using ePicSearch.Services;
 using ePicSearch.Entities;
 using ePicSearch.Labels;
+using Microsoft.Extensions.Logging;
 
 namespace ePicSearch.Views
 {
@@ -12,13 +13,15 @@ namespace ePicSearch.Views
         private readonly AdventureManager _adventureManager;
         private readonly AdventureNameGenerator _nameGenerator;
         private readonly AudioPlayerService _audioPlayerService;
+        private readonly ILogger<MainPage> _logger;
 
-        public NewAdventurePage(AdventureManager adventureManager, AudioPlayerService audioPlayerService, AdventureNameGenerator nameGenerator)
+        public NewAdventurePage(AdventureManager adventureManager, AudioPlayerService audioPlayerService, AdventureNameGenerator nameGenerator, ILogger<MainPage> logger)
         {
             InitializeComponent();
             _adventureManager = adventureManager;
             _nameGenerator = nameGenerator;
             _audioPlayerService = audioPlayerService;
+            _logger = logger;
 
             AdventureNameEntry.Text = _nameGenerator.GenerateUniqueName();
 
@@ -56,7 +59,7 @@ namespace ePicSearch.Views
 
             _adventureManager.AddAdventure(adventureData);
 
-            await Navigation.PushAsync(new CameraPage(adventureData, _adventureManager, _audioPlayerService));
+            await Navigation.PushAsync(new CameraPage(adventureData, _adventureManager, _audioPlayerService, _logger));
         }
 
         private async Task<string?> GetValidAdventureNameAsync()

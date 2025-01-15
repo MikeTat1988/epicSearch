@@ -4,6 +4,7 @@ using ePicSearch.Infrastructure.Entities;
 using ePicSearch.Infrastructure.Services;
 using ePicSearch.Labels;
 using ePicSearch.Services;
+using Microsoft.Extensions.Logging;
 namespace ePicSearch.Views;
 
 public partial class CameraPage : ContentPage
@@ -14,14 +15,16 @@ public partial class CameraPage : ContentPage
     private CancellationTokenSource _cts;
     private ProgressBar? _currentLongPressProgress;
     private bool _hasShownTutorials = false;
+    private readonly ILogger<MainPage> _logger;
 
-    public CameraPage(AdventureData adventureData, AdventureManager adventureManager, AudioPlayerService audioPlayerService)
+    public CameraPage(AdventureData adventureData, AdventureManager adventureManager, AudioPlayerService audioPlayerService, ILogger<MainPage> logger)
     {
         InitializeComponent();
 
         _localAdventureData = new AdventureData(adventureData);
         _adventureManager = adventureManager;
         _audioPlayerService = audioPlayerService;
+        _logger = logger;
 
         TreasureNextClueButton.Pressed += OnButtonPressed;
         TreasureNextClueButton.Released += OnButtonReleased;
@@ -42,36 +45,59 @@ public partial class CameraPage : ContentPage
         }
     }
 
+    protected override bool OnBackButtonPressed()
+    {
+        // Prevent back navigation
+        return true;
+    }
+
     private async void StartTreasurePhotoCapture()
     {
-        var photo = await MediaPicker.CapturePhotoAsync();
-
-        if (photo == null)
+        try
         {
-            await DisplayAlert("Error", "Photo capture failed. Please try again.", "OK");
-            return;
+            var photo = await MediaPicker.CapturePhotoAsync();
+
+            if (photo == null)
+            {
+                _logger.LogError($"Photo capture failed for {_localAdventureData.AdventureName}");
+
+                var deleteSuccess = await _adventureManager.DeleteAdventureAsync(_localAdventureData.AdventureName);
+                if (!deleteSuccess)
+                {
+                    _logger.LogWarning($"Failed to delete unfinished adventure: {_localAdventureData.AdventureName}");
+                }
+
+                await Navigation.PopAsync();
+                return;
+            }
+
+            var capturedPhoto = await _adventureManager.CapturePhoto(new AppFileResult(photo), _localAdventureData.AdventureName);
+
+            if (capturedPhoto == null)
+            {
+                _logger.LogError($"Failed to save the photo for {_localAdventureData.AdventureName}");
+                await DisplayAlert("Error", "Failed to save the photo. Please try again.", "OK");
+                return;
+            }
+
+            AddPhotoToLocalAdventure(capturedPhoto);
+
+            TreasureCodeLabel.Text = $"{capturedPhoto.Code}";
+            TreasurePhotoModal.IsVisible = true;
+
+            if (_adventureManager.ShowTutorials)
+            {
+                var messages = EnglishLabels.CameraPageTreasureTutorialMessages;
+                await PopupManager.ShowMessages(this, messages);
+            }
+
+            await TreasurePhotoModal.FadeTo(1, 250);
         }
-
-        var capturedPhoto = await _adventureManager.CapturePhoto(new AppFileResult(photo), _localAdventureData.AdventureName);
-
-        if (capturedPhoto == null)
+        catch (Exception ex)
         {
-            await DisplayAlert("Error", "Failed to save the photo. Please try again.", "OK");
-            return;
+            _logger.LogError($"An unexpected error occurred: {ex.Message}");
+            await DisplayAlert("Error", $"An unexpected error occurred", "OK");
         }
-
-        AddPhotoToLocalAdventure(capturedPhoto);
-
-        TreasureCodeLabel.Text = $"{capturedPhoto.Code}";
-        TreasurePhotoModal.IsVisible = true;
-
-        if (_adventureManager.ShowTutorials)
-        {
-            var messages = EnglishLabels.CameraPageTreasureTutorialMessages;
-            await PopupManager.ShowMessages(this, messages);
-        }
-
-        await TreasurePhotoModal.FadeTo(1, 250);
     }
 
     private async Task StartCluePhotoLoop()
@@ -82,7 +108,8 @@ public partial class CameraPage : ContentPage
 
             if (photo == null)
             {
-                await DisplayAlert("Error", "Photo capture failed. Please try again.", "OK");
+                _logger.LogError($"Photo capture failed / bacvk pressed for {_localAdventureData.AdventureName}");
+                await ShowResumeModal();
                 return;
             }
 
@@ -90,6 +117,7 @@ public partial class CameraPage : ContentPage
 
             if (capturedPhoto == null)
             {
+                _logger.LogError($"Failed to save the photo for {_localAdventureData.AdventureName}");
                 await DisplayAlert("Error", "Failed to save the photo. Please try again.", "OK");
                 return;
             }
@@ -114,6 +142,7 @@ public partial class CameraPage : ContentPage
         }
         catch (Exception ex)
         {
+            _logger.LogError($"An unexpected error occurred: {ex.Message}");
             await DisplayAlert("Error", $"An unexpected error occurred: {ex.Message}", "OK");
         }
     }
@@ -215,9 +244,27 @@ public partial class CameraPage : ContentPage
         CompletionImage.IsVisible = false;
         CompletionTitle.IsVisible = false;
 
-        await Navigation.PopToRootAsync();
+        await Shell.Current.GoToAsync("//MainPage");
     }
 
+    private async Task ShowResumeModal()
+    {
+        // Save the current state of the adventure
+        _adventureManager.UpdateAdventure(_localAdventureData);
+
+        var resumePage = new ResumeAdventurePromptPage(_logger);
+        resumePage.Initialize(_localAdventureData, _adventureManager, _audioPlayerService);
+        resumePage.ModalClosed += (sender, e) =>
+        {
+            // Navigate back to the main page if the adventure is canceled
+            if (!_localAdventureData.IsComplete)
+            {
+                Shell.Current.GoToAsync("//MainPage");
+            }
+        };
+
+        await Navigation.PushModalAsync(resumePage, false); 
+    }
 
     private async void OnButtonPressed(object sender, EventArgs e)
     {

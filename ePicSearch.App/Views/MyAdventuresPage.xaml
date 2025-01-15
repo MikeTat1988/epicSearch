@@ -50,6 +50,7 @@
                    FontSize="40"
                    TextColor="White"
                    Opacity="0.8"
+                   HorizontalTextAlignment="Center"
                    HorizontalOptions="Center"
                    VerticalOptions="Center"
                    LineBreakMode="WordWrap" />
