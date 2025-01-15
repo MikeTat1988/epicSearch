@@ -13,6 +13,7 @@ namespace ePicSearch.Views
             _adventureManager = adventureManager;
             MuteSwitch.IsToggled = _adventureManager.IsMuted;
             ShowStartupSwitch.IsToggled = _adventureManager.PlayStartupVideo;
+            TutorialSwitch.IsToggled = _adventureManager.ShowTutorials;
 
             MuteLabel.Text = EnglishLabels.MuteLabel;
             StartVideoLabel.Text = EnglishLabels.StartVideoLabel;

@@ -12,14 +12,25 @@ public static class PopupManager
             if (page.FindByName<VisualElement>(entry.Key) is not View view)
                 continue;
 
-            // Create and configure the popup
-            var popup = new MessagePopup(entry.Value)
+            var popup = new TutorialPopup(entry.Value)
             {
                 Anchor = view
             };
 
             await page.ShowPopupAsync(popup);
         }
+    }
+
+    public static async Task ShowNoArrowMessage(ContentPage page, string message, View? anchor = null)
+    {
+        var popup = new MessagePopup(message);
+
+        if (anchor != null)
+        {
+            popup.Anchor = anchor;
+        }
+
+        await page.ShowPopupAsync(popup);
     }
 }
         

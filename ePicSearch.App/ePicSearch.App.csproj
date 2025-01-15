@@ -108,6 +108,12 @@
 	  <Compile Update="Views\CodeEntryControl.xaml.cs">
 	    <DependentUpon>CodeEntryControl.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\Messages\MessagePopup.xaml.cs">
+	    <DependentUpon>MessagePopup.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Messages\TutorialPopup.xaml.cs">
+	    <DependentUpon>TutorialPopup.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\ResumeAdventurePromptPage.xaml.cs">
 	    <DependentUpon>ResumeAdventurePromptPage.xaml</DependentUpon>
 	  </Compile>
@@ -123,7 +129,10 @@
 		<MauiXaml Update="Views\CameraPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\MessagePopup.xaml">
+		<MauiXaml Update="Views\Messages\TutorialPopup.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Messages\MessagePopup.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\MyAdventuresPage.xaml">

@@ -171,6 +171,7 @@ namespace ePicSearch.Infrastructure.Services
             _dataStorageService.SyncCacheToFile();
         }
 
+        //TODO: Move to settings manager
         public bool IsMuted
         {
             get
@@ -185,6 +186,7 @@ namespace ePicSearch.Infrastructure.Services
             }
         }
 
+        //TODO: Move to settings manager
         public bool PlayStartupVideo
         {
             get

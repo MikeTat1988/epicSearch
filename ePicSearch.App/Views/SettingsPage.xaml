@@ -1,6 +1,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:ePicSearch.Helpers"
+             FlowDirection="LeftToRight"
              x:Class="ePicSearch.Views.SettingsPage">
     <Grid>
         <Image Source="settings_background.webp"

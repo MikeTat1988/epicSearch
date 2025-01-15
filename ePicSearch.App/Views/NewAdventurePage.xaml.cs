@@ -32,6 +32,8 @@ namespace ePicSearch.Views
         {
             if (_adventureManager.ShowTutorials)
             {
+                await PopupManager.ShowNoArrowMessage(this, "Welcome to a short tutorial! You can disable it anytime in the settings!", AdventureLabel);
+
                 var messages = EnglishLabels.NewAdventurePageTutorialMessages;
                 await PopupManager.ShowMessages(this, messages);
             }

@@ -42,7 +42,8 @@
                 </Label.Shadow>
             </Label>
 
-            <Label Text="New Adventure"
+            <Label x:Name="AdventureLabel"
+                   Text="New Adventure"
                    FontFamily="LuckiestGuy"
                    FontSize="40"
                    TextColor="White"
