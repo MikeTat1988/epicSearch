@@ -215,6 +215,17 @@
             <Grid VerticalOptions="Center"
                   HorizontalOptions="Center">
 
+                <helpers:NoRippleImageButton Source="no_button.webp"
+                                             WidthRequest="50"
+                                             HeightRequest="50"
+                                             HorizontalOptions="End"
+                                             VerticalOptions="Start"
+                                             Margin="10"
+                                             BackgroundColor="Transparent"
+                                             Command="{Binding CloseModalCommand}"
+                                             AutomationProperties.Name="Close"
+                                             ZIndex="2" />
+
                 <Grid x:Name="ModalContentContainer"
                       VerticalOptions="FillAndExpand"
                       HorizontalOptions="FillAndExpand">

@@ -248,6 +248,16 @@ namespace ePicSearch.Views
             BackgroundView.ItemsSource = BackgroundScrolls;
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            if (PhotoModal.IsVisible)
+            {
+                CloseModal();
+                return true;
+            }
+            return base.OnBackButtonPressed();
+        }
+
         public class ScrollMiddleInfo
         {
             public string ImageSource { get; set; } = "scroll_middle.webp";

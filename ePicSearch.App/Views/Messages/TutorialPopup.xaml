@@ -4,15 +4,15 @@
                x:Class="ePicSearch.Views.TutorialPopup"
                Color="Transparent">
     <VerticalStackLayout Spacing="0">
-        
+
+        <VerticalStackLayout.GestureRecognizers>
+            <TapGestureRecognizer Tapped="OnDismissClicked" />
+        </VerticalStackLayout.GestureRecognizers>
+
         <!-- Transparent empty rectangle for spacing -->
         <BoxView HeightRequest="120"
-                 BackgroundColor="Transparent">
-            <BoxView.GestureRecognizers>
-                <TapGestureRecognizer Tapped="OnDismissClicked" />
-            </BoxView.GestureRecognizers>
-        </BoxView>
-        
+                 BackgroundColor="Transparent" />
+
         <Image Source="tutorial_arrow.png"
                HeightRequest="30" />
 
