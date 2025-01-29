@@ -16,6 +16,8 @@ namespace ePicSearch
 
             if (_adventureManager.PlayStartupVideo)
             {
+                _adventureManager.PlayStartupVideo = false;
+                _adventureManager.SyncCache();
                 MainPage = new StartupVideoPage();
             }
             else
