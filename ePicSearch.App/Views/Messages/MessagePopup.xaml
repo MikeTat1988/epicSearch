@@ -4,7 +4,7 @@
                x:Class="ePicSearch.Views.MessagePopup"
                Color="Transparent">
     <Grid VerticalOptions="Start"
-          WidthRequest="200">
+          WidthRequest="250">
 
         <Image Source="tutorial_popup.webp"
                Aspect="AspectFill"
@@ -20,7 +20,10 @@
                    FontSize="15"
                    HorizontalTextAlignment="Center"
                    VerticalTextAlignment="Center"
-                   LineBreakMode="WordWrap" />
+                   LineBreakMode="WordWrap"
+                   MaxLines="3"
+                   HorizontalOptions="FillAndExpand"
+                   WidthRequest="200"/>
         </ContentView>
     </Grid>
 </toolkit:Popup>
