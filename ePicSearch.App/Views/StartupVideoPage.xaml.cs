@@ -26,7 +26,7 @@ namespace ePicSearch.Views
                 StartupVideo.IsVisible = true;
                 StartupVideo.Play();
 
-                await Task.Delay(3000);
+                await Task.Delay(2000);
                 SkipButton.IsVisible = true;
             });
         }
