@@ -9,11 +9,11 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		
-			<!--
+<!--
 		<AndroidEnableProguard>true</AndroidEnableProguard>
 		<AndroidLinkTool>r8</AndroidLinkTool>
 		<AndroidIncludeDebugSymbols>true</AndroidIncludeDebugSymbols>
-		 -->
+-->
 		
 		<!-- Display name -->
 		<ApplicationTitle>ePicSearch</ApplicationTitle>

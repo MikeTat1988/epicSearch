@@ -1,3 +1,4 @@
+using Android.Window;
 using CommunityToolkit.Maui.Views;
 
 namespace ePicSearch.Views
@@ -7,6 +8,27 @@ namespace ePicSearch.Views
         public StartupVideoPage()
         {
             InitializeComponent();
+            Loaded += async (s, e) => await StartIntroSequence();
+        }
+
+        private async Task StartIntroSequence()
+        {
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                await IntroText.FadeTo(1, 300);
+                await Task.Delay(500);
+
+                // Fade out slowly
+                await IntroText.FadeTo(0, 1500);
+                await IntroOverlay.FadeTo(0, 1000);
+                IntroOverlay.IsVisible = false;
+
+                StartupVideo.IsVisible = true;
+                StartupVideo.Play();
+
+                await Task.Delay(3000);
+                SkipButton.IsVisible = true;
+            });
         }
 
         private void NavigateToShell()

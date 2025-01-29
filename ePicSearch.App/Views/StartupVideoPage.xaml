@@ -5,22 +5,50 @@
              x:Class="ePicSearch.Views.StartupVideoPage"
              NavigationPage.HasNavigationBar="False">
     <Grid>
+        <Grid x:Name="IntroOverlay"
+              BackgroundColor="#36547a"
+              HorizontalOptions="FillAndExpand"
+              VerticalOptions="FillAndExpand">
+            <StackLayout VerticalOptions="Center"
+                         HorizontalOptions="Center"
+                         Opacity="0"
+                         x:Name="IntroText"
+                         Spacing="-20">
+                <Label Text="EPIC"
+                       FontSize="90"
+                       FontFamily="LuckiestGuy"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="SEARCH"
+                       FontSize="50"
+                       FontFamily="LuckiestGuy"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center" />
+            </StackLayout>
+        </Grid>
+
+
+
         <toolkit:MediaElement x:Name="StartupVideo"
                               Source="embed://SV.mp4"
                               ShouldShowPlaybackControls="False"
                               ShouldAutoPlay="True"
                               Aspect="AspectFill"
+                              IsVisible="False"
                               MediaEnded="StartupVideo_MediaEnded" />
-        <Button Text="Skip"
+        <Button Text="Skip Intro"
                 BackgroundColor="#AA000000"
                 TextColor="White"
-                FontSize="16"
-                Padding="10"
+                FontSize="18"
+                FontFamily="LuckiestGuy"
+                Padding="12"
                 CornerRadius="20"
                 HorizontalOptions="End"
                 VerticalOptions="End"
                 Margin="20"
-                Clicked="OnSkipButtonClicked" />
+                IsVisible="False"
+                Clicked="OnSkipButtonClicked" 
+                x:Name="SkipButton"/>
     </Grid>
 
 </ContentPage>
