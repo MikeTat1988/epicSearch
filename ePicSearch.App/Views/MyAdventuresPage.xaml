@@ -24,7 +24,9 @@
                                       VerticalOptions="Start"
                                       Margin="10"
                                       Grid.Row="0"
-                                      Clicked="OnBackButtonClicked" />
+                                      Clicked="OnBackButtonClicked"
+                                      x:Name="BackButton"
+                                      SemanticProperties.Description="Back" />
 
         <Label Text="Your Adventures"
                Margin="0,10,0,0"

@@ -26,6 +26,8 @@
                                       VerticalOptions="Start"
                                       Margin="5"
                                       Clicked="OnBackButtonClicked"
+                                      x:Name="BackButton"
+                                      SemanticProperties.Description="Back"
                                       Grid.Row="0" />
 
         <StackLayout Grid.Row="1"
@@ -113,7 +115,8 @@
                                               VerticalOptions="End"
                                               Margin="0,0,0,0"
                                               Grid.Column="1"
-                                              Clicked="OnStartCreatingClicked" />
+                                              Clicked="OnStartCreatingClicked"
+                                              SemanticProperties.Description="Start Creating Adventure" />
             </Grid>
 
         </Grid>

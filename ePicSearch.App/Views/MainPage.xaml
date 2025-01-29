@@ -40,7 +40,8 @@
                                           Aspect="AspectFit"
                                           Opacity="0"
                                           Grid.Row="1"
-                                          Grid.ColumnSpan="3" />
+                                          Grid.ColumnSpan="3"
+                                          SemanticProperties.Description="Game Title" />
 
 
             <!-- My Adventures Button -->

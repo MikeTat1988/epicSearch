@@ -17,14 +17,13 @@
                     </Grid.RowDefinitions>
 
                     <!-- Top Tile -->
-                <Image Source="scroll_top_n.webp"
-                       Aspect="Fill"
-                       Grid.Row="0"
-                       HorizontalOptions="FillAndExpand"
-                       HeightRequest="100" />
-                <!-- Margin="0, 0, 0, -5"   -->
+                    <Image Source="scroll_top_n.webp"
+                           Aspect="Fill"
+                           Grid.Row="0"
+                           HorizontalOptions="FillAndExpand"
+                           HeightRequest="100" />
 
-                <!-- Middle Tile  -->
+                    <!-- Middle Tile  -->
                     <CollectionView x:Name="BackgroundView"
                                     ItemsSource="{Binding BackgroundScrolls}"
                                     HorizontalScrollBarVisibility="Never"

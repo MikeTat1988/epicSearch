@@ -15,7 +15,9 @@
                                       HorizontalOptions="Start"
                                       VerticalOptions="Start"
                                       Margin="10"
-                                      Clicked="OnBackButtonClicked" />
+                                      Clicked="OnBackButtonClicked"
+                                      x:Name="BackButton"
+                                      SemanticProperties.Description="Back" />
 
         <ContentView HorizontalOptions="Center"
                      VerticalOptions="Center">
@@ -137,7 +139,8 @@
                            TextColor="Black"
                            x:Name="ClearLogsLabel"
                            VerticalOptions="Center"
-                           HorizontalOptions="Center" />
+                           HorizontalOptions="Center"
+                           SemanticProperties.Description="Clear App Logs" />
                     <controls:NoRippleImageButton Clicked="OnCleanLogsClicked" />
                 </Grid>
             </Grid>
