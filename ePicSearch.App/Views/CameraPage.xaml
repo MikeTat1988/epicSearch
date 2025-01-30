@@ -83,7 +83,7 @@
 
                 <Label x:Name="TreasureCodeLabel"
                        Rotation="-10"
-                       FontSize="50"
+                       FontSize="70"
                        WidthRequest="200"
                        Style="{StaticResource CommonLabelStyle}"
                        Grid.Row="1" />
@@ -223,7 +223,7 @@
 
                 <Label x:Name="ClueCodeLabel"
                        Rotation="3"
-                       FontSize="50"
+                       FontSize="70"
                        WidthRequest="200"
                        Style="{StaticResource CommonLabelStyle}"
                        Grid.Row="1" />
@@ -231,9 +231,6 @@
                 <StackLayout Grid.Row="2"
                              VerticalOptions="Center"
                              Rotation="6">
-                    <Label Text="Another Clue!"
-                           FontSize="30"
-                           Style="{StaticResource CommonLabelStyle}" />
                     <Label Text="Write down the code"
                            FontSize="27"
                            Style="{StaticResource CommonLabelStyle}" />
@@ -247,7 +244,7 @@
                 <Grid HeightRequest="70"
                       Grid.Row="3"
                       Margin="30,0,0,0"
-                      HorizontalOptions="Start"
+                      HorizontalOptions="Center"
                       Rotation="8">
                     <controls:NoRippleImageButton  x:Name="ClueNextButton"
                                                    Source="next_clue_button.webp"
@@ -283,7 +280,7 @@
 
                 </Grid>
 
-                <controls:NoRippleImageButton Source="finish_adventure_button.webp"
+                <!--controls:NoRippleImageButton Source="finish_adventure_button.webp"
                                               x:Name="FinishAdventureButton"
                                               Clicked="OnFinishAdventureClicked"
                                               BackgroundColor="Transparent"
@@ -292,7 +289,7 @@
                                               HorizontalOptions="End"
                                               Rotation="-9"
                                               Margin="0,0,30,0"
-                                              Grid.Row="3" />
+                                              Grid.Row="3" -->
 
                 <!-- Tutorial Popup 2 Image -->
                 <HorizontalStackLayout Spacing="10"

@@ -43,6 +43,16 @@ public static class PopupManager
         await page.ShowPopupAsync(popup);
     }
 
+    public static async Task<bool> ShowAdventureDecisionPopup(ContentPage page)
+    {
+        var completionSource = new TaskCompletionSource<bool>();
+        var popup = new AdventurePopup(completionSource);
+
+        await page.ShowPopupAsync(popup);
+
+        return await completionSource.Task;
+    }
+
     public static async Task<bool> ShowConfirmationPopup(ContentPage page, string message, View? anchor = null)
     {
         var popup = new ConfirmationPopup(message);

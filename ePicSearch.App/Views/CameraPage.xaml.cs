@@ -122,7 +122,16 @@ public partial class CameraPage : ContentPage
                 return;
             }
 
-            AddPhotoToLocalAdventure(capturedPhoto);  
+            AddPhotoToLocalAdventure(capturedPhoto);
+
+            // Use PopupManager for adventure decision
+            bool continueAdventure = await PopupManager.ShowAdventureDecisionPopup(this);
+
+            if (!continueAdventure)
+            {
+                await OnFinishAdventureClickedAsync(this, EventArgs.Empty);
+                return;
+            }
 
             ClueCodeLabel.Text = $"{capturedPhoto.Code}";
             CluePhotoPromptModal.IsVisible = true;
@@ -185,8 +194,11 @@ public partial class CameraPage : ContentPage
 
     internal async void OnFinishAdventureClicked(object sender, EventArgs e)
     {
-        await AnimationHelper.AnimatePress((View)sender);
+        await OnFinishAdventureClickedAsync(sender,e);
+    }
 
+    private async Task OnFinishAdventureClickedAsync(object sender, EventArgs e)
+    {
         await CluePhotoPromptModal.FadeTo(0, 250);
         CluePhotoPromptModal.IsVisible = false;
 

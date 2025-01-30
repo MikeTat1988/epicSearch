@@ -129,6 +129,9 @@
 		<MauiXaml Update="Views\CameraPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\Messages\AdventurePopup.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\Messages\ConfirmationPopup.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>

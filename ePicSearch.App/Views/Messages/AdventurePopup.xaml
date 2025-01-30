@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               xmlns:controls="clr-namespace:ePicSearch.Helpers"
+               x:Class="ePicSearch.Views.AdventurePopup"
+               Color="Transparent">
+
+    <Grid WidthRequest="300"
+          HeightRequest="275"
+          VerticalOptions="Fill"
+          HorizontalOptions="Fill">
+        <!-- Background Image -->
+        <Image Source="adventure_popup_bg.webp"
+               WidthRequest="300"
+               HeightRequest="275"
+               Aspect="Fill" />
+
+        <!-- Layout Grid -->
+        <Grid RowDefinitions="*,*"
+              ColumnDefinitions="*,*"
+              WidthRequest="300"
+              HeightRequest="275"
+              HorizontalOptions="FillAndExpand"
+              VerticalOptions="FillAndExpand"
+              Padding="10">
+
+            <!-- Message 1901, 5147  -->
+            <Label Text="Clue Captured!&#x0a;&#x0a;Continue adventure?"
+                   FontSize="22"
+                   FontFamily="LuckiestGuy"
+                   TextColor="White"
+                   HorizontalTextAlignment="Center"
+                   VerticalTextAlignment="Center"
+                   Grid.Row="0"
+                   Grid.ColumnSpan="2">
+                <Label.Shadow>
+                    <Shadow Brush="Black"
+                            Offset="2,2"
+                            Radius="2" />
+                </Label.Shadow>
+            </Label>
+
+            <!-- Buttons -->
+
+            <controls:NoRippleImageButton Source="another_clue_button.webp"
+                                          WidthRequest="80"
+                                          HeightRequest="80"
+                                          Grid.Row="1"
+                                          Grid.Column="0"
+                                          VerticalOptions="Center"
+                                          Clicked="OnContinueClicked"/>
+
+            <controls:NoRippleImageButton Source="finish_adventure_button.webp"
+                                          WidthRequest="80"
+                                          HeightRequest="80"
+                                          Clicked="OnFinishClicked"
+                                          Grid.Row="1"
+                                          VerticalOptions="Center"
+                                          Grid.Column="1" />
+
+        </Grid>
+    </Grid>
+
+</toolkit:Popup>
