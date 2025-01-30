@@ -12,7 +12,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Image Source="message_frame.webp"
+        <Image Source="adventure_popup_bg.webp"
                VerticalOptions="FillAndExpand"
                HorizontalOptions="Center"
                Grid.Row="1" />

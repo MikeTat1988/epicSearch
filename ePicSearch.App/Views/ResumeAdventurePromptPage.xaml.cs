@@ -87,6 +87,11 @@ namespace ePicSearch.Views
                     // Delete the adventure and hide the modal
                     await _adventureManager.DeleteAdventureAsync(_adventureData.AdventureName);
                     ModalClosed?.Invoke(this, EventArgs.Empty);
+
+                    var shell = MauiProgram.AppInstance.Services.GetRequiredService<AppShell>();
+                    Application.Current.MainPage = shell;
+
+                    await Shell.Current.GoToAsync("//MainPage");
                 }
             }
             catch (TaskCanceledException)
