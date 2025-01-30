@@ -65,13 +65,16 @@
                     </Grid.RowDefinitions>
 
                     <Label Text="{Binding AdventureName}"
-                           FontSize="26"
+                           FontSize="22"
                            HorizontalOptions="Center"
-                           VerticalOptions="Center"
+                           VerticalOptions="CenterAndExpand"
                            TextColor="White"
                            FontFamily="LuckiestGuy"
                            Grid.Row="0"
-                           Margin="20">
+                           LineBreakMode="WordWrap"
+                           MaxLines="2"
+                           HorizontalTextAlignment="Center"
+                           Margin="10">
                         <Label.Shadow>
                             <Shadow Brush="Black"
                                     Offset="2,2"

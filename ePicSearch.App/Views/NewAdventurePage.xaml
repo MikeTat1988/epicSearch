@@ -99,6 +99,24 @@
                    Margin="0,0,0,0"
                    Grid.Row="1" />
 
+            <Frame x:Name="TooLongFrame"
+                   CornerRadius="15"
+                   HasShadow="true"
+                   IsVisible="False"
+                   BackgroundColor="Red"
+                   HorizontalOptions="Center"
+                   VerticalOptions="End"
+                   Margin="0,-100,0,0"
+                   Padding="10"
+                   Grid.Row="0">
+                <Label Text="Title Too Long!"
+                       FontFamily="LuckiestGuy"
+                       FontSize="15"
+                       TextColor="Black"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center" />
+            </Frame>
+
             <!-- Start Creating Button -->
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>

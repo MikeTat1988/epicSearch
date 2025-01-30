@@ -78,6 +78,15 @@ namespace ePicSearch.Views
                 return null;
             }
 
+            if (adventureName.Length > 16)
+            {
+                // Show the “Too Long” message frame, then hide it
+                TooLongFrame.IsVisible = true;
+                await Task.Delay(1500);  // or 2000 ms
+                TooLongFrame.IsVisible = false;
+                return null;
+            }
+
             var existingAdventures = _adventureManager.GetAllAdventureNames();
 
             if (existingAdventures.Contains(adventureName, StringComparer.OrdinalIgnoreCase))
