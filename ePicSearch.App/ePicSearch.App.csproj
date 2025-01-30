@@ -22,8 +22,8 @@
 		<ApplicationId>com.epicsearch.app</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-		<ApplicationVersion>1</ApplicationVersion>
+		<ApplicationDisplayVersion>1.2</ApplicationDisplayVersion>
+		<ApplicationVersion>3</ApplicationVersion>
 
 		<!-- Supported OS Platform Version for Android -->
 		<SupportedOSPlatformVersion>21.0</SupportedOSPlatformVersion>
