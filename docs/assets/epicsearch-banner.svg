@@ -1,0 +1,130 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">ePicSearch project banner</title>
+  <desc id="desc">A professional banner showing an Android app, photo clues, unlock codes, local progress, and a treasure-hunt path.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111827"/>
+      <stop offset="0.55" stop-color="#16314A"/>
+      <stop offset="1" stop-color="#0F172A"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="620" y1="155" x2="1020" y2="755" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FAFC"/>
+      <stop offset="1" stop-color="#DDE7F0"/>
+    </linearGradient>
+    <linearGradient id="photoA" x1="684" y1="262" x2="936" y2="430" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#99F6E4"/>
+      <stop offset="1" stop-color="#38BDF8"/>
+    </linearGradient>
+    <linearGradient id="photoB" x1="719" y1="459" x2="901" y2="586" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FDE68A"/>
+      <stop offset="1" stop-color="#FB923C"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="24" stdDeviation="24" flood-color="#020617" flood-opacity="0.35"/>
+    </filter>
+    <style>
+      .label { font-family: "Segoe UI", Arial, sans-serif; fill: #E5E7EB; }
+      .muted { fill: #A7B5C7; }
+      .panel { fill: #0F172A; fill-opacity: 0.54; stroke: #94A3B8; stroke-opacity: 0.34; }
+      .fine { stroke: #E2E8F0; stroke-opacity: 0.36; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <path d="M120 742C280 590 450 622 612 525C828 395 907 208 1158 220C1312 228 1430 304 1504 418" stroke="#38BDF8" stroke-width="2" stroke-opacity="0.22" stroke-dasharray="14 18"/>
+  <path d="M136 654C337 470 523 513 675 388C812 275 986 131 1268 166" stroke="#FBBF24" stroke-width="2" stroke-opacity="0.16" stroke-dasharray="10 22"/>
+
+  <g transform="translate(126 195)">
+    <text class="label" x="0" y="0" font-size="82" font-weight="750" letter-spacing="0">ePicSearch</text>
+    <text class="label muted" x="4" y="54" font-size="31">Photo clue adventures on Android</text>
+    <g transform="translate(4 116)">
+      <rect class="panel" x="0" y="0" width="360" height="62" rx="12"/>
+      <circle cx="36" cy="31" r="12" fill="#38BDF8"/>
+      <text class="label" x="64" y="39" font-size="25" font-weight="600">Create adventure</text>
+    </g>
+    <g transform="translate(4 194)">
+      <rect class="panel" x="0" y="0" width="360" height="62" rx="12"/>
+      <circle cx="36" cy="31" r="12" fill="#FBBF24"/>
+      <text class="label" x="64" y="39" font-size="25" font-weight="600">Capture photo clues</text>
+    </g>
+    <g transform="translate(4 272)">
+      <rect class="panel" x="0" y="0" width="360" height="62" rx="12"/>
+      <circle cx="36" cy="31" r="12" fill="#34D399"/>
+      <text class="label" x="64" y="39" font-size="25" font-weight="600">Preserve progress</text>
+    </g>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="586" y="94" width="448" height="712" rx="58" fill="#020617"/>
+    <rect x="609" y="118" width="402" height="664" rx="42" fill="url(#screen)"/>
+    <rect x="739" y="139" width="142" height="13" rx="6.5" fill="#020617" fill-opacity="0.82"/>
+    <text x="666" y="216" font-family="Segoe UI, Arial, sans-serif" font-size="36" font-weight="750" fill="#0F172A">Adventure Builder</text>
+    <text x="668" y="252" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#475569">Local photos, codes, and state</text>
+
+    <g transform="translate(670 286) rotate(-4 134 92)">
+      <rect x="0" y="0" width="268" height="184" rx="20" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+      <rect x="18" y="18" width="232" height="120" rx="14" fill="url(#photoA)"/>
+      <path d="M37 122L95 70L142 109L170 86L230 122" stroke="#0F766E" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" opacity="0.62"/>
+      <circle cx="203" cy="52" r="18" fill="#FEF3C7"/>
+      <text x="22" y="165" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700" fill="#0F172A">Clue photo</text>
+    </g>
+
+    <g transform="translate(714 468) rotate(5 97 74)">
+      <rect x="0" y="0" width="194" height="148" rx="18" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+      <rect x="16" y="16" width="162" height="82" rx="12" fill="url(#photoB)"/>
+      <path d="M30 89L72 54L105 77L124 63L164 89" stroke="#92400E" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+      <text x="19" y="128" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#0F172A">Next clue</text>
+    </g>
+
+    <g transform="translate(667 642)">
+      <rect x="0" y="0" width="286" height="76" rx="22" fill="#0F172A"/>
+      <path d="M53 33V25C53 10 77 10 77 25V33" stroke="#FBBF24" stroke-width="8" stroke-linecap="round"/>
+      <rect x="42" y="32" width="46" height="34" rx="8" fill="#FBBF24"/>
+      <text x="108" y="49" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="750" fill="#F8FAFC">CODE 4827</text>
+    </g>
+  </g>
+
+  <g transform="translate(1122 190)">
+    <rect class="panel" x="0" y="0" width="330" height="412" rx="26"/>
+    <text class="label" x="34" y="58" font-size="31" font-weight="750">Treasure path</text>
+    <text class="label muted" x="34" y="91" font-size="20">unlock codes advance each step</text>
+
+    <path d="M82 146C151 110 206 145 212 197C218 249 145 268 142 320" stroke="#E2E8F0" stroke-width="8" stroke-linecap="round" stroke-dasharray="2 22"/>
+    <circle cx="77" cy="148" r="29" fill="#38BDF8"/>
+    <circle cx="214" cy="199" r="29" fill="#FBBF24"/>
+    <circle cx="142" cy="322" r="29" fill="#34D399"/>
+    <text x="66" y="158" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="800" fill="#0F172A">1</text>
+    <text x="203" y="209" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="800" fill="#0F172A">2</text>
+    <path d="M132 321L140 331L156 309" stroke="#0F172A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <g transform="translate(208 294)">
+      <rect x="0" y="0" width="84" height="72" rx="16" fill="#111827" stroke="#64748B"/>
+      <path d="M24 32C24 17 60 17 60 32" stroke="#34D399" stroke-width="6" stroke-linecap="round"/>
+      <rect x="19" y="31" width="46" height="28" rx="7" fill="#34D399"/>
+    </g>
+  </g>
+
+  <g transform="translate(1160 656)">
+    <rect x="0" y="0" width="288" height="92" rx="26" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="2"/>
+    <g transform="translate(35 23)" fill="#16A34A">
+      <rect x="14" y="13" width="48" height="40" rx="12"/>
+      <rect x="8" y="25" width="9" height="25" rx="4"/>
+      <rect x="59" y="25" width="9" height="25" rx="4"/>
+      <rect x="22" y="52" width="9" height="16" rx="4"/>
+      <rect x="45" y="52" width="9" height="16" rx="4"/>
+      <path d="M22 13L12 0" stroke="#16A34A" stroke-width="5" stroke-linecap="round"/>
+      <path d="M54 13L64 0" stroke="#16A34A" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="30" cy="31" r="3.5" fill="#ECFDF5"/>
+      <circle cx="46" cy="31" r="3.5" fill="#ECFDF5"/>
+    </g>
+    <text x="116" y="39" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="800" fill="#064E3B">Android app</text>
+    <text x="116" y="67" font-family="Segoe UI, Arial, sans-serif" font-size="19" fill="#047857">release preparation</text>
+  </g>
+
+  <g transform="translate(139 710)">
+    <path d="M0 46H338" class="fine" stroke-width="2"/>
+    <text class="label muted" x="0" y="0" font-size="22">.NET MAUI</text>
+    <text class="label muted" x="135" y="0" font-size="22">local storage</text>
+    <text class="label muted" x="296" y="0" font-size="22">custom screens</text>
+  </g>
+</svg>
